@@ -1,5 +1,6 @@
 # WRAITH
 ### Wireless Recon and Intelligence Engine
+### Current Version: v1.1
 
 Passive network reconnaissance and protocol intelligence engine. Built from raw sockets up. No wrappers. No dependencies. Pure Python standard library.
 
@@ -38,11 +39,11 @@ WRAITH core — raw socket engine
 
 | Module | Port | Domain | Status |
 |--------|------|--------|--------|
-| RECON | — | Network | v1 complete |
-| PORTSCAN | — | Network | v1 complete |
-| BANNER | 80/443 | Network | v1 complete |
-| DNS | 53 | Network | v1 complete |
-| HTTP | 80/443 | Network | v1 complete |
+| RECON | — | Network | v1.1 complete |
+| PORTSCAN | — | Network | v1.1 complete |
+| BANNER | 80/443 | Network | v1.1 complete |
+| DNS | 53 | Network | v1.1 complete |
+| HTTP | 80/443 | Network | v1.1 complete |
 | SSH | 22 | Network | v2 in development |
 | BACNET | 47808 | OT/BAS | v2 in development |
 | MODBUS | 502 | OT/ICS | v3 planned |
@@ -63,32 +64,44 @@ WRAITH core — raw socket engine
 
 ## Roadmap
 
-v1 — Passive Recon Engine — COMPLETE
+v1.0 — Passive Recon Engine — COMPLETE
 - Host reachability mapping
 - Port and service enumeration
 - DNS hostname resolution
 - Protocol fingerprinting
 - Banner grabbing
 
-v2 — OT/BAS Protocol Awareness — IN DEVELOPMENT
+v1.1 — Auto Detection and OT/BAS Port Awareness — COMPLETE
+- Auto gateway and network detection
+- Auto local IP and subnet mapping
+- Full OT/BAS/ICS port map
+- BACnet port 47808 awareness
+- Niagara port 1911 and 4911 awareness
+- Modbus port 502 awareness
+- S7Comm port 102 awareness
+- DNP3 port 20000 awareness
+- MQTT port 1883 awareness
+- SNMP port 161 awareness
+
+v2.0 — OT/BAS Protocol Awareness — IN DEVELOPMENT
 - BACnet/IP passive listener port 47808
 - BACnet device discovery via Who-Is and I-Am
 - BACnet object inventory logging
 - SSH detection port 22
 
-v3 — Industrial Protocol Suite — PLANNED
+v3.0 — Industrial Protocol Suite — PLANNED
 - Modbus TCP port 502
 - MQTT port 1883
 - SNMP port 161
 - Cross-protocol device correlation
 
-v4 — Intelligence Layer — PLANNED
+v4.0 — Intelligence Layer — PLANNED
 - Behavioral baseline per device
 - Anomaly detection engine
 - Communication health scoring
 - OT/BAS network diagnostics
 
-v5 — Sensor Deployment — PLANNED
+v5.0 — Sensor Deployment — PLANNED
 - Raspberry Pi sensor node
 - Wireless passive capture
 - Encrypted telemetry reporting
@@ -106,5 +119,6 @@ For use only on networks you own or have explicit written authorization to monit
 
 sig.int.ghost — passive observer
 instagram: @sig.int.ghost
+github: github.com/sigintghost/WRAITH
 
 systems reveal themselves under observation.
