@@ -1,6 +1,6 @@
 # WRAITH
 ### Wireless Recon and Intelligence Engine
-### Current Version: v1.3
+### Current Version: v1.3.1
 
 Passive network reconnaissance and protocol intelligence engine. Built from raw sockets up. No wrappers. No dependencies. Pure Python standard library.
 
@@ -39,11 +39,11 @@ WRAITH core — raw socket engine
 
 | Module | Port | Domain | Status |
 |--------|------|--------|--------|
-| RECON | — | Network | v1.3 complete |
-| PORTSCAN | — | Network | v1.3 complete |
-| BANNER | 80/443 | Network | v1.3 complete |
-| DNS | 53 | Network | v1.3 complete |
-| HTTP | 80/443 | Network | v1.3 complete |
+| RECON | — | Network | v1.3.1 complete |
+| PORTSCAN | — | Network | v1.3.1 complete |
+| BANNER | 80/443 | Network | v1.3.1 complete |
+| DNS | 53 | Network | v1.3.1 complete |
+| HTTP | 80/443 | Network | v1.3.1 complete |
 | SSH | 22 | Network | v2 in development |
 | BACNET | 47808 | OT/BAS | v2 in development |
 | MODBUS | 502 | OT/ICS | v3 planned |
@@ -71,7 +71,7 @@ v1.0 — Passive Recon Engine — COMPLETE
 - Protocol fingerprinting
 - Banner grabbing
 
-v1.3 — Auto Detection and OT/BAS Port Awareness — COMPLETE
+v1.3.1 — Auto Detection and OT/BAS Port Awareness — COMPLETE
 - Auto gateway and network detection
 - Auto local IP and subnet mapping
 - Full OT/BAS/ICS port map
