@@ -168,6 +168,19 @@ def run_osint(gateway):
 
 
 
+
+def run_mqtt_module():
+    import sys
+    sys.path.insert(0, '.')
+    from modules.mqtt import run_mqtt
+    run_mqtt()
+
+def run_oracle_module():
+    import sys
+    sys.path.insert(0, '.')
+    from modules.oracle import run_oracle
+    run_oracle()
+
 def run_modbus_module():
     import sys
     sys.path.insert(0, '.')
@@ -212,7 +225,7 @@ def auto_chain(gateway, local_ip):
     print(f"\n  [AUTO] complete. log saved to ~/.wraith/loot/logs/")
 
 def main2():
-    print(f"\n  WRAITH v1.3 — sig.int.ghost")
+    print(f"\n  WRAITH v3.0 — sig.int.ghost")
     print(f"  passive observer. anomaly is the signal.")
     div()
     print(f"  detecting network...")
@@ -231,6 +244,8 @@ def main2():
     print("  [8] SWEEP — discover live hosts on subnet")
     print("  [9] BACNET — passive BACnet/IP listener and device inventory")
     print("  [10] MODBUS — passive Modbus TCP listener")
+    print("  [11] MQTT — passive MQTT broker listener")
+    print("  [12] ORACLE — ghost intelligence module")
     div()
     c=input("\n  > ")
     print()
@@ -248,6 +263,10 @@ def main2():
     elif c=="8": run_sweep_module(gateway, local_ip, base)
     elif c=="9": run_bacnet_module()
     elif c=="10": run_modbus_module()
-    print(f"\n  ghost offline. v1.3\n")
+    elif c=="11": run_mqtt_module()
+    elif c=="12": run_oracle_module()
+    import sys; sys.path.insert(0,'.')
+    from modules.ghost import ghost_exit
+    ghost_exit()
 
 main2()
