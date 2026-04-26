@@ -1,7 +1,7 @@
 import socket
 import datetime
 
-VERSION = "1.1"
+VERSION = "1.3"
 
 PORTS = {
     21:    "FTP",
@@ -160,10 +160,35 @@ def run_osint(gateway):
     import sys
     sys.path.insert(0,'.')
     from modules.osint import osint_lookup
+    custom = input("  enter target IP [default: " + gateway + "]: ").strip()
+    target = custom if custom else gateway
+    osint_lookup(target)
+
+
+def auto_chain(gateway, local_ip):
+    import sys
+    sys.path.insert(0, '.')
+    from modules.logger import log_result
+    from modules.portscan import run_portscan
+    from modules.osint import osint_lookup
+    print(f"\n  [AUTO] starting full chain on {gateway}")
+    log_result(gateway, "AUTO", "chain scan started")
+    recon(gateway, local_ip)
+    log_result(gateway, "RECON", "complete")
+    results = run_portscan(gateway)
+    for port, service, state in results:
+        log_result(gateway, "PORTSCAN", f"{port} {service} {state}")
+    dns()
+    log_result(gateway, "DNS", "complete")
+    banner(gateway)
+    log_result(gateway, "BANNER", "complete")
     osint_lookup(gateway)
+    log_result(gateway, "OSINT", "complete")
+    log_result(gateway, "AUTO", "chain scan complete")
+    print(f"\n  [AUTO] complete. log saved to ~/.wraith/loot/logs/")
 
 def main2():
-    print(f"\n  WRAITH v1.2 — sig.int.ghost")
+    print(f"\n  WRAITH v1.3 — sig.int.ghost")
     print(f"  passive observer. anomaly is the signal.")
     div()
     print(f"  detecting network...")
@@ -178,6 +203,7 @@ def main2():
     print("  [4] BANNER")
     print("  [5] ALL")
     print("  [6] OSINT — threat intelligence lookup")
+    print("  [7] AUTO — full chain scan with logging")
     div()
     c=input("\n  > ")
     print()
@@ -191,6 +217,7 @@ def main2():
         dns()
         banner(gateway)
     elif c=="6": run_osint(gateway)
-    print(f"\n  ghost offline. v1.2\n")
+    elif c=="7": auto_chain(gateway, local_ip)
+    print(f"\n  ghost offline. v1.3\n")
 
 main2()
