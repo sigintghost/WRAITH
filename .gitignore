@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+keys.py
+modules/keys.py
+.wraith/
