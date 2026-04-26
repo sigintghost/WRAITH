@@ -129,6 +129,9 @@ def update_modbus_inventory(parsed):
 
 def print_modbus_inventory():
     if not modbus_inventory:
+        print(f'\n\033[36m\033[1m  MODBUS DEVICE INVENTORY\033[0m')
+        print(f'  \033[2m' + chr(8212)*50 + '\033[0m')
+        print(f'  \033[31mno devices discovered yet\033[0m')
         return
     print(f'\n{CYAN}{BOLD}  MODBUS DEVICE INVENTORY{RESET}')
     print(f'  {DIM}{chr(8212)*50}{RESET}')
