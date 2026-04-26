@@ -122,3 +122,11 @@ instagram: @sig.int.ghost
 github: github.com/sigintghost/WRAITH
 
 systems reveal themselves under observation.
+
+v1.2 — OSINT Intelligence Layer — COMPLETE
+- Shodan integration — port and vulnerability data
+- IPInfo integration — geolocation and org data
+- GreyNoise integration — threat classification
+- AbuseIPDB integration — abuse score and reports
+- Auto key loading from ~/.wraith/keys.py
+- Keys never stored in repo — local only
