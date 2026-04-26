@@ -1,3 +1,8 @@
+# WRAITH osint.py — threat intelligence module
+# sig.int.ghost
+# every IP has a story. WRAITH just listens.
+# the wire remembers everything. even silence.
+
 import urllib.request
 import urllib.parse
 import json
