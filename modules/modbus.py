@@ -195,3 +195,11 @@ def run_modbus():
     finally:
         sock.close()
         print_modbus_inventory()
+        try:
+            import sys; sys.path.insert(0,'.')
+            from modules.filestack import write_modbus
+            from modules.modbus import modbus_inventory
+            write_modbus(modbus_inventory)
+            print(f"  stack written: modbus_map.json")
+        except Exception as e:
+            pass

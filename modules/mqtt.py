@@ -249,3 +249,11 @@ def run_mqtt():
     finally:
         sock.close()
         print_mqtt_inventory()
+        try:
+            import sys; sys.path.insert(0,'.')
+            from modules.filestack import write_mqtt
+            from modules.mqtt import mqtt_inventory, mqtt_topics
+            write_mqtt(mqtt_inventory, mqtt_topics)
+            print(f"  stack written: mqtt_brokers.json")
+        except Exception as e:
+            pass
