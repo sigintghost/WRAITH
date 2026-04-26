@@ -1,6 +1,6 @@
 # WRAITH
 ### Wireless Recon and Intelligence Engine
-### Current Version: v1.3.1
+### Current Version: v2.0
 
 Passive network reconnaissance and protocol intelligence engine. Built from raw sockets up. No wrappers. No dependencies. Pure Python standard library.
 
