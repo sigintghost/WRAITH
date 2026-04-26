@@ -266,6 +266,14 @@ def run_bacnet(duration=60):
         sock.close()
         print_inventory()
         print_bbmd_table()
+        try:
+            import sys; sys.path.insert(0,'.')
+            from modules.filestack import write_bacnet
+            from modules.bacnet import inventory, bbmd_table
+            write_bacnet(inventory, bbmd_table)
+            print(f"  stack written: bacnet_inventory.json")
+        except Exception as e:
+            pass
 
 # BBMD inventory — keyed by IP
 bbmd_table = {}
