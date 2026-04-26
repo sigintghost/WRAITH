@@ -166,6 +166,13 @@ def run_osint(gateway):
 
 
 
+
+def run_bacnet_module():
+    import sys
+    sys.path.insert(0, '.')
+    from modules.bacnet import run_bacnet
+    run_bacnet()
+
 def run_sweep_module(gateway, local_ip, base):
     import sys
     sys.path.insert(0, '.')
@@ -215,6 +222,7 @@ def main2():
     print("  [6] OSINT — threat intelligence lookup")
     print("  [7] AUTO — full chain scan with logging")
     print("  [8] SWEEP — discover live hosts on subnet")
+    print("  [9] BACNET — passive BACnet/IP listener and device inventory")
     div()
     c=input("\n  > ")
     print()
@@ -230,6 +238,7 @@ def main2():
     elif c=="6": run_osint(gateway)
     elif c=="7": auto_chain(gateway, local_ip)
     elif c=="8": run_sweep_module(gateway, local_ip, base)
+    elif c=="9": run_bacnet_module()
     print(f"\n  ghost offline. v1.3\n")
 
 main2()
