@@ -244,6 +244,10 @@ def run_bacnet(duration=60):
                 data, addr = sock.recvfrom(1024)
                 src_ip = addr[0]
                 parsed = parse_bacnet_packet(list(data), src_ip)
+                bbmd = parse_bbmd_packet(list(data), src_ip)
+                if bbmd:
+                    update_bbmd(src_ip, bbmd)
+                    log_result(src_ip, "BBMD", bbmd.get('func_name','?'))
                 if parsed:
                     if parsed['type'] == 'whoIs':
                         ts = datetime.datetime.now().strftime("%H:%M:%S")
@@ -261,3 +265,169 @@ def run_bacnet(duration=60):
     finally:
         sock.close()
         print_inventory()
+        print_bbmd_table()
+
+# BBMD inventory — keyed by IP
+bbmd_table = {}
+
+# BVLC function codes
+BVLC_FUNCS = {
+    0x00: "BVLC-Result",
+    0x01: "Write-BDT",
+    0x02: "Read-BDT-Request",
+    0x03: "Read-BDT-Ack",
+    0x04: "Forwarded-NPDU",
+    0x05: "Register-Foreign-Device",
+    0x06: "Read-FDT-Request",
+    0x07: "Read-FDT-Ack",
+    0x08: "Delete-FDT-Entry",
+    0x09: "Distribute-Broadcast",
+    0x0A: "Original-Unicast-NPDU",
+    0x0B: "Original-Broadcast-NPDU",
+}
+
+def parse_bdt(data, offset):
+    # BDT entry = 4 bytes IP + 4 bytes mask = 8 bytes each
+    entries = []
+    while offset + 8 <= len(data):
+        ip   = '.'.join(str(b) for b in data[offset:offset+4])
+        mask = '.'.join(str(b) for b in data[offset+4:offset+8])
+        entries.append({'ip': ip, 'mask': mask})
+        offset += 8
+    return entries
+
+def parse_fdt(data, offset):
+    # FDT entry = 4 bytes IP + 2 bytes port + 2 bytes TTL + 2 bytes remaining
+    entries = []
+    while offset + 10 <= len(data):
+        ip   = '.'.join(str(b) for b in data[offset:offset+4])
+        port = (data[offset+4] << 8) | data[offset+5]
+        ttl  = (data[offset+6] << 8) | data[offset+7]
+        rem  = (data[offset+8] << 8) | data[offset+9]
+        entries.append({'ip': ip, 'port': port, 'ttl': ttl, 'remaining': rem})
+        offset += 10
+    return entries
+
+def parse_bbmd_packet(data, src_ip):
+    if len(data) < 4:
+        return None
+    if data[0] != 0x81:
+        return None
+    func = data[1]
+    length = (data[2] << 8) | data[3]
+
+    result = {'func': func, 'func_name': BVLC_FUNCS.get(func, f"0x{func:02x}"), 'src': src_ip}
+
+    # Forwarded-NPDU — reveals original sender and BBMD router
+    if func == 0x04 and len(data) >= 10:
+        orig_ip   = '.'.join(str(b) for b in data[4:8])
+        orig_port = (data[8] << 8) | data[9]
+        result['type']      = 'forwarded'
+        result['origin_ip'] = orig_ip
+        result['origin_port'] = orig_port
+        return result
+
+    # Read-BDT-Ack — full broadcast distribution table
+    if func == 0x03:
+        result['type'] = 'bdt'
+        result['bdt']  = parse_bdt(data, 4)
+        return result
+
+    # Write-BDT
+    if func == 0x01:
+        result['type'] = 'bdt_write'
+        result['bdt']  = parse_bdt(data, 4)
+        return result
+
+    # Read-FDT-Ack — foreign device table
+    if func == 0x07:
+        result['type'] = 'fdt'
+        result['fdt']  = parse_fdt(data, 4)
+        return result
+
+    # Register-Foreign-Device
+    if func == 0x05 and len(data) >= 6:
+        ttl = (data[4] << 8) | data[5]
+        result['type'] = 'foreign_register'
+        result['ttl']  = ttl
+        return result
+
+    return None
+
+def update_bbmd(src_ip, parsed):
+    ts = datetime.datetime.now().strftime("%H:%M:%S")
+    if src_ip not in bbmd_table:
+        bbmd_table[src_ip] = {
+            'ip':         src_ip,
+            'first_seen': ts,
+            'last_seen':  ts,
+            'bdt':        [],
+            'fdt':        [],
+            'forwards':   [],
+            'foreign_devices': [],
+        }
+        print(f"\n{GREEN}NEW{RESET} {CYAN}{BOLD}[BBMD]{RESET} {BOLD}{src_ip}{RESET}")
+    else:
+        bbmd_table[src_ip]['last_seen'] = ts
+
+    b = bbmd_table[src_ip]
+    ptype = parsed.get('type')
+
+    if ptype in ('bdt', 'bdt_write'):
+        b['bdt'] = parsed.get('bdt', [])
+        print(f"  {CYAN}[BBMD]{RESET} {src_ip} BDT updated — "
+              f"{len(b['bdt'])} entries")
+        for entry in b['bdt']:
+            print(f"    {DIM}→{RESET} {GREEN}{entry['ip']}{RESET} "
+                  f"mask {entry['mask']}")
+
+    elif ptype == 'fdt':
+        b['fdt'] = parsed.get('fdt', [])
+        print(f"  {CYAN}[BBMD]{RESET} {src_ip} FDT — "
+              f"{len(b['fdt'])} foreign devices")
+        for entry in b['fdt']:
+            print(f"    {DIM}→{RESET} {YELLOW}{entry['ip']}:{entry['port']}{RESET} "
+                  f"TTL {entry['ttl']}s remaining {entry['remaining']}s")
+
+    elif ptype == 'forwarded':
+        orig = parsed.get('origin_ip')
+        if orig not in b['forwards']:
+            b['forwards'].append(orig)
+        print(f"  {DIM}[BBMD]{RESET} {src_ip} forwarded from "
+              f"{YELLOW}{orig}{RESET}")
+
+    elif ptype == 'foreign_register':
+        ttl = parsed.get('ttl')
+        if src_ip not in b['foreign_devices']:
+            b['foreign_devices'].append(src_ip)
+        print(f"  {YELLOW}[FOREIGN]{RESET} {src_ip} registered "
+              f"TTL {ttl}s")
+
+def print_bbmd_table():
+    if not bbmd_table:
+        return
+    print(f"\n{CYAN}{BOLD}  BBMD TOPOLOGY MAP{RESET}")
+    print(f"  {DIM}{'─'*50}{RESET}")
+    for ip, b in bbmd_table.items():
+        print(f"\n  {CYAN}{BOLD}{ip}{RESET} — BBMD")
+        print(f"  {DIM}first seen : {b['first_seen']}{RESET}")
+        if b['bdt']:
+            print(f"  {DIM}BDT routes :{RESET}")
+            for e in b['bdt']:
+                print(f"    {GREEN}→ {e['ip']}{RESET} "
+                      f"{DIM}mask {e['mask']}{RESET}")
+        if b['fdt']:
+            print(f"  {DIM}foreign devices :{RESET}")
+            for e in b['fdt']:
+                print(f"    {YELLOW}→ {e['ip']}:{e['port']}{RESET} "
+                      f"TTL {e['ttl']}s")
+        if b['forwards']:
+            print(f"  {DIM}forwarded from :{RESET}")
+            for f in b['forwards']:
+                print(f"    {DIM}→ {f}{RESET}")
+        subnets = set()
+        for e in b['bdt']:
+            subnets.add('.'.join(e['ip'].split('.')[:3]))
+        if subnets:
+            print(f"  {DIM}routes to {len(subnets)} subnet(s) :{RESET} "
+                  f"{GREEN}{', '.join(sorted(subnets))}{RESET}")
