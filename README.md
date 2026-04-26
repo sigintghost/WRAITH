@@ -91,7 +91,7 @@ v2.1 — BBMD Topology Mapping, BDT/FDT Parsing — COMPLETE
 - SSH detection port 22
 
 v3.0 — Modbus TCP, MQTT Broker Listener, Ghost Module — COMPLETE
-v3.1 — Oracle AI Intelligence, Claude API, Alert Architecture — IN PROGRESS
+v3.1 — Oracle AI, Filestack JSON Engine, Agent Architecture, Menu Loop, Ghost Module — COMPLETE
 - Modbus TCP port 502
 - MQTT port 1883
 - SNMP port 161
