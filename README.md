@@ -1,6 +1,6 @@
 # WRAITH
 ### Wireless Recon and Intelligence Engine
-### Current Version: v2.1
+### Current Version: v3.1
 
 Passive network reconnaissance and protocol intelligence engine. Built from raw sockets up. No wrappers. No dependencies. Pure Python standard library.
 
@@ -44,12 +44,12 @@ WRAITH core — raw socket engine
 | BANNER | 80/443 | Network | v1.3.1 complete |
 | DNS | 53 | Network | v1.3.1 complete |
 | HTTP | 80/443 | Network | v1.3.1 complete |
-| SSH | 22 | Network | v2 in development |
-| BACNET | 47808 | OT/BAS | v2 in development |
-| MODBUS | 502 | OT/ICS | v3 planned |
-| MQTT | 1883 | IoT/BAS | v3 planned |
-| SNMP | 161 | Network | v3 planned |
-| CUSTOM | user | Any | v4 planned |
+| SSH | 22 | Network | v3.1 complete |
+| BACNET | 47808 | OT/BAS | v3.1 complete |
+| MODBUS | 502 | OT/ICS | v3.1 complete |
+| MQTT | 1883 | IoT/BAS | v3.1 complete |
+| SNMP | 161 | Network | v3.1 complete |
+| CUSTOM | user | Any | v4.0 planned |
 
 ---
 
@@ -83,19 +83,21 @@ v1.3.1 — Auto Detection and OT/BAS Port Awareness — COMPLETE
 - MQTT port 1883 awareness
 - SNMP port 161 awareness
 
-v2.0 — OT/BAS Protocol Awareness — IN DEVELOPMENT
+v2.0 — BACnet/IP Passive Listener, Device Inventory, Vendor Lookup — COMPLETE
+v2.1 — BBMD Topology Mapping, BDT/FDT Parsing — COMPLETE
 - BACnet/IP passive listener port 47808
 - BACnet device discovery via Who-Is and I-Am
 - BACnet object inventory logging
 - SSH detection port 22
 
-v3.0 — Industrial Protocol Suite — PLANNED
+v3.0 — Modbus TCP, MQTT Broker Listener, Ghost Module — COMPLETE
+v3.1 — Oracle AI Intelligence, Claude API, Alert Architecture — IN PROGRESS
 - Modbus TCP port 502
 - MQTT port 1883
 - SNMP port 161
 - Cross-protocol device correlation
 
-v4.0 — Intelligence Layer — PLANNED
+v4.0 — Behavioral Baseline, Anomaly Detection, CVE Intelligence — PLANNED
 - Behavioral baseline per device
 - Anomaly detection engine
 - Communication health scoring
@@ -123,7 +125,7 @@ github: github.com/sigintghost/WRAITH
 
 systems reveal themselves under observation.
 
-v1.3.1 — OSINT Intelligence Layer — COMPLETE
+v3.1 — Oracle AI, MQTT, Modbus, BACnet/IP, BBMD, Ghost Module — COMPLETE
 - Shodan integration — port and vulnerability data
 - IPInfo integration — geolocation and org data
 - GreyNoise integration — threat classification
