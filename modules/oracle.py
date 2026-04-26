@@ -143,7 +143,7 @@ def run_oracle():
             print()
             break
         if not q: continue
-        if q.lower() in ('exit','quit','back'):
+        if q.lower() in ('exit','quit','back','q'):
             break
         print(f'  {DIM}thinking...{RESET}')
         reply = ask_oracle(q, api_key, history)
