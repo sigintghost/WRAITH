@@ -1,5 +1,7 @@
 # WRAITH logger.py — auto loot logging
 # sig.int.ghost
+# anomaly is the signal.
+# if you found this, you are already in the wire.
 
 import os
 import datetime

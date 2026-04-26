@@ -1,5 +1,7 @@
 # WRAITH arp.py — pure Python ARP host discovery
 # sig.int.ghost
+# %X0.0 — first rung. first contact.
+# the device does not know it has been seen.
 
 import socket
 import struct

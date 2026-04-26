@@ -1,6 +1,8 @@
 # WRAITH portscan.py — port state detection
 # open / closed / filtered — pure Python sockets
 # sig.int.ghost
+# %MW100 — memory word. state unknown.
+# open is a confession. filtered is a whisper.
 
 import socket
 import errno

@@ -165,6 +165,16 @@ def run_osint(gateway):
     osint_lookup(target)
 
 
+
+def run_sweep_module(gateway, local_ip, base):
+    import sys
+    sys.path.insert(0, '.')
+    from modules.sweep import run_sweep
+    from modules.logger import log_result
+    results = run_sweep(base, local_ip)
+    for ip, port, hostname in results:
+        log_result(local_ip, "SWEEP", f"{ip} port={port} {hostname}")
+
 def auto_chain(gateway, local_ip):
     import sys
     sys.path.insert(0, '.')
@@ -204,6 +214,7 @@ def main2():
     print("  [5] ALL")
     print("  [6] OSINT — threat intelligence lookup")
     print("  [7] AUTO — full chain scan with logging")
+    print("  [8] SWEEP — discover live hosts on subnet")
     div()
     c=input("\n  > ")
     print()
@@ -218,6 +229,7 @@ def main2():
         banner(gateway)
     elif c=="6": run_osint(gateway)
     elif c=="7": auto_chain(gateway, local_ip)
+    elif c=="8": run_sweep_module(gateway, local_ip, base)
     print(f"\n  ghost offline. v1.3\n")
 
 main2()
