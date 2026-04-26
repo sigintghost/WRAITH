@@ -123,7 +123,7 @@ github: github.com/sigintghost/WRAITH
 
 systems reveal themselves under observation.
 
-v1.2 — OSINT Intelligence Layer — COMPLETE
+v1.3.1 — OSINT Intelligence Layer — COMPLETE
 - Shodan integration — port and vulnerability data
 - IPInfo integration — geolocation and org data
 - GreyNoise integration — threat classification
