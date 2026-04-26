@@ -99,7 +99,7 @@ def ask_oracle(question, api_key, history):
     system  = GHOST_SYSTEM + f'\n\nCURRENT NETWORK STATE:\n{context}'
     history.append({'role': 'user', 'content': question})
     payload = json.dumps({
-        'model': 'claude-sonnet-4-20250514',
+        'model': 'claude-sonnet-4-5',
         'max_tokens': 1024,
         'system': system,
         'messages': history,

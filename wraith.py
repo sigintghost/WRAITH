@@ -225,7 +225,7 @@ def auto_chain(gateway, local_ip):
     print(f"\n  [AUTO] complete. log saved to ~/.wraith/loot/logs/")
 
 def main2():
-    print(f"\n  WRAITH v3.0 — sig.int.ghost")
+    print(f"\n  WRAITH v3.1 — sig.int.ghost")
     print(f"  passive observer. anomaly is the signal.")
     div()
     print(f"  detecting network...")
