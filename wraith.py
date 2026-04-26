@@ -148,4 +148,49 @@ def main():
         banner(gateway)
     print(f"\n  ghost offline. v{VERSION}\n")
 
-main()
+
+def osint_module(gateway):
+    import sys
+    sys.path.insert(0, '.')
+    from modules.osint import osint_lookup
+    print(f"\n  [OSINT] target: {gateway}")
+    osint_lookup(gateway)
+
+def run_osint(gateway):
+    import sys
+    sys.path.insert(0,'.')
+    from modules.osint import osint_lookup
+    osint_lookup(gateway)
+
+def main2():
+    print(f"\n  WRAITH v1.2 — sig.int.ghost")
+    print(f"  passive observer. anomaly is the signal.")
+    div()
+    print(f"  detecting network...")
+    gateway,local_ip,base=get_network()
+    print(f"  gateway  : {gateway}")
+    print(f"  local ip : {local_ip}")
+    print(f"  subnet   : {base}.0/24")
+    div()
+    print("  [1] RECON")
+    print("  [2] PORTSCAN — full OT/BAS/ICS port map")
+    print("  [3] DNS")
+    print("  [4] BANNER")
+    print("  [5] ALL")
+    print("  [6] OSINT — threat intelligence lookup")
+    div()
+    c=input("\n  > ")
+    print()
+    if c=="1": recon(gateway,local_ip)
+    elif c=="2": portscan(gateway)
+    elif c=="3": dns()
+    elif c=="4": banner(gateway)
+    elif c=="5":
+        recon(gateway,local_ip)
+        portscan(gateway)
+        dns()
+        banner(gateway)
+    elif c=="6": run_osint(gateway)
+    print(f"\n  ghost offline. v1.2\n")
+
+main2()
