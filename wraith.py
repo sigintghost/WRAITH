@@ -167,6 +167,13 @@ def run_osint(gateway):
 
 
 
+
+def run_modbus_module():
+    import sys
+    sys.path.insert(0, '.')
+    from modules.modbus import run_modbus
+    run_modbus()
+
 def run_bacnet_module():
     import sys
     sys.path.insert(0, '.')
@@ -223,6 +230,7 @@ def main2():
     print("  [7] AUTO — full chain scan with logging")
     print("  [8] SWEEP — discover live hosts on subnet")
     print("  [9] BACNET — passive BACnet/IP listener and device inventory")
+    print("  [10] MODBUS — passive Modbus TCP listener")
     div()
     c=input("\n  > ")
     print()
@@ -239,6 +247,7 @@ def main2():
     elif c=="7": auto_chain(gateway, local_ip)
     elif c=="8": run_sweep_module(gateway, local_ip, base)
     elif c=="9": run_bacnet_module()
+    elif c=="10": run_modbus_module()
     print(f"\n  ghost offline. v1.3\n")
 
 main2()
