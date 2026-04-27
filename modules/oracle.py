@@ -1,5 +1,4 @@
 # WRAITH oracle.py — ghost intelligence module
-# powered by Claude API — Anthropic
 # sig.int.ghost
 # the oracle sees the wire. asks the ghost. gets the truth.
 # anomaly is the signal. the signal is everything.
@@ -94,12 +93,20 @@ def build_context():
     except: pass
     return '\n'.join(ctx)
 
-def ask_oracle(question, api_key, history):
+    return HAIKU
+HAIKU = "claude-haiku-4-5"
+SONNET = "claude-sonnet-4-5"
+COMPLEX_KEYWORDS = ["analyze","correlate","baseline","recommend","investigate","explain","compare","summarize","report","vulnerability","risk","anomaly"]
+def pick_model(question):
+    q = question.lower()
+    if len(question) > 200: return SONNET
+    if any(k in q for k in COMPLEX_KEYWORDS): return SONNET
+    return HAIKU
     context = build_context()
     system  = GHOST_SYSTEM + f'\n\nCURRENT NETWORK STATE:\n{context}'
     history.append({'role': 'user', 'content': question})
     payload = json.dumps({
-        'model': 'claude-sonnet-4-5',
+        'model': pick_model(question),
         'max_tokens': 1024,
         'system': system,
         'messages': history,
@@ -127,7 +134,7 @@ def ask_oracle(question, api_key, history):
 
 def run_oracle():
     print(f'\n  {CYAN}{BOLD}[ORACLE]{RESET} ghost intelligence module')
-    print(f'  {DIM}powered by Claude — Anthropic{RESET}')
+    print(f"  {DIM}model: {pick_model(question)} — Anthropic{RESET}")
     print(f'  {DIM}ask anything about your network, BACnet, OT security{RESET}')
     print(f'  {DIM}type exit to return to menu{RESET}\n')
     api_key = load_oracle_key()
