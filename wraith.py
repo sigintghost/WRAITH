@@ -1,7 +1,7 @@
 import socket
 import datetime
 
-VERSION = "1.3"
+VERSION = "3.2"
 
 PORTS = {
     21:    "FTP",
@@ -225,54 +225,71 @@ def auto_chain(gateway, local_ip):
     log_result(gateway, "AUTO", "chain scan complete")
     print(f"\n  [AUTO] complete. log saved to ~/.wraith/loot/logs/")
 
-def main2():
-    print(f"\n  WRAITH v{VERSION} — sig.int.ghost")
-    print(f"  passive observer. anomaly is the signal.")
+def show_main_menu():
     div()
-    print(f"  detecting network...")
+    print("  [1] RECON")
+    print("  [2] PROTOCOLS")
+    print("  [3] INTELLIGENCE")
+    print("  [4] ALERTS")
+    print("  [5] SWEEP")
+    print("  [0] EXIT")
+    div()
+def show_protocols_menu():
+    div()
+    print("  [1] BACnet/IP  47808")
+    print("  [2] Modbus TCP 502")
+    print("  [3] MQTT       1883")
+    print("  [4] MSTP       RS485")
+    print("  [5] PORTSCAN   OT/BAS")
+    print("  [0] BACK")
+    div()
+def show_intel_menu():
+    div()
+    print("  [1] OSINT")
+    print("  [2] ORACLE")
+    print("  [3] AUTO")
+    print("  [4] DNS")
+    print("  [5] BANNER")
+    print("  [0] BACK")
+    div()
+def main2():
+    print(f"  WRAITH v{VERSION}")
+    div()
     gateway,local_ip,base=get_network()
     print(f"  gateway  : {gateway}")
     print(f"  local ip : {local_ip}")
     print(f"  subnet   : {base}.0/24")
     while True:
-        div()
-        print("  [1] RECON")
-        print("  [2] PORTSCAN — full OT/BAS/ICS port map")
-        print("  [3] DNS")
-        print("  [4] BANNER")
-        print("  [5] ALL")
-        print("  [6] OSINT — threat intelligence lookup")
-        print("  [7] AUTO — full chain scan with logging")
-        print("  [8] SWEEP — discover live hosts on subnet")
-        print("  [9] BACNET — passive BACnet/IP listener and device inventory")
-        print("  [10] MODBUS — passive Modbus TCP listener")
-        print("  [11] MQTT — passive MQTT broker listener")
-        print("  [12] ORACLE — ghost intelligence module")
-        print("  [13] MSTP    — BACnet MSTP passive listener via USB-RS485")
-        print("  [0] EXIT")
-        div()
-        c=input("\n > ")
-        print()
-        if c=="0": break
-        elif c=="1": recon(gateway,local_ip)
-        elif c=="2": portscan(gateway)
-        elif c=="3": dns()
-        elif c=="4": banner(gateway)
-        elif c=="5":
-            recon(gateway,local_ip)
-            portscan(gateway)
-            dns()
-            banner(gateway)
-        elif c=="6": run_osint(gateway)
-        elif c=="7": auto_chain(gateway, local_ip)
-        elif c=="8": run_sweep_module(gateway, local_ip, base)
-        elif c=="9": run_bacnet_module()
-        elif c=="10": run_modbus_module()
-        elif c=="11": run_mqtt_module()
-        elif c=="12": run_oracle_module()
-        elif c=="13": run_mstp_module()
+        show_main_menu()
+        c = input(" > ")
+        if c == "0": break
+        elif c == "1": recon(gateway,local_ip)
+        elif c == "4": run_alerts_module()
+        elif c == "5": run_sweep_module(gateway,local_ip,base)
+        elif c == "2":
+            while True:
+                show_protocols_menu()
+                p = input(" > ")
+                if p == "0": break
+                elif p == "1": run_bacnet_module()
+                elif p == "2": run_modbus_module()
+                elif p == "3": run_mqtt_module()
+                elif p == "4": run_mstp_module()
+                elif p == "5": portscan(gateway)
+                else: print("  invalid")
+        elif c == "3":
+            while True:
+                show_intel_menu()
+                p = input(" > ")
+                if p == "0": break
+                elif p == "1": run_osint(gateway)
+                elif p == "2": run_oracle_module()
+                elif p == "3": auto_chain(gateway,local_ip)
+                elif p == "4": dns()
+                elif p == "5": banner(gateway)
+                else: print("  invalid")
         else: print("  invalid option")
-    import sys; sys.path.insert(0,'.')
     from modules.ghost import ghost_exit
     ghost_exit()
+    import sys; sys.path.insert(0,'.')
 main2()
