@@ -270,4 +270,26 @@ def main2():
     from modules.ghost import ghost_exit
     ghost_exit()
     import sys; sys.path.insert(0,'.')
-main2()
+def run_auth():
+    from modules.auth import first_run, create_user, login, logout, get_session
+    print("  [WRAITH] authentication required")
+    if first_run():
+        print("  [*] first run — create admin account")
+        u = input("  username: ")
+        p = input("  password: ")
+        create_user(u, p, "admin")
+        print("  [+] admin account created")
+    attempts = 0
+    while attempts < 3:
+        u = input("  username: ")
+        p = input("  password: ")
+        if login(u, p):
+            s = get_session()
+            print("  [+] access granted")
+            main2()
+            logout()
+            return
+        attempts += 1
+        print(f"  [-] invalid — {3-attempts} remaining")
+    print("  [!] too many failed attempts. exiting.")
+run_auth()
