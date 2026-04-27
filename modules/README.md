@@ -11,51 +11,33 @@ Passive OT/IT network intelligence. Raw Python sockets. Zero dependencies.
 | modbus.py | Modbus TCP | 502 |
 | mqtt.py | MQTT | 1883 |
 | serial_mstp.py | BACnet MSTP | RS485 |
-| osint.py | OSINT APIs | n/a |
+| osint.py | 7 APIs | n/a |
 | oracle.py | Claude API | n/a |
-| logger.py | internal | n/a |
-| filestack.py | internal | n/a |
-| ghost.py | internal | n/a |
-
-## OSINT Sources
-| Source | Key Required |
-|--------|-------------|
-| Shodan | yes |
-| IPInfo | yes |
-| GreyNoise | yes |
-| AbuseIPDB | yes |
-| Censys | no |
-
-## Filestack Output
-All modules write to ~/.wraith/loot/stack/
-| File | Source |
-|------|--------|
-| hosts.json | sweep |
-| bacnet_inventory.json | bacnet |
-| bbmd_topology.json | bacnet |
-| modbus_map.json | modbus |
-| mqtt_brokers.json | mqtt |
-| mstp_topology.json | serial_mstp |
-| alerts.json | all modules |
-
-## Oracle Agents
-1. BACnet/BAS Analyst
-2. Threat Enrichment
-3. Alert Triage
-4. Executive Summary
-
-Model: claude-haiku-4-5
-Key: ~/.wraith/keys.py - never in repo
+| alerts.py | throttling | n/a |
+| auth.py | login/audit | n/a |
+| logger.py | logging | n/a |
+| filestack.py | JSON stack | n/a |
+| ghost.py | ANSI/sayings | n/a |
 
 ## Planned
-- snmp.py - SNMP port 161
-- alerts.py - throttling and notifications
-- baseline.py - behavioral baseline per device
-- webctrl.py - WebCTRL folder watcher
-- dashboard.py - local web dashboard
+- snmp.py port 161
+- smtp.py email alerts
+- context_engine.py Strata
+- baseline.py rolling stats
+- anomaly.py deviation detection
+- lutron.py telnet
+- crestron.py REST
+- dmx.py Art-Net/sACN
+- meters.py Modbus layer
+- webctrl.py folder watcher
 
-## Architecture
-listen -> capture -> decode -> log -> filestack -> agent
+## Filestack
+~/.wraith/loot/stack/
+hosts.json, bacnet_inventory.json, bbmd_topology.json
+modbus_map.json, mqtt_brokers.json, mstp_topology.json, alerts.json
 
+## Security
 Passive only. No injection. No exploitation.
-Authorized networks only.
+Auth: SHA256 hashed, role based, session UUID, audit log.
+Keys: ~/.wraith/keys.py chmod 600 — never in repo.
+NIST SP 800-82 and IEC 62443 aligned.
