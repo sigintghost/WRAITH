@@ -160,6 +160,18 @@ def run_mqtt_module():
     from modules.mqtt import run_mqtt
     run_mqtt()
 
+def run_alerts_module():
+    from modules.alerts import get_recent, clear_alerts
+    alerts = get_recent(20)
+    if not alerts:
+        print(chr(32)*2 + chr(91) + chr(42) + chr(93) + chr(32) + chr(78) + chr(111) + chr(32) + chr(97) + chr(108) + chr(101) + chr(114) + chr(116) + chr(115) + chr(32) + chr(111) + chr(110) + chr(32) + chr(102) + chr(105) + chr(108) + chr(101))
+        return
+    for a in alerts:
+        sev = a.get(chr(115)+chr(101)+chr(118)+chr(101)+chr(114)+chr(105)+chr(116)+chr(121))
+        ts = a.get(chr(116)+chr(105)+chr(109)+chr(101)+chr(115)+chr(116)+chr(97)+chr(109)+chr(112))[11:19]
+        msg = a.get(chr(109)+chr(101)+chr(115)+chr(115)+chr(97)+chr(103)+chr(101))
+        print(chr(32)*2 + ts + chr(32) + sev + chr(32) + msg)
+
 def run_mstp_module():
     from modules.serial_mstp import run_mstp
     run_mstp()
