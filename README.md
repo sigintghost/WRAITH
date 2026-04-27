@@ -1,55 +1,81 @@
 # WRAITH
-### Wireless Recon and Intelligence Engine
-### Current Version: v3.1
+### passive network reconnaissance and OT/BAS intelligence engine
+### v3.1
 
-Passive network reconnaissance and protocol intelligence engine. Built from raw sockets up. No wrappers. No dependencies. Pure Python standard library.
-
-anomaly is the signal. — sig.int.ghost
+> *anomaly is the signal.* — [sig.int.ghost](https://instagram.com/sig.int.ghost)
 
 ---
 
 ## What It Is
 
-WRAITH is a modular passive network intelligence engine. Unlike tools that wrap nmap or existing scanners, WRAITH reads the wire directly using raw Python sockets. Each protocol gets its own dedicated listener — not just port detection, but full protocol awareness.
+WRAITH is a modular passive network intelligence engine built entirely from raw Python sockets.
+No nmap. No libpcap. No wrappers. Pure Python standard library.
 
-Domain expertise in OT/BAS networks including BACnet/IP, MSTP, and building automation systems baked into the architecture.
+Most tools wrap nmap. WRAITH reads the wire directly.
 
----
-
-## Architecture
-
-raw socket to ethernet frame to IP header to protocol payload to intelligence
-
-WRAITH core — raw socket engine
-├── module: RECON      host reachability
-├── module: PORTSCAN   service enumeration
-├── module: BANNER     protocol fingerprint
-├── module: DNS        port 53
-├── module: HTTP       port 80/443
-├── module: SSH        port 22
-├── module: BACNET     port 47808 — OT/BAS
-├── module: MODBUS     port 502 — OT/ICS
-├── module: MQTT       port 1883 — IoT/BAS
-├── module: SNMP       port 161 — network devices
-└── module: CUSTOM     user defined
+Domain expertise in OT/BAS networks — BACnet/IP, MSTP, Modbus, MQTT — baked into the architecture.
 
 ---
 
-## Module Status
+## Modules
 
-| Module | Port | Domain | Status |
-|--------|------|--------|--------|
-| RECON | — | Network | v1.3.1 complete |
-| PORTSCAN | — | Network | v1.3.1 complete |
-| BANNER | 80/443 | Network | v1.3.1 complete |
-| DNS | 53 | Network | v1.3.1 complete |
-| HTTP | 80/443 | Network | v1.3.1 complete |
-| SSH | 22 | Network | v3.1 complete |
-| BACNET | 47808 | OT/BAS | v3.1 complete |
-| MODBUS | 502 | OT/ICS | v3.1 complete |
-| MQTT | 1883 | IoT/BAS | v3.1 complete |
-| SNMP | 161 | Network | v3.1 complete |
-| CUSTOM | user | Any | v4.0 planned |
+| Module | Protocol | Port | Status |
+|--------|----------|------|--------|
+| [RECON](modules/arp.py) | ICMP/TCP | any | v1.3 |
+| [PORTSCAN](modules/portscan.py) | TCP | OT/BAS/ICS | v1.3 |
+| [SWEEP](modules/sweep.py) | ICMP | subnet | v1.3 |
+| [BACNET](modules/bacnet.py) | BACnet/IP | 47808 | v2.1 |
+| [MODBUS](modules/modbus.py) | Modbus TCP | 502 | v3.0 |
+| [MQTT](modules/mqtt.py) | MQTT | 1883 | v3.0 |
+| [MSTP](modules/serial_mstp.py) | BACnet MSTP | RS485 | v3.1 |
+| [OSINT](modules/osint.py) | APIs | n/a | v3.1 |
+| [ORACLE](modules/oracle.py) | Claude API | n/a | v3.1 |
+| SNMP | SNMP | 161 | v3.2 planned |
+| ALERTS | internal | n/a | v3.2 planned |
+| BASELINE | internal | n/a | v4.0 planned |
+
+---
+
+## OSINT Intelligence Stack
+
+Seven sources per discovered IP:
+
+| Source | Key | Data |
+|--------|-----|------|
+| [Shodan](https://shodan.io) | paid | port history, services |
+| [IPInfo](https://ipinfo.io) | paid | geolocation, ASN, org |
+| [GreyNoise](https://greynoise.io) | paid | noise vs targeted |
+| [AbuseIPDB](https://abuseipdb.com) | paid | abuse score |
+| [Shodan InternetDB](https://internetdb.shodan.io) | free | CVEs, ports, tags |
+| [Censys](https://censys.io) | free | certs, services |
+| [URLScan](https://urlscan.io) | free | passive scan history |
+
+---
+
+## Version History
+
+| Version | Feature |
+|---------|---------|
+| v1.0 | raw socket recon, port scan, DNS, banner grab |
+| v1.1 | auto gateway detection, OT/BAS port map |
+| v1.2 | OSINT module, Shodan/IPInfo/GreyNoise/AbuseIPDB |
+| v1.3 | loot directory, logging, ARP, auto chain |
+| v1.3.1 | host sweep, progress bar, ASCII art, Easter eggs |
+| v2.0 | BACnet/IP passive listener, device inventory |
+| v2.1 | BBMD topology, BDT/FDT parsing |
+| v3.0 | Modbus TCP, MQTT, ghost sayings |
+| v3.1 | Oracle Claude API, filestack JSON, MSTP, OSINT expansion |
+
+---
+
+## Roadmap
+
+- v3.2 — SNMP, alert throttling, email/Pushover notifications
+- v4.0 — behavioral baseline, anomaly detection, WebCTRL integration
+- v4.1 — CVE intelligence via NVD/NIST free API
+- v5.0 — sensor deployment, WireGuard tunnel, edge nodes
+- v5.1 — web dashboard, protocol heatmap, alert timeline
+- v6.0 — Docker, multi-sensor, API, platform
 
 ---
 
@@ -57,78 +83,24 @@ WRAITH core — raw socket engine
 
 - Python 3.6+
 - No pip install required
-- Linux recommended
+- Linux or iSH on iOS
 - Root or sudo for raw socket capture
-
----
-
-## Roadmap
-
-v1.0 — Passive Recon Engine — COMPLETE
-- Host reachability mapping
-- Port and service enumeration
-- DNS hostname resolution
-- Protocol fingerprinting
-- Banner grabbing
-
-v1.3.1 — Auto Detection and OT/BAS Port Awareness — COMPLETE
-- Auto gateway and network detection
-- Auto local IP and subnet mapping
-- Full OT/BAS/ICS port map
-- BACnet port 47808 awareness
-- Niagara port 1911 and 4911 awareness
-- Modbus port 502 awareness
-- S7Comm port 102 awareness
-- DNP3 port 20000 awareness
-- MQTT port 1883 awareness
-- SNMP port 161 awareness
-
-v2.0 — BACnet/IP Passive Listener, Device Inventory, Vendor Lookup — COMPLETE
-v2.1 — BBMD Topology Mapping, BDT/FDT Parsing — COMPLETE
-- BACnet/IP passive listener port 47808
-- BACnet device discovery via Who-Is and I-Am
-- BACnet object inventory logging
-- SSH detection port 22
-
-v3.0 — Modbus TCP, MQTT Broker Listener, Ghost Module — COMPLETE
-v3.1 — Oracle AI, Filestack JSON Engine, Agent Architecture, Menu Loop, Ghost Module — COMPLETE
-- Modbus TCP port 502
-- MQTT port 1883
-- SNMP port 161
-- Cross-protocol device correlation
-
-v4.0 — Behavioral Baseline, Anomaly Detection, CVE Intelligence — PLANNED
-- Behavioral baseline per device
-- Anomaly detection engine
-- Communication health scoring
-- OT/BAS network diagnostics
-
-v5.0 — Sensor Deployment — PLANNED
-- Raspberry Pi sensor node
-- Wireless passive capture
-- Encrypted telemetry reporting
-- Multi-site visibility
 
 ---
 
 ## Legal
 
-For use only on networks you own or have explicit written authorization to monitor. Passive observation only. No packet injection. No exploitation.
+For use only on networks you own or have explicit written authorization to monitor.
+Passive observation only. No packet injection. No exploitation.
 
 ---
 
 ## Author
 
-sig.int.ghost — passive observer
-instagram: @sig.int.ghost
-github: github.com/sigintghost/WRAITH
+**sig.int.ghost** — passive observer. ghost in the machine.
 
-systems reveal themselves under observation.
+- Instagram: [@sig.int.ghost](https://instagram.com/sig.int.ghost)
+- GitHub: [sigintghost](https://github.com/sigintghost)
+- Email: abstractname.02@proton.me
 
-v3.1 — Oracle AI, MQTT, Modbus, BACnet/IP, BBMD, Ghost Module — COMPLETE
-- Shodan integration — port and vulnerability data
-- IPInfo integration — geolocation and org data
-- GreyNoise integration — threat classification
-- AbuseIPDB integration — abuse score and reports
-- Auto key loading from ~/.wraith/keys.py
-- Keys never stored in repo — local only
+*systems reveal themselves under observation.*
