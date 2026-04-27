@@ -101,6 +101,5 @@ Passive observation only. No packet injection. No exploitation.
 
 - Instagram: [@sig.int.ghost](https://instagram.com/sig.int.ghost)
 - GitHub: [sigintghost](https://github.com/sigintghost)
-- Email: abstractname.02@proton.me
 
 *systems reveal themselves under observation.*
