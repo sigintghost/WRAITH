@@ -160,6 +160,10 @@ def run_mqtt_module():
     from modules.mqtt import run_mqtt
     run_mqtt()
 
+def run_mstp_module():
+    from modules.serial_mstp import run_mstp
+    run_mstp()
+
 def run_oracle_module():
     import sys
     sys.path.insert(0, '.')
@@ -232,6 +236,7 @@ def main2():
         print("  [10] MODBUS — passive Modbus TCP listener")
         print("  [11] MQTT — passive MQTT broker listener")
         print("  [12] ORACLE — ghost intelligence module")
+        print("  [13] MSTP    — BACnet MSTP passive listener via USB-RS485")
         print("  [0] EXIT")
         div()
         c=input("\n > ")
@@ -253,6 +258,7 @@ def main2():
         elif c=="10": run_modbus_module()
         elif c=="11": run_mqtt_module()
         elif c=="12": run_oracle_module()
+        elif c=="13": run_mstp_module()
         else: print("  invalid option")
     import sys; sys.path.insert(0,'.')
     from modules.ghost import ghost_exit
