@@ -91,6 +91,9 @@ def greynoise_check(ip, key):
         print(f"  greynoise: unavailable")
 
 def abuseipdb_check(ip, key):
+    shodan_internetdb(ip)
+    censys_lookup(ip)
+    urlscan_lookup(ip)
     if not key:
         print("  abuseipdb: no key configured")
         return
@@ -124,3 +127,91 @@ def osint_lookup(ip):
     greynoise_check(ip, keys["GREYNOISE_KEY"])
     abuseipdb_check(ip, keys["ABUSEIPDB_KEY"])
     div()
+
+def shodan_internetdb(ip):
+    print("  -- SHODAN INTERNETDB --")
+    try:
+        import socket
+        url = "internetdb.shodan.io/" + ip
+        host = "internetdb.shodan.io"
+        req = "GET /" + ip + " HTTP/1.0" + chr(13)+chr(10) + "Host: internetdb.shodan.io" + chr(13)+chr(10)+chr(13)+chr(10)
+
+        s = socket.create_connection((host, 80), timeout=5)
+        s.send(req.encode())
+        resp = b""
+        while True:
+            chunk = s.recv(4096)
+            if not chunk: break
+            resp += chunk
+        s.close()
+        body = resp.decode(errors=chr(34)+chr(105)+chr(103)+chr(110)+chr(111)+chr(114)+chr(101)+chr(34)).split(chr(13)+chr(10)+chr(13)+chr(10),1)[-1]
+        import json
+        data = json.loads(body)
+        ports = data.get("ports", [])
+        vulns = data.get("vulns", [])
+        tags = data.get("tags", [])
+        print(f"  internetdb: ports={ports}")
+        print(f"  internetdb: vulns={vulns}")
+        print(f"  internetdb: tags={tags}")
+    except Exception as e:
+        print(f"  internetdb: unavailable {e}")
+
+def censys_lookup(ip):
+    print("  -- CENSYS --")
+    try:
+        import socket, json
+        host = "search.censys.io"
+        path = "/api/v2/hosts/" + ip
+        req = chr(71)+chr(69)+chr(84)+chr(32) + path + chr(32)+chr(72)+chr(84)+chr(84)+chr(80)+chr(47)+chr(49)+chr(46)+chr(48) + chr(13)+chr(10) + chr(72)+chr(111)+chr(115)+chr(116)+chr(58)+chr(32)+chr(115)+chr(101)+chr(97)+chr(114)+chr(99)+chr(104)+chr(46)+chr(99)+chr(101)+chr(110)+chr(115)+chr(121)+chr(115)+chr(46)+chr(105)+chr(111) + chr(13)+chr(10) + chr(65)+chr(99)+chr(99)+chr(101)+chr(112)+chr(116)+chr(58)+chr(32)+chr(97)+chr(112)+chr(112)+chr(108)+chr(105)+chr(99)+chr(97)+chr(116)+chr(105)+chr(111)+chr(110)+chr(47)+chr(106)+chr(115)+chr(111)+chr(110) + chr(13)+chr(10) + chr(13)+chr(10)
+        s = socket.create_connection((host, 443), timeout=5)
+        import ssl
+        s = ssl.wrap_socket(s)
+        s.send(req.encode())
+        resp = b""
+        while True:
+            chunk = s.recv(4096)
+            if not chunk: break
+            resp += chunk
+        s.close()
+        body = resp.decode(errors=chr(34)+chr(105)+chr(103)+chr(110)+chr(111)+chr(114)+chr(101)+chr(34)).split(chr(13)+chr(10)+chr(13)+chr(10),1)[-1]
+
+        data = json.loads(body)
+        result = data.get("result", {})
+        services = result.get("services", [])
+        print(f"  censys: {len(services)} services found")
+        for svc in services[:5]:
+            port = svc.get("port")
+            proto = svc.get("service_name")
+            print(f"    port={port} proto={proto}")
+    except Exception as e:
+        print(f"  censys: unavailable {e}")
+
+def urlscan_lookup(ip):
+    print("  -- URLSCAN --")
+    try:
+        import socket, json, ssl
+        host = "urlscan.io"
+        path = "/api/v1/search/?q=ip:" + ip + "&size=5"
+        req = chr(71)+chr(69)+chr(84)+chr(32) + path + chr(32)+chr(72)+chr(84)+chr(84)+chr(80)+chr(47)+chr(49)+chr(46)+chr(48) + chr(13)+chr(10) + chr(72)+chr(111)+chr(115)+chr(116)+chr(58)+chr(32)+chr(117)+chr(114)+chr(108)+chr(115)+chr(99)+chr(97)+chr(110)+chr(46)+chr(105)+chr(111) + chr(13)+chr(10) + chr(65)+chr(99)+chr(99)+chr(101)+chr(112)+chr(116)+chr(58)+chr(32)+chr(97)+chr(112)+chr(112)+chr(108)+chr(105)+chr(99)+chr(97)+chr(116)+chr(105)+chr(111)+chr(110)+chr(47)+chr(106)+chr(115)+chr(111)+chr(110) + chr(13)+chr(10) + chr(13)+chr(10)
+        body = resp.decode(errors=chr(34)+chr(105)+chr(103)+chr(110)+chr(111)+chr(114)+chr(101)+chr(34)).split(chr(13)+chr(10)+chr(13)+chr(10),1)[-1]
+        s = socket.create_connection((host, 443), timeout=5)
+        s = ssl.wrap_socket(s)
+        s.send(req.encode())
+        resp = b""
+        while True:
+            chunk = s.recv(4096)
+            if not chunk: break
+            resp += chunk
+        s.close()
+        body = resp.decode(errors=chr(34)+chr(105)+chr(103)+chr(110)+chr(111)+chr(114)+chr(101)+chr(34)).split(chr(13)+chr(10)+chr(13)+chr(10),1)[-1]
+
+        data = json.loads(body)
+        total = data.get("total", 0)
+        results = data.get("results", [])
+        print(f"  urlscan: {total} historical scans found")
+        for r in results[:3]:
+            page = r.get("page", {})
+            url = page.get("url", "unknown")
+            print(f"    url={url}")
+    except Exception as e:
+        print(f"  urlscan: unavailable {e}")
