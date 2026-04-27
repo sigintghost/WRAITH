@@ -119,28 +119,6 @@ def banner(gateway):
     except:
         print("  no banner retrieved.")
     div()
-def main():
-    print(f"\n  WRAITH v{VERSION} — sig.int.ghost")
-    print(f"  passive observer. anomaly is the signal.")
-    div()
-    print(f"  detecting network...")
-    gateway,local_ip,base=get_network()
-    print(f"  gateway  : {gateway}")
-    print(f"  local ip : {local_ip}")
-    print(f"  subnet   : {base}.0/24")
-    div()
-    print("  [1] RECON")
-    print("  [2] PORTSCAN — full OT/BAS/ICS port map")
-    print("  [3] DNS")
-    print("  [4] BANNER")
-    print("  [5] ALL")
-    div()
-    import sys
-    sys.path.insert(0, '.')
-    from modules.osint import osint_lookup
-    print(f"\n  [OSINT] target: {gateway}")
-    osint_lookup(gateway)
-
 def run_osint(gateway):
     import sys
     sys.path.insert(0,'.')
