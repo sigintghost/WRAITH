@@ -150,6 +150,10 @@ def run_alerts_module():
         msg = a.get(chr(109)+chr(101)+chr(115)+chr(115)+chr(97)+chr(103)+chr(101))
         print(chr(32)*2 + ts + chr(32) + sev + chr(32) + msg)
 
+def run_snmp_module():
+    from modules.snmp import run_snmp
+    run_snmp()
+
 def run_mstp_module():
     from modules.serial_mstp import run_mstp
     run_mstp()
@@ -219,6 +223,7 @@ def show_protocols_menu():
     print("  [3] MQTT       1883")
     print("  [4] MSTP       RS485")
     print("  [5] PORTSCAN   OT/BAS")
+    print("  [6] SNMP      port 161")
     print("  [0] BACK")
     div()
 def show_intel_menu():
@@ -254,6 +259,7 @@ def main2():
                 elif p == "3": run_mqtt_module()
                 elif p == "4": run_mstp_module()
                 elif p == "5": portscan(gateway)
+                elif p == "6": run_snmp_module()
                 else: print("  invalid")
         elif c == "3":
             while True:
