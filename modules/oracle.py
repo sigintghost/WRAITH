@@ -102,6 +102,7 @@ def pick_model(question):
     if len(question) > 200: return SONNET
     if any(k in q for k in COMPLEX_KEYWORDS): return SONNET
     return HAIKU
+def ask_oracle(question, api_key, history):
     context = build_context()
     system  = GHOST_SYSTEM + f'\n\nCURRENT NETWORK STATE:\n{context}'
     history.append({'role': 'user', 'content': question})
@@ -134,7 +135,7 @@ def pick_model(question):
 
 def run_oracle():
     print(f'\n  {CYAN}{BOLD}[ORACLE]{RESET} ghost intelligence module')
-    print(f"  {DIM}model: {pick_model(question)} — Anthropic{RESET}")
+    print(f"  {DIM}token routing active — Anthropic{RESET}")
     print(f'  {DIM}ask anything about your network, BACnet, OT security{RESET}')
     print(f'  {DIM}type exit to return to menu{RESET}\n')
     api_key = load_oracle_key()
