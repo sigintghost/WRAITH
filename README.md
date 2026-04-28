@@ -65,7 +65,7 @@ Agent swarm planned:
 - Coordinator, BACnet Analyst, Threat Enrichment
 - Alert Triage, Executive Summary, Lighting Analyst
 - Meter Analyst, FDD Agent, Code Writer Agent
-- MITRE ATT&CK ICS mapping — coming v4.0
+- MITRE ATT&CK ICS mapping — coming v3.3
 
 ---
 
@@ -115,16 +115,16 @@ NIST SP 800-82 and IEC 62443 aligned:
 | v2.0 | BACnet/IP passive listener, device inventory |
 | v2.1 | BBMD topology, BDT/FDT parsing |
 | v3.0 | Modbus TCP, MQTT, ghost module |
-| v3.1 | Oracle AI, filestack JSON, MSTP, OSINT x7 |
-| v3.2 | alerts.py, menu submenus, token routing |
+| v3.3 | Oracle AI, filestack JSON, MSTP, OSINT x7 |
+| v3.3 | alerts.py, menu submenus, token routing |
 | v3.3 | auth.py, audit log, SNMP, SMTP planned |
 
 ## Roadmap
 
 - v3.3 — SNMP, SMTP, input validation, MITRE ATT&CK ICS
-- v4.0 — Strata MVS, baseline, anomaly, WebCTRL ingestion
-- v4.1 — Lutron, Crestron, DMX, meters, CVE lookup
-- v5.0 — sensor nodes, WireGuard, VM deployment
+- v3.3 — Strata MVS, baseline, anomaly, WebCTRL ingestion
+- v3.3 — Lutron, Crestron, DMX, meters, CVE lookup
+- v3.3 — sensor nodes, WireGuard, VM deployment
 - v5.1 — browser dashboard, health scores, alert timeline
 - v6.0 — multi-user, API layer, OptigoVN replacement
 
