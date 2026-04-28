@@ -1,4 +1,4 @@
-import socket
+import socket, getpass
 import datetime
 
 VERSION = "3.2"
@@ -282,13 +282,13 @@ def run_auth():
     if first_run():
         print("  [*] first run — create admin account")
         u = input("  username: ")
-        p = input("  password: ")
+        p = getpass.getpass("  password: ")
         create_user(u, p, "admin")
         print("  [+] admin account created")
     attempts = 0
     while attempts < 3:
         u = input("  username: ")
-        p = input("  password: ")
+        p = getpass.getpass("  password: ")
         if login(u, p):
             s = get_session()
             print("  [+] access granted")
