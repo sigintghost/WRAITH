@@ -3,11 +3,13 @@
 # usage: python3 tools/version_bump.py v3.3
 import os, sys
 
-FILES = [
-    "wraith.py",
-    "README.md",
-    "modules/README.md",
-]
+import glob
+FILES = (
+    ["wraith.py", "HANDOFF.md"] +
+    glob.glob("README.md") +
+    glob.glob("**/README.md", recursive=True) +
+    glob.glob("**/*.md", recursive=True)
+)
 
 VERSIONS = ["v3.1", "v3.2", "v3.3", "v3.4", "v4.0", "v4.1", "v5.0"]
 def bump_version(new_ver):
