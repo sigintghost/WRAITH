@@ -247,6 +247,8 @@ def run_bacnet(idle_timeout=30, max_duration=300):
             if idle >= idle_timeout:
                 print(f"  {YELLOW}[BACNET]{RESET} {idle_timeout}s idle — stopping")
                 break
+            if idle > 0 and idle % 10 == 0:
+                print(f"  {DIM}[BACNET] idle {idle}s — listening...{RESET}")
             try:
                 data, addr = sock.recvfrom(1024)
                 src_ip = addr[0]

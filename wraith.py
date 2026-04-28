@@ -1,7 +1,7 @@
 import socket, getpass
 import datetime
 
-VERSION = "3.3"
+VERSION = "3.4"
 
 PORTS = {
     21:    "FTP",

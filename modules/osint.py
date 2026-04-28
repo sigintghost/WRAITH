@@ -163,23 +163,14 @@ def shodan_internetdb(ip):
 def censys_lookup(ip):
     print("  -- CENSYS --")
     try:
-        import socket, json
-        host = "search.censys.io"
-        path = "/api/v2/hosts/" + ip
-        req = chr(71)+chr(69)+chr(84)+chr(32) + path + chr(32)+chr(72)+chr(84)+chr(84)+chr(80)+chr(47)+chr(49)+chr(46)+chr(48) + chr(13)+chr(10) + chr(72)+chr(111)+chr(115)+chr(116)+chr(58)+chr(32)+chr(115)+chr(101)+chr(97)+chr(114)+chr(99)+chr(104)+chr(46)+chr(99)+chr(101)+chr(110)+chr(115)+chr(121)+chr(115)+chr(46)+chr(105)+chr(111) + chr(13)+chr(10) + chr(65)+chr(99)+chr(99)+chr(101)+chr(112)+chr(116)+chr(58)+chr(32)+chr(97)+chr(112)+chr(112)+chr(108)+chr(105)+chr(99)+chr(97)+chr(116)+chr(105)+chr(111)+chr(110)+chr(47)+chr(106)+chr(115)+chr(111)+chr(110) + chr(13)+chr(10) + chr(13)+chr(10)
-        s = socket.create_connection((host, 443), timeout=5)
-        import ssl
-        s = ssl.wrap_socket(s)
-        s.send(req.encode())
-        resp = b""
-        while True:
-            chunk = s.recv(4096)
-            if not chunk: break
-            resp += chunk
-        s.close()
-        body = resp.decode(errors=chr(34)+chr(105)+chr(103)+chr(110)+chr(111)+chr(114)+chr(101)+chr(34)).split(chr(13)+chr(10)+chr(13)+chr(10),1)[-1]
-
-        data = json.loads(body)
+        import urllib.request, ssl, json
+        ctx = ssl._create_unverified_context()
+        url = "https://search.censys.io/api/v2/hosts/" + ip
+        req = urllib.request.Request(url)
+        req.add_header("Accept", "application/json")
+        req.add_header("User-Agent", "WRAITH/3.4")
+        with urllib.request.urlopen(req, context=ctx, timeout=5) as r:
+            data = json.loads(r.read())
         result = data.get("result", {})
         services = result.get("services", [])
         print(f"  censys: {len(services)} services found")

@@ -1,6 +1,6 @@
 # WRAITH
 ### passive OT/BAS network intelligence engine
-v3.3 — dev branch active
+v3.4 — dev branch active
 
 ---
 
@@ -56,11 +56,11 @@ Keys go in ~/.wraith/keys.py
 See modules/keys_template.py
 
 ## ROADMAP
-v3.3  current  — idle timeouts, ANSI, auth, oracle
+v3.4  current  — idle timeouts, ANSI, auth, oracle
 v3.4  next     — key mgmt, admin panel, gradient UI
-v4.0  strata   — FDD, energy, trend, anomaly
-v4.1  protocols — Lutron, Crestron, DMX, EasyIO
-v5.0  sensors  — GL.iNet nodes, WireGuard, per-building
+v3.4  strata   — FDD, energy, trend, anomaly
+v3.4  protocols — Lutron, Crestron, DMX, EasyIO
+v3.4  sensors  — GL.iNet nodes, WireGuard, per-building
 v5.1  dashboard — browser UI, zero dependencies
 v6.0  platform — FSI/1Call/Tableau, SaaS, API
 
