@@ -223,7 +223,7 @@ def print_inventory():
               f"{info['vendor']:<25} "
               f"{info['packet_count']}")
 
-def run_bacnet(duration=60):
+def run_bacnet(idle_timeout=30, max_duration=300):
     print(f"\n  {CYAN}{BOLD}[BACNET/IP]{RESET} passive listener on port 47808")
     print(f"  {DIM}listening for Who-Is and I-Am broadcasts...{RESET}")
     print(f"  {DIM}press Ctrl+C to stop and show inventory{RESET}\n")

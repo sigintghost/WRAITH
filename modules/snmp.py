@@ -29,17 +29,23 @@ def print_summary(inventory):
     if not devices:
         print("  no SNMP devices detected")
     print("  ===================")
-def run_snmp(duration=60):
+def run_snmp(idle_timeout=30, max_duration=300):
     print("  [WRAITH] SNMP Passive Listener — port 161")
     inventory = {"devices": {}, "frames": []}
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_UDP)
         s.settimeout(1.0)
-        print(f"  [*] listening for {duration}s — Ctrl+C to stop")
+        print(f"  [*] max {max_duration}s — stops after {idle_timeout}s idle")
         import time
-        deadline = time.time() + duration
+        deadline = time.time() + max_duration
+        last_seen = time.time()
         count = 0
         while time.time() < deadline:
+            idle = int(time.time() - last_seen)
+            if idle >= idle_timeout:
+                print(f"  [*] no new devices for {idle_timeout}s — stopping")
+                break
+            if idle > 0 and idle % 10 == 0: print(f"  [*] idle {idle}s — listening...")
             try:
                 data, addr = s.recvfrom(4096)
                 src_ip = addr[0]

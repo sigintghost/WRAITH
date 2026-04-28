@@ -150,7 +150,7 @@ def print_modbus_inventory():
         if dev['exceptions']:
             print(f'  {RED}exceptions: {", ".join(dev["exceptions"])}{RESET}')
 
-def run_modbus():
+def run_modbus(idle_timeout=30, max_duration=300):
     print(f'\n  {CYAN}{BOLD}[MODBUS]{RESET} passive listener on port 502')
     print(f'  {DIM}listening for Modbus TCP traffic...{RESET}')
     print(f'  {DIM}press Ctrl+C to stop and show inventory{RESET}\n')
@@ -181,17 +181,23 @@ def run_modbus():
             pass
         finally:
             conn.close()
+    import time
     try:
-        while True:
+        deadline = time.time() + max_duration
+        last_seen = time.time()
+        while time.time() < deadline:
+            idle = int(time.time() - last_seen)
+            if idle >= idle_timeout:
+                print(f"  [*] idle {idle_timeout}s — stopping")
+                break
             try:
                 conn, addr = sock.accept()
+                last_seen = time.time()
                 t = threading.Thread(target=handle_client, args=(conn, addr))
                 t.daemon = True
                 t.start()
-            except socket.timeout:
-                continue
-    except KeyboardInterrupt:
-        pass
+            except socket.timeout: continue
+    except KeyboardInterrupt: pass
     finally:
         sock.close()
         print_modbus_inventory()

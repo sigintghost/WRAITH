@@ -211,7 +211,7 @@ def print_mqtt_inventory():
             if info['last_payload']:
                 print(f'    {DIM}last: {info["last_payload"][:60]}{RESET}')
 
-def run_mqtt():
+def run_mqtt(idle_timeout=30, max_duration=300):
     print(f'\n  {CYAN}{BOLD}[MQTT]{RESET} passive listener on port 1883')
     print(f'  {DIM}listening for MQTT broker traffic...{RESET}')
     print(f'  {DIM}press Ctrl+C to stop and show inventory{RESET}\n')
@@ -237,10 +237,18 @@ def run_mqtt():
                     log_result(addr[0], 'MQTT', parsed['type_name'])
         except: pass
         finally: conn.close()
+    import time
     try:
-        while True:
+        deadline = time.time() + max_duration
+        last_seen = time.time()
+        while time.time() < deadline:
+            idle = int(time.time() - last_seen)
+            if idle >= idle_timeout:
+                print(f"  [*] idle {idle_timeout}s — stopping")
+                break
             try:
                 conn, addr = sock.accept()
+                last_seen = time.time()
                 t = threading.Thread(target=handle_client, args=(conn,addr))
                 t.daemon = True
                 t.start()

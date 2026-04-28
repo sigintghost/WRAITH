@@ -167,7 +167,7 @@ def _print_summary(topology):
     print("  Frames: " + str(len(topology.get("frames", []))))
     print("  ==============================")
 
-def run_mstp(duration=60):
+def run_mstp(idle_timeout=30, max_duration=300):
     port = find_serial_port()
     if not port:
         print("  [-] No serial port found. Connect USB-RS485.")
@@ -181,7 +181,8 @@ def run_mstp(duration=60):
     topology = {"port": port, "baud": baud, "masters": {}, "slaves": {}, "frames": []}
     fd = open_serial(port, baud)
     buf = b""
-    deadline = time.time() + duration
+    deadline = time.time() + max_duration
+    last_seen = time.time()
     frame_count = 0
     try:
         while time.time() < deadline:
