@@ -92,4 +92,9 @@ def run_sweep(base, local_ip):
         print(f"  {ip:<18} {port:<8} {hostname}")
     if not results:
         print("  [SWEEP] no hosts found")
+    try:
+        from modules.filestack import write_hosts
+        write_hosts(results)
+    except Exception as e:
+        pass
     return results

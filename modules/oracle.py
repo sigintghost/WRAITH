@@ -60,10 +60,37 @@ When analyzing network data:
 - BBMD table changes indicate network topology changes
 '''
 
+def load_stack():
+    import os, json
+    stack_dir = os.path.expanduser('~/.wraith/loot/stack')
+    files = ['hosts.json','bacnet_inventory.json','modbus_map.json',
+             'mqtt_brokers.json','snmp_inventory.json','mstp_topology.json',
+             'alerts.json']
+    data = {}
+    for fn in files:
+        fp = os.path.join(stack_dir, fn)
+        if os.path.exists(fp):
+            try:
+                with open(fp) as f: data[fn] = json.load(f)
+            except: pass
+    return data
+
 def build_context():
     ctx = []
     ctx.append('WRAITH LIVE NETWORK CONTEXT')
     ctx.append(f'timestamp: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+    stack = load_stack()
+    if 'hosts.json' in stack:
+        hosts = stack['hosts.json'].get('hosts', [])
+        ctx.append(f'\nSWEEP RESULTS: {len(hosts)} hosts discovered')
+        for h in hosts:
+            ctx.append(f'  ip={h.get("ip")} port={h.get("port",0)} hostname={h.get("hostname","")}')
+    if 'alerts.json' in stack:
+        alerts = stack['alerts.json'].get('alerts', [])
+        if alerts:
+            ctx.append(f'\nACTIVE ALERTS: {len(alerts)}')
+            for a in alerts[-3:]:
+                ctx.append(f'  [{a.get("severity")}] {a.get("message")}')
     try:
         from modules.bacnet import inventory as bacnet_inv
         if bacnet_inv:

@@ -13,6 +13,16 @@ STACK = os.path.join(LOOT, 'stack')
 def ensure_stack():
     os.makedirs(STACK, exist_ok=True)
 
+def write_hosts(results):
+    hosts = []
+    for item in results:
+        if len(item) == 3:
+            ip, port, hostname = item
+            hosts.append({'ip':ip,'port':port,'hostname':hostname})
+        else:
+            hosts.append({'ip':item[0]})
+    write_json('hosts.json', {'hosts': hosts, 'count': len(hosts)})
+
 def write_json(filename, data):
     ensure_stack()
     path = os.path.join(STACK, filename)
