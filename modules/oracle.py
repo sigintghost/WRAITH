@@ -84,7 +84,24 @@ def build_context():
         hosts = stack['hosts.json'].get('hosts', [])
         ctx.append(f'\nSWEEP RESULTS: {len(hosts)} hosts discovered')
         for h in hosts:
-            ctx.append(f'  ip={h.get("ip")} port={h.get("port",0)} hostname={h.get("hostname","")}')
+            if isinstance(h, dict):
+                ctx.append(f'  ip={h.get("ip")} port={h.get("port",0)} hostname={h.get("hostname","")}')
+            else:
+                ctx.append(f'  {h}')
+    if 'arp_table.json' in stack:
+        arps = stack['arp_table.json'].get('hosts', [])
+        ctx.append(f'\nARP TABLE: {len(arps)} hosts')
+        for h in arps:
+            if isinstance(h, dict):
+                ctx.append(f'  ip={h.get("ip")} mac={h.get("mac")}')
+    if 'portscan.json' in stack:
+        ps = stack['portscan.json']
+        target = ps.get('target','unknown')
+        ports = ps.get('ports', [])
+        open_ports = [p for p in ports if isinstance(p,dict) and p.get('state')=='OPEN']
+        ctx.append(f'\nPORTSCAN: target={target} open={len(open_ports)}')
+        for p in open_ports:
+            ctx.append(f'  port={p.get("port")} service={p.get("service")}')
     if 'alerts.json' in stack:
         alerts = stack['alerts.json'].get('alerts', [])
         if alerts:

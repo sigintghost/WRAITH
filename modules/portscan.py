@@ -52,4 +52,10 @@ def run_portscan(ip):
         line = f"  {port:<8} {service:<14} {state} {marker}"
         print(line)
         results.append((port, service, state))
+    try:
+        from modules.filestack import write_json
+        write_json('portscan.json', {'target': ip, 'ports': [
+            {'port': p, 'service': s, 'state': st} for p,s,st in results
+        ]})
+    except: pass
     return results

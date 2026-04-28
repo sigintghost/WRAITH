@@ -79,4 +79,10 @@ def run_arp(gateway, local_ip):
     hosts = arp_scan(prefix, local_ip)
     if not hosts:
         print("  [ARP] no hosts found or raw socket unavailable")
+    try:
+        from modules.filestack import write_json
+        write_json('arp_table.json', {'hosts': [
+            {'ip': h[0], 'mac': h[1]} for h in hosts
+        ]})
+    except: pass
     return hosts
