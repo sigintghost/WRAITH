@@ -146,13 +146,17 @@ def shodan_internetdb(ip):
         s.close()
         body = resp.decode(errors=chr(34)+chr(105)+chr(103)+chr(110)+chr(111)+chr(114)+chr(101)+chr(34)).split(chr(13)+chr(10)+chr(13)+chr(10),1)[-1]
         import json
-        data = json.loads(body)
-        ports = data.get("ports", [])
-        vulns = data.get("vulns", [])
-        tags = data.get("tags", [])
-        print(f"  internetdb: ports={ports}")
-        print(f"  internetdb: vulns={vulns}")
-        print(f"  internetdb: tags={tags}")
+        if not body or body.strip() == "" or body.strip().startswith("<"):
+            print("  internetdb: no data returned")
+        else:
+            import json
+            data = json.loads(body)
+            ports = data.get("ports", [])
+            vulns = data.get("vulns", [])
+            tags = data.get("tags", [])
+            print(f"  internetdb: ports={ports}")
+            print(f"  internetdb: vulns={vulns}")
+            print(f"  internetdb: tags={tags}")
     except Exception as e:
         print(f"  internetdb: unavailable {e}")
 
@@ -193,7 +197,6 @@ def urlscan_lookup(ip):
         host = "urlscan.io"
         path = "/api/v1/search/?q=ip:" + ip + "&size=5"
         req = chr(71)+chr(69)+chr(84)+chr(32) + path + chr(32)+chr(72)+chr(84)+chr(84)+chr(80)+chr(47)+chr(49)+chr(46)+chr(48) + chr(13)+chr(10) + chr(72)+chr(111)+chr(115)+chr(116)+chr(58)+chr(32)+chr(117)+chr(114)+chr(108)+chr(115)+chr(99)+chr(97)+chr(110)+chr(46)+chr(105)+chr(111) + chr(13)+chr(10) + chr(65)+chr(99)+chr(99)+chr(101)+chr(112)+chr(116)+chr(58)+chr(32)+chr(97)+chr(112)+chr(112)+chr(108)+chr(105)+chr(99)+chr(97)+chr(116)+chr(105)+chr(111)+chr(110)+chr(47)+chr(106)+chr(115)+chr(111)+chr(110) + chr(13)+chr(10) + chr(13)+chr(10)
-        body = resp.decode(errors=chr(34)+chr(105)+chr(103)+chr(110)+chr(111)+chr(114)+chr(101)+chr(34)).split(chr(13)+chr(10)+chr(13)+chr(10),1)[-1]
         s = socket.create_connection((host, 443), timeout=5)
         s = ssl.wrap_socket(s)
         s.send(req.encode())
