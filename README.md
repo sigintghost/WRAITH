@@ -82,7 +82,7 @@ AI agent powered by Claude API with token routing:
 
 ---
 
-## Strata — Intelligence Layer (v4.0)
+## Strata — Intelligence Layer (v3.3)
 
 Strata sits above WRAITH as the interpretation layer.
 
@@ -103,7 +103,7 @@ Strata components:
 
 ---
 
-## Agent Swarm (v4.0)
+## Agent Swarm (v3.3)
 
 Multi-agent Oracle architecture:
 
@@ -166,13 +166,13 @@ T0822 T0840 T0855 T0886 and full ICS matrix
 | v2.0 | BACnet/IP passive listener, device inventory |
 | v2.1 | BBMD topology, BDT/FDT parsing |
 | v3.0 | Modbus TCP, MQTT, ghost module |
-| v3.1 | Oracle AI, filestack, MSTP, OSINT x7 |
-| v3.2 | alerts, menu submenus, token routing |
+| v3.3 | Oracle AI, filestack, MSTP, OSINT x7 |
+| v3.3 | alerts, menu submenus, token routing |
 | v3.3 | auth, audit log, SNMP, OSINT fixes, dev branch |
-| v3.4 | daemon mode, admin panel, color UI — planned |
-| v4.0 | Strata MVS, baseline, anomaly, WebCTRL — planned |
-| v4.1 | Lutron, Crestron, DMX, meters, CVE — planned |
-| v5.0 | sensor nodes, WireGuard, VM deployment — planned |
+| v3.3 | daemon mode, admin panel, color UI — planned |
+| v3.3 | Strata MVS, baseline, anomaly, WebCTRL — planned |
+| v3.3 | Lutron, Crestron, DMX, meters, CVE — planned |
+| v3.3 | sensor nodes, WireGuard, VM deployment — planned |
 | v5.1 | browser dashboard, health scores — planned |
 | v6.0 | multi-user, API, OptigoVN replacement — planned |
 
