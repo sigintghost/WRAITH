@@ -4,6 +4,13 @@ import socket, os, json
 from datetime import datetime
 STACK_DIR = os.path.expanduser("~/.wraith/loot/stack")
 SNMP_FILE = os.path.join(STACK_DIR, "snmp_inventory.json")
+GREEN  = '\033[32m'
+CYAN   = '\033[36m'
+YELLOW = '\033[33m'
+RED    = '\033[31m'
+DIM    = '\033[2m'
+BOLD   = '\033[1m'
+RESET  = '\033[0m'
 VERSIONS = {0: "v1", 1: "v2c", 3: "v3"}
 def parse_snmp(data, src_ip):
     try:
@@ -19,16 +26,17 @@ def save_snmp(inventory):
     print("  [+] SNMP inventory saved")
 def print_summary(inventory):
     devices = inventory.get("devices", {})
-    print("  === SNMP SUMMARY ===")
-    print(f"  Devices: {len(devices)}")
+    print(f"\n{CYAN}{BOLD}  SNMP DEVICE SUMMARY{RESET}")
+    print(f"  {DIM}{'─'*46}{RESET}")
+    print(f"  {DIM}devices found: {RESET}{YELLOW}{len(devices)}{RESET}")
     for ip, info in devices.items():
         ver = info.get("version")
         com = info.get("community")
-        ts = info.get("last_seen", "")[11:19]
-        print(f"    {ip} SNMP {ver} community={com} last={ts}")
+        ts  = info.get("last_seen", "")[11:19]
+        print(f"  {GREEN}{ip:<18}{RESET} {CYAN}{ver:<6}{RESET} {DIM}community={RESET}{YELLOW}{com}{RESET} {DIM}last={ts}{RESET}")
     if not devices:
-        print("  no SNMP devices detected")
-    print("  ===================")
+        print(f"  {RED}no SNMP devices detected{RESET}")
+    print(f"  {DIM}{'─'*46}{RESET}")
 def run_snmp(idle_timeout=30, max_duration=300):
     print("  [WRAITH] SNMP Passive Listener — port 161")
     inventory = {"devices": {}, "frames": []}
@@ -59,7 +67,7 @@ def run_snmp(idle_timeout=30, max_duration=300):
                             ip = parsed["ip"]
                             inventory["devices"][ip] = parsed
                             inventory["devices"][ip]["last_seen"] = parsed["timestamp"]
-                            print(f"  [SNMP] {src_ip} v={parsed[chr(118)+chr(101)+chr(114)+chr(115)+chr(105)+chr(111)+chr(110)]} community={parsed[chr(99)+chr(111)+chr(109)+chr(109)+chr(117)+chr(110)+chr(105)+chr(116)+chr(121)]}")
+                            print(f"  {CYAN}[SNMP]{RESET} {GREEN}{src_ip}{RESET} v={YELLOW}{parsed['version']}{RESET} {DIM}community={RESET}{parsed['community']}")
             except socket.timeout: pass
             except KeyboardInterrupt: break
         s.close()

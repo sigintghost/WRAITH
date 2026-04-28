@@ -1,7 +1,7 @@
 import socket, getpass
 import datetime
 
-VERSION = "3.2"
+VERSION = "3.3"
 
 PORTS = {
     21:    "FTP",
@@ -27,7 +27,13 @@ PORTS = {
     5353:  "MDNS",
 }
 
-def div(): print("  " + "="*44)
+GREEN  = '\033[32m'
+CYAN   = '\033[36m'
+YELLOW = '\033[33m'
+DIM    = '\033[2m'
+BOLD   = '\033[1m'
+RESET  = '\033[0m'
+def div(): print(f"  {DIM}{'─'*44}{RESET}")
 def ts(): return datetime.datetime.now().strftime("%H:%M:%S")
 def get_network():
     try:
@@ -209,31 +215,31 @@ def auto_chain(gateway, local_ip):
 
 def show_main_menu():
     div()
-    print("  [1] RECON")
-    print("  [2] PROTOCOLS")
-    print("  [3] INTELLIGENCE")
-    print("  [4] ALERTS")
-    print("  [5] SWEEP")
-    print("  [0] EXIT")
+    print(f"  {CYAN}[1]{RESET} RECON")
+    print(f"  {CYAN}[2]{RESET} PROTOCOLS")
+    print(f"  {CYAN}[3]{RESET} INTELLIGENCE")
+    print(f"  {CYAN}[4]{RESET} ALERTS")
+    print(f"  {CYAN}[5]{RESET} SWEEP")
+    print(f"  {DIM}[0] EXIT{RESET}")
     div()
 def show_protocols_menu():
     div()
-    print("  [1] BACnet/IP  47808")
-    print("  [2] Modbus TCP 502")
-    print("  [3] MQTT       1883")
-    print("  [4] MSTP       RS485")
-    print("  [5] PORTSCAN   OT/BAS")
-    print("  [6] SNMP      port 161")
-    print("  [0] BACK")
+    print(f"  {CYAN}[1]{RESET} BACnet/IP  {DIM}47808{RESET}")
+    print(f"  {CYAN}[2]{RESET} Modbus TCP {DIM}502{RESET}")
+    print(f"  {CYAN}[3]{RESET} MQTT       {DIM}1883{RESET}")
+    print(f"  {CYAN}[4]{RESET} MSTP       {DIM}RS485{RESET}")
+    print(f"  {CYAN}[5]{RESET} PORTSCAN   {DIM}OT/BAS{RESET}")
+    print(f"  {CYAN}[6]{RESET} SNMP       {DIM}161{RESET}")
+    print(f"  {DIM}[0] BACK{RESET}")
     div()
 def show_intel_menu():
     div()
-    print("  [1] OSINT")
-    print("  [2] ORACLE")
-    print("  [3] AUTO")
-    print("  [4] DNS")
-    print("  [5] BANNER")
-    print("  [0] BACK")
+    print(f"  {CYAN}[1]{RESET} OSINT")
+    print(f"  {CYAN}[2]{RESET} ORACLE")
+    print(f"  {CYAN}[3]{RESET} AUTO")
+    print(f"  {CYAN}[4]{RESET} DNS")
+    print(f"  {CYAN}[5]{RESET} BANNER")
+    print(f"  {DIM}[0] BACK{RESET}")
     div()
 def main2():
     print(f"  WRAITH v{VERSION}")

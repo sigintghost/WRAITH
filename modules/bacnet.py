@@ -226,7 +226,7 @@ def print_inventory():
 def run_bacnet(idle_timeout=30, max_duration=300):
     print(f"\n  {CYAN}{BOLD}[BACNET/IP]{RESET} passive listener on port 47808")
     print(f"  {DIM}listening for Who-Is and I-Am broadcasts...{RESET}")
-    print(f"  {DIM}press Ctrl+C to stop and show inventory{RESET}\n")
+    print(f"  {DIM}max {max_duration}s — stops after {idle_timeout}s idle{RESET}\n")
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -237,9 +237,16 @@ def run_bacnet(idle_timeout=30, max_duration=300):
         print(f"  {RED}[BACNET] socket error: {e}{RESET}")
         return
     from modules.logger import log_result
+    import time
     start = datetime.datetime.now()
+    deadline = time.time() + max_duration
+    last_pkt = time.time()
     try:
-        while True:
+        while time.time() < deadline:
+            idle = int(time.time() - last_pkt)
+            if idle >= idle_timeout:
+                print(f"  {YELLOW}[BACNET]{RESET} {idle_timeout}s idle — stopping")
+                break
             try:
                 data, addr = sock.recvfrom(1024)
                 src_ip = addr[0]
@@ -249,6 +256,7 @@ def run_bacnet(idle_timeout=30, max_duration=300):
                     update_bbmd(src_ip, bbmd)
                     log_result(src_ip, "BBMD", bbmd.get('func_name','?'))
                 if parsed:
+                    last_pkt = time.time()
                     if parsed['type'] == 'whoIs':
                         ts = datetime.datetime.now().strftime("%H:%M:%S")
                         print(f"  {DIM}[{ts}] Who-Is from {src_ip}{RESET}")
@@ -259,7 +267,7 @@ def run_bacnet(idle_timeout=30, max_duration=300):
                             f"iAm device={parsed.get('device_id')} "
                             f"vendor={parsed.get('vendor')}")
             except socket.timeout:
-                continue
+                pass
     except KeyboardInterrupt:
         pass
     finally:
