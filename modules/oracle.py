@@ -93,7 +93,13 @@ def build_context():
         ctx.append(f'\nARP TABLE: {len(arps)} hosts')
         for h in arps:
             if isinstance(h, dict):
-                ctx.append(f'  ip={h.get("ip")} mac={h.get("mac")}')
+                ctx.append(f'  ip={h.get("ip")} mac={h.get("mac")} vendor={h.get("vendor","unknown")}')
+    if 'ttl_fingerprints.json' in stack:
+        ttls = stack['ttl_fingerprints.json'].get('hosts', [])
+        ctx.append(f'\nOS FINGERPRINTS: {len(ttls)} hosts')
+        for h in ttls:
+            if isinstance(h, dict):
+                ctx.append(f'  ip={h.get("ip")} ttl={h.get("ttl")} os={h.get("os")}')
     if 'portscan.json' in stack:
         ps = stack['portscan.json']
         target = ps.get('target','unknown')
@@ -102,6 +108,21 @@ def build_context():
         ctx.append(f'\nPORTSCAN: target={target} open={len(open_ports)}')
         for p in open_ports:
             ctx.append(f'  port={p.get("port")} service={p.get("service")}')
+    if 'modbus_map.json' in stack:
+        devs = stack['modbus_map.json']
+        if isinstance(devs, dict):
+            ctx.append(f'\nMODBUS DEVICES: {len(devs)}')
+            for k,d in devs.items():
+                if isinstance(d,dict):
+                    ctx.append(f'  ip={d.get("ip")} unit={d.get("unit_id")} pkts={d.get("packet_count")}')
+    if 'mqtt_brokers.json' in stack:
+        brokers = stack['mqtt_brokers.json']
+        if isinstance(brokers, dict):
+            inv = brokers.get('inventory', brokers)
+            ctx.append(f'\nMQTT BROKERS: {len(inv)}')
+            for ip,d in inv.items():
+                if isinstance(d,dict):
+                    ctx.append(f'  ip={ip} publishes={d.get("publishes",0)} topics={len(d.get("topics_seen",[]))}')
     if 'alerts.json' in stack:
         alerts = stack['alerts.json'].get('alerts', [])
         if alerts:

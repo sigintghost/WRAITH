@@ -4,6 +4,22 @@
 # the device does not know it has been seen.
 
 import socket
+OUI = {
+    '00:50:56':'VMware','00:0c:29':'VMware','00:1a:11':'Google',
+    '00:17:88':'Philips Hue','b8:27:eb':'Raspberry Pi',
+    'dc:a6:32':'Raspberry Pi','e4:5f:01':'Raspberry Pi',
+    '00:1b:44':'Siemens','00:0d:f0':'Siemens',
+    '00:80:f4':'Tridium','00:60:35':'Tridium',
+    '00:50:c2':'Johnson Controls','00:30:48':'Supermicro',
+    '00:1d:7e':'Cisco','00:23:ab':'Cisco',
+    'b4:e6:2d':'Apple','3c:22:fb':'Apple',
+    'ac:bc:32':'Apple','00:11:32':'Synology',
+}
+def oui_lookup(mac):
+    prefix = mac[:8].lower()
+    for k,v in OUI.items():
+        if prefix == k.lower(): return v
+    return 'unknown'
 import struct
 import os
 import sys
@@ -63,8 +79,10 @@ def arp_scan(network_prefix, src_ip, timeout=1):
             if raw[12:14] == b'\x08\x06' and raw[20:22] == b'\x00\x02':
                 ip = socket.inet_ntoa(raw[28:32])
                 mac = ':'.join(f'{b:02x}' for b in raw[22:28])
-                alive.append((ip, mac))
-                print(f"  [ARP] {ip} — {mac}")
+
+                vendor = oui_lookup(mac)
+                print(f"  [ARP] {ip} — {mac} ({vendor})")
+                alive.append((ip, mac, vendor))
         except socket.timeout:
             break
         except:

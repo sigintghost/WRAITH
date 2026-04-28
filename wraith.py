@@ -252,7 +252,14 @@ def main2():
         show_main_menu()
         c = input(" > ")
         if c == "0": break
-        elif c == "1": recon(gateway,local_ip)
+        elif c == "1":
+            recon(gateway,local_ip)
+            try:
+                from modules.sweep import run_sweep
+                from modules.ttl import run_ttl
+                hosts = run_sweep(base, local_ip)
+                if hosts: run_ttl(hosts)
+            except Exception as e: pass
         elif c == "4": run_alerts_module()
         elif c == "5": run_sweep_module(gateway,local_ip,base)
         elif c == "2":
