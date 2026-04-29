@@ -220,6 +220,7 @@ def show_main_menu():
     print(f"  {CYAN}[3]{RESET} INTELLIGENCE")
     print(f"  {CYAN}[4]{RESET} ALERTS")
     print(f"  {CYAN}[5]{RESET} SWEEP")
+    print(f"  {CYAN}[9]{RESET} WISHLIST")
     print(f"  {DIM}[0] EXIT{RESET}")
     div()
 def show_protocols_menu():
@@ -260,6 +261,9 @@ def main2():
                 hosts = run_sweep(base, local_ip)
                 if hosts: run_ttl(hosts)
             except Exception as e: pass
+        elif c == "9":
+            from modules.wishlist_agent import run_wishlist_agent
+            run_wishlist_agent()
         elif c == "4": run_alerts_module()
         elif c == "5": run_sweep_module(gateway,local_ip,base)
         elif c == "2":
