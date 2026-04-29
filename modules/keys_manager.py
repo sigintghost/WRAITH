@@ -73,8 +73,7 @@ def setup_key(key_name):
     print(f"  pricing : {info['free']}")
     if info['fmt']: print(f"  format  : starts with '{info['fmt']}'")
     if current:
-        masked=current[:8]+'...'
-        print(f"  current : {GREEN}{masked}{RESET}")
+        print(f"  current : {GREEN}SET [{len(current)} chars]{RESET}")
         if input("  keep current? [y/n] > ").strip().lower()=='y': return
     try: val=getpass.getpass("  paste key (hidden) > ")
     except: val=input("  paste key > ").strip()
