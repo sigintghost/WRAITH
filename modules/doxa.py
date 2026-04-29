@@ -177,6 +177,8 @@ def pick_model(question):
     if any(k in q for k in COMPLEX_KEYWORDS): return SONNET
     return HAIKU
 def ask_doxa(question, api_key, history):
+    from modules.sanitize import clean_wire_value
+    question=clean_wire_value(question,"doxa_input")
     context = build_context()
     system  = GHOST_SYSTEM + f'\n\nCURRENT NETWORK STATE:\n{context}'
     history.append({'role': 'user', 'content': question})

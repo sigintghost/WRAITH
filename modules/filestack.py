@@ -23,6 +23,13 @@ def write_hosts(results):
             hosts.append({'ip':item[0]})
     write_json('hosts.json', {'hosts': hosts, 'count': len(hosts)})
 
+def write_json_safe(filename, data):
+    try:
+        from modules.sanitize import sanitize_filestack
+        data=sanitize_filestack(data,filename)
+    except: pass
+    return write_json(filename,data)
+
 def write_json(filename, data):
     ensure_stack()
     path = os.path.join(STACK, filename)
