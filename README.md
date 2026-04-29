@@ -41,7 +41,7 @@ critical infrastructure environments.
 | serial_mstp.py | BACnet MSTP | RS485 | USB adapter |
 | snmp.py | SNMP | 161 | requires root |
 | osint.py | 7 source APIs | — | threat intel |
-| oracle.py | Claude API | — | reads full filestack |
+| doxa.py | Claude API | — | reads full filestack |
 | alerts.py | throttling | — | severity + cooldowns |
 | auth.py | login/audit | — | SHA256, roles, UUID |
 | logger.py | logging | — | session logs |
@@ -50,12 +50,12 @@ critical infrastructure environments.
 
 ---
 
-## Oracle
+## DOXA
 
 AI agent powered by Claude API.
 Reads everything WRAITH captures before every query.
 
-Context fed to Oracle on every session:
+Context fed to DOXA on every session:
 - Sweep hosts and hostnames
 - ARP table with MAC vendor lookup
 - OS fingerprints via ICMP TTL
@@ -110,7 +110,7 @@ portscan.json, bacnet_inventory.json,
 modbus_map.json, mqtt_brokers.json,
 snmp_inventory.json, alerts.json
 
-Oracle reads all of these before every query.
+DOXA reads all of these before every query.
 
 ---
 
@@ -136,9 +136,9 @@ Coming in v4.0.
 | v1.0 | raw socket recon, port scan, DNS |
 | v2.0 | BACnet/IP passive listener |
 | v3.0 | Modbus, MQTT, ghost module |
-| v3.3 | Oracle AI, OSINT x7, auth, SNMP |
+| v3.3 | DOXA AI, OSINT x7, auth, SNMP |
 | v3.4 | ANSI menus, idle timeouts, Censys fix |
-| v3.5 | Oracle reads full filestack, MAC OUI, TTL |
+| v3.5 | DOXA reads full filestack, MAC OUI, TTL |
 | v3.6 | key mgmt, admin panel — next |
 | v4.0 | Strata MVS, FDD, WebCTRL integration |
 | v5.0 | sensor nodes, WireGuard, per-building |

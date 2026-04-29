@@ -164,11 +164,11 @@ def run_mstp_module():
     from modules.serial_mstp import run_mstp
     run_mstp()
 
-def run_oracle_module():
+def run_doxa_module():
     import sys
     sys.path.insert(0, '.')
-    from modules.oracle import run_oracle
-    run_oracle()
+    from modules.doxa import run_doxa
+    run_doxa()
 
 def run_modbus_module():
     import sys
@@ -237,7 +237,7 @@ def show_protocols_menu():
 def show_intel_menu():
     div()
     print(f"  {CYAN}[1]{RESET} OSINT")
-    print(f"  {CYAN}[2]{RESET} ORACLE")
+    print(f"  {CYAN}[2]{RESET} DOXA")
     print(f"  {CYAN}[3]{RESET} AUTO")
     print(f"  {CYAN}[4]{RESET} DNS")
     print(f"  {CYAN}[5]{RESET} BANNER")
@@ -288,7 +288,7 @@ def main2():
                 p = input(" > ")
                 if p == "0": break
                 elif p == "1": run_osint(gateway)
-                elif p == "2": run_oracle_module()
+                elif p == "2": run_doxa_module()
                 elif p == "3": auto_chain(gateway,local_ip)
                 elif p == "4": dns()
                 elif p == "5": banner(gateway)

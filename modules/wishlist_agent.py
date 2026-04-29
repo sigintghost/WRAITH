@@ -51,8 +51,8 @@ def run_wishlist_agent():
 
 def generate_workflow(item):
     try:
-        from modules.oracle import load_oracle_key, ask_oracle
-        api_key = load_oracle_key()
+        from modules.doxa import load_doxa_key, ask_doxa
+        api_key = load_doxa_key()
         prompt = (
             f"You are a Python developer working on WRAITH, "
             f"a passive OT/BAS network intelligence tool. "
@@ -66,7 +66,7 @@ def generate_workflow(item):
         )
         print(f"\n  [WISHLIST] generating workflow for: {item['name']}")
         print("  thinking...\n")
-        reply, _ = ask_oracle(prompt, api_key, [])
+        reply, _ = ask_doxa(prompt, api_key, [])
         print(reply)
     except Exception as e:
         print(f"  workflow generation failed: {e}")

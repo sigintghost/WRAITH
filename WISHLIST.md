@@ -24,13 +24,13 @@ Status: planned v4.0
 ### Assessment Report Export
 After every session — one click PDF report.
 Device inventory, risk findings, protocol map.
-Oracle recommendations included.
+DOXA recommendations included.
 Client deliverable for Tier 2 professional services.
 Status: wishlist
 
 ### Assess Baseline Optimize Report Cycle
 Every engagement follows this loop automatically.
-WRAITH sweeps, Oracle assesses, Strata baselines.
+WRAITH sweeps, DOXA assesses, Strata baselines.
 Agents monitor, dashboard reports, cycle repeats.
 Sticky. Subscription-worthy.
 Status: wishlist
@@ -41,7 +41,7 @@ Status: wishlist
 
 ### MCP Server Layer
 Formalize filestack as MCP tool endpoints.
-Oracle calls tools instead of reading flat files.
+DOXA calls tools instead of reading flat files.
 Tools: get_sweep_results, get_arp_table,
 get_bacnet_inventory, get_active_alerts,
 get_portscan, run_sweep, run_portscan,
@@ -52,24 +52,24 @@ Status: wishlist — high priority
 
 ### RAG Memory Layer
 Vector database for historical filestack.
-Oracle answers questions about device state
+DOXA answers questions about device state
 from weeks or months ago.
 Strata baseline memory across seasons.
 Status: wishlist
 
-### Oracle Streaming
+### DOXA Streaming
 Print tokens as Claude generates them.
 Feels alive. Better UX for long analysis.
 Status: wishlist — quick win
 
 ### Persistent Cross-Session Memory
-Oracle remembers findings from last session.
+DOXA remembers findings from last session.
 summary.json written on exit, loaded on start.
 Device history, anomaly history, recommendations.
 Status: planned v4.0
 
-### Tool Use — Oracle Triggers Modules
-Oracle calls run_sweep, run_portscan directly.
+### Tool Use — DOXA Triggers Modules
+DOXA calls run_sweep, run_portscan directly.
 No menu interaction required.
 AI directs its own investigation.
 Status: wishlist — high priority
@@ -107,5 +107,5 @@ Admin reviews workflow in terminal or dashboard.
 Admin approves — agent writes the module scaffold.
 Admin runs scaffold — confirms and commits.
 Closes the loop: wishlist to working code.
-Oracle model: Sonnet for workflow generation.
+DOXA model: Sonnet for workflow generation.
 Status: wishlist — meta priority

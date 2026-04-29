@@ -1,6 +1,6 @@
-# WRAITH oracle.py — ghost intelligence module
+# WRAITH doxa.py — ghost intelligence module
 # sig.int.ghost
-# the oracle sees the wire. asks the ghost. gets the truth.
+# the doxa sees the wire. asks the ghost. gets the truth.
 # anomaly is the signal. the signal is everything.
 
 import urllib.request
@@ -18,19 +18,19 @@ DIM    = '\033[2m'
 BOLD   = '\033[1m'
 RESET  = '\033[0m'
 
-ORACLE_KEY_PATH = os.path.expanduser('~/.wraith/keys.py')
+DOXA_KEY_PATH = os.path.expanduser('~/.wraith/keys.py')
 
-def load_oracle_key():
+def load_doxa_key():
     try:
         import importlib.util
-        spec = importlib.util.spec_from_file_location('keys', ORACLE_KEY_PATH)
+        spec = importlib.util.spec_from_file_location('keys', DOXA_KEY_PATH)
         keys = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(keys)
         return getattr(keys, 'ANTHROPIC_KEY', None)
     except:
         return None
 
-GHOST_SYSTEM = '''You are ORACLE, the intelligence module inside WRAITH.
+GHOST_SYSTEM = '''You are DOXA, the intelligence module inside WRAITH.
 WRAITH is a passive network reconnaissance and OT/BAS intelligence engine.
 You were built by sig.int.ghost — a systems engineer with deep operational
 experience in building automation systems, BACnet networks, Siemens Apogee,
@@ -167,7 +167,7 @@ def pick_model(question):
     if len(question) > 200: return SONNET
     if any(k in q for k in COMPLEX_KEYWORDS): return SONNET
     return HAIKU
-def ask_oracle(question, api_key, history):
+def ask_doxa(question, api_key, history):
     context = build_context()
     system  = GHOST_SYSTEM + f'\n\nCURRENT NETWORK STATE:\n{context}'
     history.append({'role': 'user', 'content': question})
@@ -194,18 +194,18 @@ def ask_oracle(question, api_key, history):
             history.append({'role': 'assistant', 'content': reply})
             return reply
     except urllib.error.HTTPError as e:
-        return f'[ORACLE] API error: {e.code} {e.reason}'
+        return f'[DOXA] API error: {e.code} {e.reason}'
     except Exception as e:
-        return f'[ORACLE] error: {e}'
+        return f'[DOXA] error: {e}'
 
-def run_oracle():
-    print(f'\n  {CYAN}{BOLD}[ORACLE]{RESET} ghost intelligence module')
+def run_doxa():
+    print(f'\n  {CYAN}{BOLD}[DOXA]{RESET} ghost intelligence module')
     print(f"  {DIM}token routing active — Anthropic{RESET}")
     print(f'  {DIM}ask anything about your network, BACnet, OT security{RESET}')
     print(f'  {DIM}type exit to return to menu{RESET}\n')
-    api_key = load_oracle_key()
+    api_key = load_doxa_key()
     if not api_key:
-        print(f'  {RED}[ORACLE] no API key found{RESET}')
+        print(f'  {RED}[DOXA] no API key found{RESET}')
         print(f'  {DIM}add ANTHROPIC_KEY to ~/.wraith/keys.py{RESET}')
         return
     history = []
@@ -219,7 +219,7 @@ def run_oracle():
         if q.lower() in ('exit','quit','back','q'):
             break
         print(f'  {DIM}thinking...{RESET}')
-        reply = ask_oracle(q, api_key, history)
+        reply = ask_doxa(q, api_key, history)
         print()
         for line in reply.split('\n'):
             print(f'  {GREEN}{line}{RESET}')

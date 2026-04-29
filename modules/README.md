@@ -15,7 +15,7 @@ snmp.py — SNMP port 161, raw socket, requires root
 
 ## INTELLIGENCE
 osint.py — 7-source threat intel per IP
-oracle.py — Claude AI, token routed, OT/BAS locked
+doxa.py — Claude AI, token routed, OT/BAS locked
 
 ## SYSTEM
 alerts.py — throttled severity alerting, alerts.json
