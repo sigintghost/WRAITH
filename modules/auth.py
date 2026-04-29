@@ -58,3 +58,9 @@ def get_session():
     return {"user": CURRENT_USER, "role": CURRENT_ROLE, "session": SESSION_ID}
 def require_admin(): return CURRENT_ROLE == "admin"
 def first_run(): return not os.path.exists(AUTH_FILE) or len(_load_users()) == 0
+def check_keys_on_login():
+    if CURRENT_ROLE=='admin':
+        try:
+            from modules.keys_manager import warn_missing_keys
+            warn_missing_keys()
+        except: pass

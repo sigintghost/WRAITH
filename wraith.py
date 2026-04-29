@@ -220,6 +220,7 @@ def show_main_menu():
     print(f"  {CYAN}[3]{RESET} INTELLIGENCE")
     print(f"  {CYAN}[4]{RESET} ALERTS")
     print(f"  {CYAN}[5]{RESET} SWEEP")
+    print(f"  {CYAN}[8]{RESET} KEY MANAGEMENT")
     print(f"  {CYAN}[9]{RESET} WISHLIST")
     print(f"  {DIM}[0] EXIT{RESET}")
     div()
@@ -261,6 +262,9 @@ def main2():
                 hosts = run_sweep(base, local_ip)
                 if hosts: run_ttl(hosts)
             except Exception as e: pass
+        elif c == "8":
+            from modules.keys_manager import run_keys_manager
+            run_keys_manager()
         elif c == "9":
             from modules.wishlist_agent import run_wishlist_agent
             run_wishlist_agent()
