@@ -289,6 +289,9 @@ def main2():
                 if p == "0": break
                 elif p == "1": run_osint(gateway)
                 elif p == "2": run_doxa_module()
+                elif p == "6":
+                    from modules.cve import run_cve_module
+                    run_cve_module()
                 elif p == "3": auto_chain(gateway,local_ip)
                 elif p == "4": dns()
                 elif p == "5": banner(gateway)

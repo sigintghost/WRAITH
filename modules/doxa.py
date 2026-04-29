@@ -123,6 +123,15 @@ def build_context():
             for ip,d in inv.items():
                 if isinstance(d,dict):
                     ctx.append(f'  ip={ip} publishes={d.get("publishes",0)} topics={len(d.get("topics_seen",[]))}')
+    if 'cve_findings.json' in stack:
+        cf=stack['cve_findings.json']
+        findings=cf.get('findings',{})
+        total=cf.get('total',0)
+        ctx.append(f'\nCVE FINDINGS: {total} total')
+        for vendor,cves in findings.items():
+            if cves:
+                top=cves[0]
+                ctx.append(f'  {vendor}: {len(cves)} CVEs highest={top.get("id")} CVSS={top.get("cvss")} [{top.get("severity")}]')
     if 'alerts.json' in stack:
         alerts = stack['alerts.json'].get('alerts', [])
         if alerts:
