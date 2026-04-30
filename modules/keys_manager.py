@@ -174,7 +174,7 @@ def run_keys_manager():
         print(f"  {CYAN}[4]{RESET} setup all missing")
     print(f"  {CYAN}[5]{RESET} configure SMTP email")
     print(f"  {CYAN}[6]{RESET} configure Pushover")
-        print(f"  {DIM}[0] back{RESET}")
+            print(f"  {DIM}[0] back{RESET}")
         c=input("  > ").strip()
         if c=='0': break
         kl=list(KEY_INFO.keys())
