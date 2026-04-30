@@ -19,7 +19,7 @@ Cost per fault avoided.
 Cost per sqft trending.
 ROI calculator vs OptigoVN subscription cost.
 Sales tool for Tier 2 and Tier 3.
-Status: planned v4.0
+Status: planned v3.7
 
 ### Assessment Report Export
 After every session — one click PDF report.
@@ -66,7 +66,7 @@ Status: wishlist — quick win
 DOXA remembers findings from last session.
 summary.json written on exit, loaded on start.
 Device history, anomaly history, recommendations.
-Status: planned v4.0
+Status: planned v3.7
 
 ### Tool Use — DOXA Triggers Modules
 DOXA calls run_sweep, run_portscan directly.
@@ -109,3 +109,51 @@ Admin runs scaffold — confirms and commits.
 Closes the loop: wishlist to working code.
 DOXA model: Sonnet for workflow generation.
 Status: wishlist — meta priority
+
+---
+
+## SECURITY DETECTION — v3.8+
+
+### Outbound Connection Monitor
+BAS controllers should never call external IPs.
+Track destination IPs in passive capture.
+Alert: controller hitting port 80/443/53 externally.
+Status: wishlist — high priority
+
+### TTL Delta Tracking
+Compare TTL per IP across sessions.
+Flag OS fingerprint changes per device.
+Controller changing TTL from 62 to 128 = alert.
+Status: wishlist — high priority
+
+### Admin Panel
+List all users, roles, created dates.
+Create, delete, role change, password reset.
+Recovery code system at first run.
+tools/reset_admin.py emergency script.
+Status: wishlist — next sprint
+
+### DOXA Streaming
+Print tokens as Claude generates them.
+Feels alive. Better UX for long analysis.
+One line change in ask_doxa().
+Status: wishlist — quick win
+
+### DOXA Persistent Memory
+summary.json written on exit.
+Loaded on next session start.
+DOXA remembers what it found last week.
+Status: wishlist — v3.8
+
+### OSINT Filestack Pipeline
+osint.py writes per-IP findings to osint_results.json.
+DOXA reads osint_results.json in load_stack().
+Cross-reference OSINT intel with network findings.
+Status: wishlist — quick win
+
+### Strata Separation
+~/strata/ as separate directory or repo.
+strata.py separate entry point.
+Reads ~/.wraith/loot/stack/ one way only.
+Never writes back to WRAITH.
+Status: wishlist — v3.8 architecture decision

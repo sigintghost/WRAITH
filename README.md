@@ -1,6 +1,6 @@
 # WRAITH
 ### passive OT/BAS network intelligence engine
-### v3.5 — dev branch active
+### v3.7 — dev branch active
 
 > *anomaly is the signal.*
 > — [sig.int.ghost](https://instagram.com/sig.int.ghost)
@@ -125,7 +125,7 @@ CSVs, and COV events with WRAITH network
 intelligence to produce unified building
 diagnostics with confidence scoring.
 
-Coming in v4.0.
+Coming in v3.7.
 
 ---
 
@@ -136,12 +136,12 @@ Coming in v4.0.
 | v1.0 | raw socket recon, port scan, DNS |
 | v2.0 | BACnet/IP passive listener |
 | v3.0 | Modbus, MQTT, ghost module |
-| v3.3 | DOXA AI, OSINT x7, auth, SNMP |
-| v3.4 | ANSI menus, idle timeouts, Censys fix |
+| v3.7 | DOXA AI, OSINT x7, auth, SNMP |
+| v3.7 | ANSI menus, idle timeouts, Censys fix |
 | v3.5 | DOXA reads full filestack, MAC OUI, TTL |
-| v3.6 | key mgmt, admin panel — next |
-| v4.0 | Strata MVS, FDD, WebCTRL integration |
-| v5.0 | sensor nodes, WireGuard, per-building |
+| v3.8 | admin panel, Strata separation — next |
+| v3.7 | Strata MVS, FDD, WebCTRL integration |
+| v3.7 | sensor nodes, WireGuard, per-building |
 | v5.1 | browser dashboard, zero dependencies |
 | v6.0 | platform, SaaS, API, integrations |
 

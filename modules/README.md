@@ -1,5 +1,5 @@
 # WRAITH — MODULE REFERENCE
-v3.4 — modules/
+v3.7 — modules/
 
 ## NETWORK DISCOVERY
 arp.py — ARP host discovery
@@ -31,3 +31,10 @@ cov_agent.py, context_engine.py, baseline.py
 anomaly.py, correlator.py, explainer.py, dead_man.py
 
 WRAITH observes. Strata understands.
+
+## SECURITY
+sanitize.py — prompt injection defense, HTML escape, pattern blocking
+beacon_detector.py — C2 beacon timing analysis, fixed interval detection
+lateral_detector.py — ARP delta, new host baseline comparison
+netcheck.py — network context validator, session change detection
+input_validator.py — IP/port/subnet validation, text sanitization
