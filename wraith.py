@@ -272,7 +272,13 @@ def main2():
                 elif p == "2": run_modbus_module()
                 elif p == "3": run_mqtt_module()
                 elif p == "4": run_mstp_module()
-                elif p == "5": portscan(gateway)
+                elif p == "5":
+                    from modules.portscan import select_target_from_sweep
+                    t=select_target_from_sweep()
+                    if t: portscan(t)
+                    else:
+                        custom=input("  enter IP manually > ").strip()
+                        if custom: portscan(custom)
                 elif p == "6": run_snmp_module()
                 else: print("  invalid")
         elif c == "3":
