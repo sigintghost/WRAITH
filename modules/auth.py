@@ -17,6 +17,13 @@ def _save_users(users):
     os.makedirs(AUTH_DIR, exist_ok=True)
     with open(AUTH_FILE, "w") as f: json.dump(users, f, indent=2)
     os.chmod(AUTH_FILE, 0o600)
+def validate_password(pw):
+    import re
+    if len(pw)<8: return "min 8 characters"
+    if not re.search(r'[A-Z]',pw): return "need uppercase"
+    if not re.search(r'[0-9]',pw): return "need number"
+    if not re.search(r'[!@#$%^&*]',pw): return "need special char"
+    return None
 def create_user(username, password, role="technician"):
     users = _load_users()
     if username in users: return False

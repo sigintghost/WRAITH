@@ -33,6 +33,8 @@ def _create_user():
     if not u or u=="0": print(f"  {DIM}cancelled{RESET}"); return
     p=input(f"  {CYAN}password [0=cancel]:{RESET} ").strip()
     if not p or p=="0": print(f"  {DIM}cancelled{RESET}"); return
+    err=auth.validate_password(p)
+    if err: print(f"  {RED}password rejected: {err}{RESET}"); return
     print(f"  select role:")
     r=_pick_role()
     if not r: print(f"  {RED}invalid role{RESET}"); return
@@ -57,15 +59,30 @@ def _edit_user():
         if r and auth.set_role(u,r): print(f"  {GREEN}role updated{RESET}")
     elif c=="2":
         p=input(f"  {CYAN}new password:{RESET} ").strip()
-        if p and auth.change_password_admin(u,p):
-            print(f"  {GREEN}password reset{RESET}")
+        if not p: return
+        err=auth.validate_password(p)
+        if err: print(f"  {RED}rejected: {err}{RESET}"); return
+        if auth.change_password_admin(u,p): print(f"  {GREEN}password reset{RESET}")
     elif c=="3":
         b=input(f"  {CYAN}buildings:{RESET} ").strip()
         if b and auth.set_buildings(u,b):
             print(f"  {GREEN}buildings updated{RESET}")
+PRIMARY_ADMIN="kgod450"
 def _delete_user():
-    u=input(f"  {CYAN}username [0=cancel]:{RESET} ").strip()
+    users=auth.list_users()
+    current=auth.CURRENT_USER
+    print(f"  {DIM}users:{RESET}")
+    for u,d in users.items():
+        role=d.get("role","?")
+        if u==PRIMARY_ADMIN: tag=f"{RED}[protected]{RESET}"
+        elif u==current: tag=f"{YELLOW}[you]{RESET}"
+        else: tag=""
+        print(f"  {CYAN}{u:<16}{RESET} {role} {tag}")
+    u=input(f"  username [0=cancel]: ").strip()
     if not u or u=="0": print(f"  {DIM}cancelled{RESET}"); return
+    if u==PRIMARY_ADMIN: print(f"  {RED}protected — cannot delete primary admin{RESET}"); return
+    if u==current: print(f"  {RED}cannot delete your own account{RESET}"); return
+    if u not in users: print(f"  {RED}not found{RESET}"); return
     print(f"  {RED}[1]{RESET} confirm delete {u}")
     print(f"  {CYAN}[0]{RESET} cancel")
     if input(f"  > ").strip()=="1" and auth.delete_user(u):
