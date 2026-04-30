@@ -172,9 +172,9 @@ def run_keys_manager():
         print(f"  {CYAN}[2]{RESET} delete a key")
         print(f"  {CYAN}[3]{RESET} test a key")
         print(f"  {CYAN}[4]{RESET} setup all missing")
-    print(f"  {CYAN}[5]{RESET} configure SMTP email")
-    print(f"  {CYAN}[6]{RESET} configure Pushover")
-            print(f"  {DIM}[0] back{RESET}")
+        print(f"  {CYAN}[5]{RESET} configure SMTP email")
+        print(f"  {CYAN}[6]{RESET} configure Pushover")
+        print(f"  {DIM}[0] back{RESET}")
         c=input("  > ").strip()
         if c=='0': break
         kl=list(KEY_INFO.keys())
@@ -193,6 +193,8 @@ def run_keys_manager():
             if not missing: print(f"  {GREEN}all keys configured{RESET}")
             else:
                 for k,_ in missing: setup_key(k)
+        elif c=='5': setup_smtp()
+        elif c=='6': setup_pushover()
 def first_run_keys():
     missing=[(k,i) for k,i in check_keys() if i['req']]
     if not missing: return
