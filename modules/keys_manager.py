@@ -42,8 +42,7 @@ def show_key_status():
     for k,info in KEY_INFO.items():
         val=keys.get(k,'')
         if val:
-            masked=val[:8]+'...' if len(val)>8 else '***'
-            status=f"{GREEN}SET{RESET} {DIM}{masked}{RESET}"
+            status=f"{GREEN}SET{RESET} {DIM}[{len(val)} chars]{RESET}"
         else:
             req=f"{RED}REQUIRED{RESET}" if info['req'] else f"{YELLOW}optional{RESET}"
             status=f"{RED}MISSING{RESET} [{req}]"
