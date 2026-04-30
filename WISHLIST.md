@@ -207,3 +207,50 @@ Uptime first, efficiency second, cost third
 PUE as primary health metric
 Liquid cooling as primary thermal layer
 Status: wishlist — Strata v2.0
+
+---
+
+## OSINT EXPANSION — HIGH PRIORITY
+
+### Free Sources to Add
+CISA KEV — known exploited vulnerabilities feed
+  cisa.gov/known-exploited-vulnerabilities-catalog
+  no key, JSON feed, cross-reference per device
+Criminal IP — OT-focused Korean scanner
+  criminalip.io — free tier available
+FOFA — Chinese internet scanner sees OT gear
+  fofa.info — free tier available
+ONYPHE — French scanner good OT coverage
+  onyphe.io — free tier available
+HackerTarget — host search BGP DNS
+  hackertarget.com — free API
+Threatfox — IOC malware IP database
+  threatfox.abuse.ch — free
+AbuseCH — malware botnet IP feeds
+  abuse.ch — free
+BGPView — ASN routing intelligence
+  bgpview.io — free
+DNSDumpster — passive DNS reconnaissance
+  dnsdumpster.com — free
+MXToolbox — blacklist DNS check
+  mxtoolbox.com — free API
+
+### Paid Sources to Add
+BinaryEdge — attack surface OT protocols
+  binaryedge.io — key required
+Pulsedive — threat feeds affordable
+  pulsedive.com — key required
+SecurityTrails — DNS history subdomains
+  securitytrails.com — key required
+Validin — passive DNS new
+  validin.com — key required
+
+### OT/ICS Specific Intel
+ICS-CERT advisories — OT specific CVEs
+  us-cert.cisa.gov/ics
+MITRE ATT&CK ICS — already in portscan
+  expand to OSINT cross-reference
+Dragos Year In Review — ICS threat landscape
+Claroty Team82 — OT research feed
+
+Status: wishlist — next sprint HIGH PRIORITY
