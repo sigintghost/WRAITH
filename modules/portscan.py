@@ -82,6 +82,50 @@ HIGH={4444,50050,23,69,102,502,44818,20000,5555,5554,2323,37777,34567,9527,81}
 OT={47808,47809,47810,1911,4911,502,802,
     44818,20000,102,4840,6454,5568,2430,
     41794,4059,9600,1962,2404,34964,1200}
+def http_fingerprint(ip, port=80):
+    import socket
+    try:
+        s=socket.socket()
+        s.settimeout(3)
+        s.connect((ip,port))
+        req=f"GET / HTTP/1.0\r\nHost: {ip}\r\n\r\n"
+        s.send(req.encode())
+        resp=s.recv(2048).decode(errors='ignore')
+        s.close()
+        headers={}
+        lines=resp.split('\r\n')
+        status=lines[0] if lines else ''
+        for line in lines[1:10]:
+            if ':' in line:
+                k,v=line.split(':',1)
+                headers[k.strip().lower()]=v.strip()
+        server=headers.get('server','unknown')
+        powered=headers.get('x-powered-by','')
+        title=''
+        if '<title>' in resp.lower():
+            t=resp.lower().split('<title>')[1]
+            title=t.split('</title>')[0][:50]
+        print(f"  {C}HTTP {port}{RS} {status[:40]}")
+        print(f"  {D}server: {server}{RS}")
+        if powered: print(f"  {D}powered: {powered}{RS}")
+        if title: print(f"  {D}title: {title}{RS}")
+        for keyword,device in [
+            ('router','ROUTER'),('camera','IP-CAMERA'),
+            ('dvr','DVR-RECORDER'),('nas','NAS-STORAGE'),
+            ('samsung','SAMSUNG-DEVICE'),('lg','LG-DEVICE'),
+            ('hikvision','HIKVISION-CAM'),('dahua','DAHUA-CAM'),
+            ('ubiquiti','UBIQUITI-AP'),('mikrotik','MIKROTIK'),
+            ('niagara','NIAGARA-BAS'),('webctrl','WEBCTRL-BAS'),
+            ('bacnet','BACNET-DEVICE'),('tridium','TRIDIUM-BAS'),
+        ]:
+            if keyword in resp.lower():
+                print(f"  {Y}DEVICE TYPE: {device}{RS}")
+                break
+        return resp
+    except Exception as e:
+        print(f"  {D}port {port}: {e}{RS}")
+        return None
+
 def select_target_from_sweep():
     import os,json
     stack=os.path.expanduser("~/.wraith/loot/stack")
@@ -157,6 +201,12 @@ def run_portscan(ip):
         print(f"  {R}FINDINGS:{RS}")
         for m in mitre:
             print(f"  {D}  {m}{RS}")
+    http_open=[p for p in plist if p in [80,8080,8443,443,8888,8001,8008,8009,8123,8086,3000]]
+    if http_open:
+        print(f"\n{C}  HTTP FINGERPRINT{RS}")
+        print(f"  {D}{'─'*46}{RS}")
+        for p in http_open[:3]:
+            http_fingerprint(ip,p)
     try:
         from modules.filestack import write_json
         write_json('portscan.json', {'target': ip, 'ports': [
