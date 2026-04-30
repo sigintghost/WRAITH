@@ -11,7 +11,7 @@ KEY_INFO = {
 "IPINFO_KEY":{"label":"IPInfo","url":"ipinfo.io/signup","free":"50k/month free","modules":"OSINT geo, ASN, org","fmt":"","req":False},
 "GREYNOISE_KEY":{"label":"GreyNoise","url":"greynoise.io/signup","free":"community plan free","modules":"OSINT noise classification","fmt":"","req":False},
 "ABUSEIPDB_KEY":{"label":"AbuseIPDB","url":"abuseipdb.com/register","free":"1000/day free","modules":"OSINT abuse scoring","fmt":"","req":False},
-"SMTP_HOST":{"label":"SMTP Email","url":"your email provider","free":"use existing account","modules":"CRITICAL email alerts","fmt":"","req":False},
+"SMTP_HOST":{"label":"SMTP Email","url":"myaccount.google.com — App Passwords","free":"use existing Gmail or Proton account","modules":"CRITICAL email alerts","fmt":"","req":False,"multi":True},
 "PUSHOVER_KEY":{"label":"Pushover","url":"pushover.net","free":"$5 one time","modules":"phone push notifications","fmt":"","req":False},
 }
 def load_keys():
@@ -40,12 +40,22 @@ def show_key_status():
     print(f"\n{CYAN}{BOLD}  API KEY STATUS{RESET}")
     print(f"  {DIM}{'─'*46}{RESET}")
     for k,info in KEY_INFO.items():
-        val=keys.get(k,'')
-        if val:
-            status=f"{GREEN}SET{RESET} {DIM}[{len(val)} chars]{RESET}"
+        if info.get('multi'):
+            host=keys.get('SMTP_HOST','')
+            user=keys.get('SMTP_USER','')
+            if host and user:
+                status=f"{GREEN}SET{RESET} {DIM}{host}{RESET}"
+            elif host or user:
+                status=f"{YELLOW}PARTIAL{RESET} {DIM}incomplete{RESET}"
+            else:
+                status=f"{RED}MISSING{RESET} [{YELLOW}optional{RESET}]"
         else:
-            req=f"{RED}REQUIRED{RESET}" if info['req'] else f"{YELLOW}optional{RESET}"
-            status=f"{RED}MISSING{RESET} [{req}]"
+            val=keys.get(k,'')
+            if val:
+                status=f"{GREEN}SET{RESET} {DIM}[{len(val)} chars]{RESET}"
+            else:
+                req=f"{RED}REQUIRED{RESET}" if info['req'] else f"{YELLOW}optional{RESET}"
+                status=f"{RED}MISSING{RESET} [{req}]"
         print(f"  {CYAN}{k:<20}{RESET} {status}")
         print(f"  {DIM}  {info['modules']}{RESET}")
     print(f"  {DIM}{'─'*46}{RESET}")

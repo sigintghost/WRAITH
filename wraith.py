@@ -4,27 +4,17 @@ import datetime
 VERSION = "3.8"
 
 PORTS = {
-    21:    "FTP",
-    22:    "SSH",
-    23:    "TELNET",
-    53:    "DNS",
-    80:    "HTTP",
-    443:   "HTTPS",
-    3389:  "RDP",
-    8080:  "HTTP-ALT",
-    47808: "BACNET",
-    502:   "MODBUS",
-    102:   "S7COMM",
-    44818: "ETHERNET-IP",
-    20000: "DNP3",
-    1911:  "NIAGARA",
-    4911:  "NIAGARA-SSL",
-    1883:  "MQTT",
-    8883:  "MQTT-SSL",
-    161:   "SNMP",
-    162:   "SNMP-TRAP",
-    1900:  "UPNP",
-    5353:  "MDNS",
+    21:"FTP",22:"SSH",23:"TELNET",80:"HTTP",
+    443:"HTTPS",3389:"RDP",8080:"HTTP-ALT",
+    47808:"BACNET-IP",502:"MODBUS-TCP",
+    102:"S7COMM",44818:"ETHERNET-IP",
+    20000:"DNP3",1911:"NIAGARA-FOX",
+    4911:"NIAGARA-FOXS",1883:"MQTT",
+    8883:"MQTT-SSL",161:"SNMP",162:"SNMP-TRAP",
+    1900:"UPNP",5353:"MDNS",4840:"OPC-UA",
+    6454:"ARTNET-DMX",5568:"SACN-DMX",
+    2430:"LUTRON",41794:"CRESTRON",
+    4444:"MSFPORT",50050:"CSTRIKE",
 }
 
 GREEN  = '\033[32m'
