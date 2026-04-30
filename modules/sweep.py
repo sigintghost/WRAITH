@@ -71,6 +71,7 @@ def run_sweep(base, local_ip):
     for i in range(1, 255):
         ip = f"{prefix}.{i}"
         if ip == local_ip:
+            total -= 1
             continue
         t = threading.Thread(target=tcp_ping, args=(ip, results, counter, lock))
         t.daemon = True
