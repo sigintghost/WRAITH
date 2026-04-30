@@ -303,12 +303,16 @@ def threatfox_lookup(ip):
     print("  -- THREATFOX --")
     try:
         import urllib.request,json,ssl
+        keys=load_keys()
+        tfkey=keys.get("THREATFOX_KEY","")
         ctx=ssl._create_unverified_context()
         payload=json.dumps({"query":"search_ioc","search_term":ip}).encode()
+        hdrs={"Content-Type":"application/json"}
+        if tfkey: hdrs["Auth-Key"]=tfkey
         req=urllib.request.Request(
             "https://threatfox-api.abuse.ch/api/v1/",
             data=payload,
-            headers={"Content-Type":"application/json"})
+            headers=hdrs)
         with urllib.request.urlopen(req,context=ctx,timeout=5) as r:
             data=json.loads(r.read())
         if data.get("query_status")=="ok":

@@ -12,6 +12,7 @@ KEY_INFO = {
 "GREYNOISE_KEY":{"label":"GreyNoise","url":"greynoise.io/signup","free":"community plan free","modules":"OSINT noise classification","fmt":"","req":False},
 "ABUSEIPDB_KEY":{"label":"AbuseIPDB","url":"abuseipdb.com/register","free":"1000/day free","modules":"OSINT abuse scoring","fmt":"","req":False},
 "SMTP_HOST":{"label":"SMTP Email","url":"myaccount.google.com — App Passwords","free":"use existing Gmail or Proton account","modules":"CRITICAL email alerts","fmt":"","req":False,"multi":True},
+"THREATFOX_KEY":{"label":"ThreatFox","url":"auth.abuse.ch/login","free":"free account required","modules":"OSINT IOC threat feed","fmt":"","req":False},
 "PUSHOVER_KEY":{"label":"Pushover","url":"pushover.net","free":"$5 one time","modules":"phone push notifications","fmt":"","req":False},
 }
 def load_keys():
