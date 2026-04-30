@@ -1,7 +1,7 @@
 import socket, getpass
 import datetime
 
-VERSION = "3.8"
+VERSION = "3.9"
 
 PORTS = {
     21:"FTP",22:"SSH",23:"TELNET",80:"HTTP",
@@ -210,6 +210,8 @@ def show_main_menu():
     print(f"  {CYAN}[3]{RESET} INTELLIGENCE")
     print(f"  {CYAN}[4]{RESET} ALERTS")
     print(f"  {CYAN}[5]{RESET} SWEEP")
+    print(f"  {CYAN}[6]{RESET} DOXA")
+    print(f"  {CYAN}[7]{RESET} ADMIN")
     print(f"  {CYAN}[8]{RESET} KEY MANAGEMENT")
     print(f"  {CYAN}[9]{RESET} WISHLIST")
     print(f"  {DIM}[0] EXIT{RESET}")

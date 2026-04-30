@@ -118,7 +118,7 @@ def build_context():
     if 'mqtt_brokers.json' in stack:
         brokers = stack['mqtt_brokers.json']
         if isinstance(brokers, dict):
-            inv = brokers.get('inventory', brokers)
+            inv = brokers.get('brokers', brokers.get('inventory', {}))
             ctx.append(f'\nMQTT BROKERS: {len(inv)}')
             for ip,d in inv.items():
                 if isinstance(d,dict):
