@@ -115,7 +115,14 @@ def abuseipdb_check(ip, key):
     except:
         print(f"  abuseipdb: unavailable")
 
+osint_results={}
+def save_osint_results():
+    try:
+        from modules.filestack import write_json
+        write_json('osint_results.json',osint_results)
+    except: pass
 def osint_lookup(ip):
+    global osint_results
     print(f"\n  [OSINT] {ip}")
     div()
     keys = load_keys()
@@ -181,6 +188,8 @@ def censys_lookup(ip):
     except Exception as e:
         print(f"  censys: unavailable {e}")
 
+    save_osint_results()
+    osint_results[ip]={"queried":True}
 def urlscan_lookup(ip):
     print("  -- URLSCAN --")
     try:

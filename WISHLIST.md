@@ -157,3 +157,53 @@ strata.py separate entry point.
 Reads ~/.wraith/loot/stack/ one way only.
 Never writes back to WRAITH.
 Status: wishlist — v3.8 architecture decision
+
+---
+
+## HYPERSCALE DATA CENTER — future vertical
+
+### Multi-subnet Scanner
+/16 subnet support — thousands of devices
+Pod/row/rack topology mapping
+WRAITH currently does /24 only
+Status: wishlist — v3.8+
+
+### DC Protocol Stack
+PDU Modbus TCP — APC/Raritan/Vertiv
+CRAC/CRAH BACnet — precision cooling units
+Generator/UPS Modbus — power chain monitoring
+DCIM API bridge — Sunbird/Nlyte read only
+Liquid cooling sensors — flow/temp/pressure
+Status: wishlist — v3.8+
+
+### Liquid Cooling Intelligence
+Direct liquid cooling flow rate baseline
+Coolant inlet/outlet delta-T trending
+Immersion cooling pump efficiency
+Rear door heat exchanger valve monitoring
+Anomaly: delta-T outside baseline = alert
+All via Modbus TCP — already in WRAITH
+Status: wishlist — Strata DC agent
+
+### DC Intelligence Layer
+PUE calculation and trending
+Cooling efficiency baseline per zone
+Power chain tracing utility to rack
+Stranded capacity detection
+Hot/cold aisle thermal correlation
+Status: wishlist — Strata DC persona
+
+### Niagara/Tridium Integration
+WRAITH does not need Niagara certification
+WRAITH passively observes Niagara via BACnet/IP
+Port 4911 Niagara-SSL already in PORTS dict
+Sell TO Niagara integrators as assessment layer
+They program it. WRAITH watches it.
+Status: current capability — marketing angle
+
+### DC Strata Persona
+DC-specific language and priorities
+Uptime first, efficiency second, cost third
+PUE as primary health metric
+Liquid cooling as primary thermal layer
+Status: wishlist — Strata v2.0

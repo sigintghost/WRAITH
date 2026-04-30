@@ -123,6 +123,13 @@ def build_context():
             for ip,d in inv.items():
                 if isinstance(d,dict):
                     ctx.append(f'  ip={ip} publishes={d.get("publishes",0)} topics={len(d.get("topics_seen",[]))}')
+    if 'osint_results.json' in stack:
+        osint=stack['osint_results.json']
+        if osint:
+            ctx.append(f'\nOSINT RESULTS: {len(osint)} IPs analyzed')
+            for ip,data in osint.items():
+                if isinstance(data,dict):
+                    ctx.append(f'  {ip}: OSINT queried')
     if 'cve_findings.json' in stack:
         cf=stack['cve_findings.json']
         findings=cf.get('findings',{})
@@ -213,6 +220,19 @@ def ask_doxa(question, api_key, history):
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             data = json.loads(resp.read().decode('utf-8'))
+            from modules.sanitize import validate_doxa_output
+            print()
+            full_reply=""
+            for block in data.get('content',[]):
+                if block.get('type')=='text':
+                    for char in block.get('text',''):
+                        print(char,end='',flush=True)
+                        full_reply+=char
+            print()
+            warnings=validate_doxa_output(full_reply)
+            if warnings:
+                for w in warnings:
+                    print(f"  \033[31m[DOXA SECURITY] {w}\033[0m")
             reply = data['content'][0]['text']
             history.append({'role': 'assistant', 'content': reply})
             return reply
