@@ -257,6 +257,12 @@ def main2():
                 hosts = run_sweep(base, local_ip)
                 if hosts: run_ttl(hosts)
             except Exception as e: pass
+        elif c == "6":
+            from modules.doxa import run_doxa
+            run_doxa()
+        elif c == "7":
+            from modules.admin import run_admin
+            run_admin()
         elif c == "8":
             from modules.keys_manager import run_keys_manager
             run_keys_manager()

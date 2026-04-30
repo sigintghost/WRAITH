@@ -64,3 +64,49 @@ def check_keys_on_login():
             from modules.keys_manager import warn_missing_keys
             warn_missing_keys()
         except: pass
+def delete_user(username):
+    users = _load_users()
+    if username not in users: return False
+    del users[username]
+    _save_users(users)
+    return True
+def list_users():
+    return _load_users()
+def set_role(username, role):
+    users = _load_users()
+    if username not in users: return False
+    users[username]["role"] = role
+    _save_users(users)
+    return True
+def set_buildings(username, buildings):
+    users = _load_users()
+    if username not in users: return False
+    users[username]["buildings"] = buildings
+    _save_users(users)
+    return True
+def delete_user(username):
+    users = _load_users()
+    if username not in users: return False
+    del users[username]
+    _save_users(users)
+    return True
+def list_users():
+    return _load_users()
+def set_role(username, role):
+    users = _load_users()
+    if username not in users: return False
+    users[username]["role"] = role
+    _save_users(users)
+    return True
+def set_buildings(username, buildings):
+    users = _load_users()
+    if username not in users: return False
+    users[username]["buildings"] = buildings
+    _save_users(users)
+    return True
+def change_password_admin(username, new_pw):
+    users = _load_users()
+    if username not in users: return False
+    users[username]["hash"] = _hash(new_pw)
+    _save_users(users)
+    return True
