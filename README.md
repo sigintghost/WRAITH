@@ -40,7 +40,7 @@ critical infrastructure environments.
 | mqtt.py | MQTT | 1883 | writes mqtt_brokers.json |
 | serial_mstp.py | BACnet MSTP | RS485 | USB adapter |
 | snmp.py | SNMP | 161 | requires root |
-| osint.py | 7 source APIs | — | threat intel |
+| osint.py | 13 source APIs | — | threat intel |
 | doxa.py | Claude API | — | reads full filestack |
 | alerts.py | throttling | — | severity + cooldowns |
 | auth.py | login/audit | — | SHA256, roles, UUID |

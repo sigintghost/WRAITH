@@ -123,6 +123,12 @@ def save_osint_results():
     except: pass
 def osint_lookup(ip):
     global osint_results
+    virustotal_lookup(ip)
+    hackertarget_lookup(ip)
+    bgpview_lookup(ip)
+    threatfox_lookup(ip)
+    dnsdumpster_lookup(ip)
+    criminalip_lookup(ip)
     print(f"\n  [OSINT] {ip}")
     div()
     keys = load_keys()
@@ -218,3 +224,132 @@ def urlscan_lookup(ip):
             print(f"    url={url}")
     except Exception as e:
         print(f"  urlscan: unavailable {e}")
+def virustotal_lookup(ip):
+    print("  -- VIRUSTOTAL --")
+    try:
+        import urllib.request,json,ssl
+        ctx=ssl._create_unverified_context()
+        url=f"https://www.virustotal.com/api/v3/ip_addresses/{ip}"
+        req=urllib.request.Request(url)
+        req.add_header("x-apikey","")
+        with urllib.request.urlopen(req,context=ctx,timeout=5) as r:
+            data=json.loads(r.read())
+        stats=data.get("data",{}).get("attributes",{}).get("last_analysis_stats",{})
+        mal=stats.get("malicious",0)
+        sus=stats.get("suspicious",0)
+        total=sum(stats.values())
+        print(f"  virustotal: {mal} malicious {sus} suspicious of {total} engines")
+        if mal>0:
+            print(f"  FLAGGED AS MALICIOUS by {mal} vendors")
+    except Exception as e:
+        print(f"  virustotal: unavailable {e}")
+def cisa_kev_lookup(vendor_keyword):
+    print("  -- CISA KEV --")
+    try:
+        import urllib.request,json,ssl
+        ctx=ssl._create_unverified_context()
+        url="https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+        with urllib.request.urlopen(url,context=ctx,timeout=10) as r:
+            data=json.loads(r.read())
+        vulns=data.get("vulnerabilities",[])
+        matches=[v for v in vulns if vendor_keyword.lower() in
+                 v.get("vendorProject","").lower() or
+                 vendor_keyword.lower() in v.get("product","").lower()]
+        if matches:
+            print(f"  CISA KEV: {len(matches)} known exploited CVEs for {vendor_keyword}")
+            for v in matches[:3]:
+                print(f"  {v.get('cveID')} — {v.get('product')} — due:{v.get('dueDate')}")
+        else:
+            print(f"  CISA KEV: no known exploited CVEs for {vendor_keyword}")
+    except Exception as e:
+        print(f"  CISA KEV: unavailable {e}")
+def hackertarget_lookup(ip):
+    print("  -- HACKERTARGET --")
+    try:
+        import urllib.request,ssl
+        ctx=ssl._create_unverified_context()
+        url=f"https://api.hackertarget.com/hostsearch/?q={ip}"
+        with urllib.request.urlopen(url,context=ctx,timeout=5) as r:
+            data=r.read().decode()
+        lines=[l for l in data.split('\n') if l.strip()]
+        if lines and 'error' not in lines[0].lower():
+            print(f"  hackertarget: {len(lines)} related hosts")
+            for l in lines[:3]:
+                print(f"  {l}")
+        else:
+            print(f"  hackertarget: no results")
+    except Exception as e:
+        print(f"  hackertarget: unavailable {e}")
+def bgpview_lookup(ip):
+    print("  -- BGPVIEW --")
+    try:
+        import urllib.request,json,ssl
+        ctx=ssl._create_unverified_context()
+        url=f"https://api.bgpview.io/ip/{ip}"
+        with urllib.request.urlopen(url,context=ctx,timeout=5) as r:
+            data=json.loads(r.read())
+        prefixes=data.get("data",{}).get("prefixes",[])
+        if prefixes:
+            p=prefixes[0]
+            asn=p.get("asn",{}).get("asn","")
+            name=p.get("asn",{}).get("name","")
+            prefix=p.get("prefix","")
+            print(f"  bgpview: ASN{asn} {name} prefix={prefix}")
+        else:
+            print(f"  bgpview: no BGP data")
+    except Exception as e:
+        print(f"  bgpview: unavailable {e}")
+def threatfox_lookup(ip):
+    print("  -- THREATFOX --")
+    try:
+        import urllib.request,json,ssl
+        ctx=ssl._create_unverified_context()
+        payload=json.dumps({"query":"search_ioc","search_term":ip}).encode()
+        req=urllib.request.Request(
+            "https://threatfox-api.abuse.ch/api/v1/",
+            data=payload,
+            headers={"Content-Type":"application/json"})
+        with urllib.request.urlopen(req,context=ctx,timeout=5) as r:
+            data=json.loads(r.read())
+        if data.get("query_status")=="ok":
+            iocs=data.get("data",[])
+            print(f"  threatfox: {len(iocs)} IOC matches")
+            for ioc in iocs[:2]:
+                print(f"  {ioc.get('threat_type')} — {ioc.get('malware')}")
+        else:
+            print(f"  threatfox: not in database")
+    except Exception as e:
+        print(f"  threatfox: unavailable {e}")
+def dnsdumpster_lookup(ip):
+    print("  -- DNSDUMPSTER --")
+    try:
+        import urllib.request,ssl
+        ctx=ssl._create_unverified_context()
+        url=f"https://api.hackertarget.com/reversedns/?q={ip}"
+        with urllib.request.urlopen(url,context=ctx,timeout=5) as r:
+            data=r.read().decode()
+        if data and 'error' not in data.lower():
+            print(f"  reverse dns: {data.strip()[:100]}")
+        else:
+            print(f"  reverse dns: no results")
+    except Exception as e:
+        print(f"  dnsdumpster: unavailable {e}")
+def criminalip_lookup(ip, key=""):
+    print("  -- CRIMINAL IP --")
+    try:
+        import urllib.request,json,ssl
+        ctx=ssl._create_unverified_context()
+        url=f"https://api.criminalip.io/v1/ip/summary?ip={ip}"
+        req=urllib.request.Request(url)
+        if key: req.add_header("x-api-key",key)
+        with urllib.request.urlopen(req,context=ctx,timeout=5) as r:
+            data=json.loads(r.read())
+        score=data.get("inbound_score","")
+        country=data.get("country","")
+        issues=data.get("issues",{})
+        print(f"  criminal ip: score={score} country={country}")
+        if issues:
+            flags=[k for k,v in issues.items() if v]
+            if flags: print(f"  flags: {', '.join(flags)}")
+    except Exception as e:
+        print(f"  criminal ip: unavailable {e}")

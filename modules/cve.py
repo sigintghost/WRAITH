@@ -93,6 +93,13 @@ def run_cve_scan(keywords=None):
         time.sleep(1)
     return findings
 def run_cve_module():
+    kw=input("  vendor to check CISA KEV [enter to skip] > ").strip()
+    if kw:
+        try:
+            from modules.osint import cisa_kev_lookup
+            cisa_kev_lookup(kw)
+        except Exception as e:
+            print(f"  CISA KEV error: {e}")
     findings=run_cve_scan()
     if not findings: return
     print(f"\n{CYAN}{BOLD}  CVE DETAIL{RESET}")
