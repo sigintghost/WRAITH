@@ -84,6 +84,58 @@ def setup_key(key_name):
     keys[key_name]=val
     save_keys(keys)
     print(f"  {GREEN}{key_name} saved{RESET}")
+def setup_smtp():
+    keys=load_keys()
+    print(f"\n{CYAN}  SMTP EMAIL ALERTS{RESET}")
+    print(f"  {DIM}{'─'*46}{RESET}")
+    print(f"  enables : CRITICAL event email alerts")
+    print(f"  examples: smtp.gmail.com, smtp.office365.com")
+    print(f"  {DIM}current:{RESET}")
+    for k in ['SMTP_HOST','SMTP_PORT','SMTP_USER','SMTP_PASS','SMTP_TO']:
+        v=keys.get(k,'')
+        if v and k!='SMTP_PASS':
+            print(f"  {k}: {GREEN}{v}{RESET}")
+        elif v and k=='SMTP_PASS':
+            print(f"  {k}: {GREEN}SET [{len(v)} chars]{RESET}")
+        else:
+            print(f"  {k}: {RED}not set{RESET}")
+    print()
+    host=input("  SMTP host [enter to skip] > ").strip()
+    if host: keys['SMTP_HOST']=host
+    port=input("  SMTP port [587] > ").strip()
+    keys['SMTP_PORT']=port if port else '587'
+    user=input("  SMTP username/email > ").strip()
+    if user: keys['SMTP_USER']=user
+    try:
+        import getpass
+        pw=getpass.getpass("  SMTP password (hidden) > ")
+    except:
+        pw=input("  SMTP password > ").strip()
+    if pw: keys['SMTP_PASS']=pw
+    to=input("  send alerts to email > ").strip()
+    if to: keys['SMTP_TO']=to
+    save_keys(keys)
+    print(f"  {GREEN}SMTP configured{RESET}")
+
+def setup_pushover():
+    keys=load_keys()
+    print(f"\n{CYAN}  PUSHOVER NOTIFICATIONS{RESET}")
+    print(f"  {DIM}{'─'*46}{RESET}")
+    print(f"  enables : phone push notifications")
+    print(f"  register: pushover.net")
+    print(f"  pricing : 7 day trial then $5 one time")
+    try:
+        import getpass
+        token=getpass.getpass("  Pushover app token (hidden) > ")
+        user=getpass.getpass("  Pushover user key (hidden) > ")
+    except:
+        token=input("  app token > ").strip()
+        user=input("  user key > ").strip()
+    if token: keys['PUSHOVER_TOKEN']=token
+    if user: keys['PUSHOVER_USER']=user
+    save_keys(keys)
+    print(f"  {GREEN}Pushover configured{RESET}")
+
 def delete_key(key_name):
     keys=load_keys()
     if not keys.get(key_name):
@@ -121,6 +173,8 @@ def run_keys_manager():
         print(f"  {CYAN}[2]{RESET} delete a key")
         print(f"  {CYAN}[3]{RESET} test a key")
         print(f"  {CYAN}[4]{RESET} setup all missing")
+    print(f"  {CYAN}[5]{RESET} configure SMTP email")
+    print(f"  {CYAN}[6]{RESET} configure Pushover")
         print(f"  {DIM}[0] back{RESET}")
         c=input("  > ").strip()
         if c=='0': break
