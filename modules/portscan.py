@@ -57,6 +57,17 @@ PORTS = {
     2323:"TELNET-IOT-ALT",37777:"DAHUA-DVR",
     34567:"DVR-CHINA",9527:"DVR-ALT",
     81:"CAM-HTTP-ALT",
+    6463:"DISCORD-RPC",6472:"DISCORD-RPC-ALT",
+    3478:"DISCORD-VOICE",3479:"DISCORD-VOICE-ALT",
+    6881:"BITTORRENT",6969:"BITTORRENT-TRACKER",
+    25565:"MINECRAFT",8211:"PALWORLD",
+    7777:"TERRARIA",19132:"MINECRAFT-BEDROCK",
+    5222:"XMPP-WHATSAPP",5223:"XMPP-SSL",
+    4244:"WHATSAPP-VOIP",5228:"TELEGRAM-PUSH",
+    1080:"SIGNAL-PROXY",5269:"XMPP-SERVER",
+    6667:"IRC",6697:"IRC-SSL",
+    5060:"SIP-VOIP",5061:"SIPS-VOIP",
+    4569:"IAX2-VOIP",9943:"SNAPCHAT",
 }
 
 def check_port(ip, port, timeout=2):
@@ -78,7 +89,7 @@ def check_port(ip, port, timeout=2):
 
 C='[36m';G='[32m';R='[31m'
 Y='[33m';D='[2m';RS='[0m'
-HIGH={4444,50050,23,69,102,502,44818,20000,5555,5554,2323,37777,34567,9527,81}
+HIGH={4444,50050,23,69,102,502,44818,20000,5555,5554,2323,37777,34567,9527,81,6463}
 OT={47808,47809,47810,1911,4911,502,802,
     44818,20000,102,4840,6454,5568,2430,
     41794,4059,9600,1962,2404,34964,1200}
@@ -197,11 +208,19 @@ def run_portscan(ip):
         mitre.append("Telnet alt — IoT Mirai botnet signature")
     if 81 in plist:
         mitre.append("Camera HTTP alt — default credential risk")
+    if 6463 in plist:
+        mitre.append("Discord RPC open — token theft risk")
+    if 5222 in plist or 5223 in plist:
+        mitre.append("XMPP open — WhatsApp messaging protocol")
+    if 5060 in plist or 5061 in plist:
+        mitre.append("SIP open — VOIP interception risk")
+    if 6667 in plist or 6697 in plist:
+        mitre.append("IRC open — known C2 channel")
     if mitre:
         print(f"  {R}FINDINGS:{RS}")
         for m in mitre:
             print(f"  {D}  {m}{RS}")
-    http_open=[p for p in plist if p in [80,8080,8443,443,8888,8001,8008,8009,8123,8086,3000]]
+    http_open=[p for p in plist if p in [80,8080,8443,443,8888,8001,8008,8009,8123,8086,3000,8010,9080,8181,8088]]
     if http_open:
         print(f"\n{C}  HTTP FINGERPRINT{RS}")
         print(f"  {D}{'─'*46}{RS}")
