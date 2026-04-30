@@ -244,6 +244,9 @@ def show_intel_menu():
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def main2():
+    from modules.netcheck import run_network_check
+    ok=run_network_check()
+    if not ok: return
     print(f"  WRAITH v{VERSION}")
     div()
     gateway,local_ip,base=get_network()

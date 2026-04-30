@@ -95,6 +95,10 @@ def run_sweep(base, local_ip):
     try:
         from modules.filestack import write_hosts
         write_hosts(results)
-    except Exception as e:
-        pass
+    except Exception as e: pass
+    try:
+        from modules.lateral_detector import check_lateral_movement
+        ips=[r[0] if isinstance(r,(list,tuple)) else r for r in results]
+        check_lateral_movement(ips)
+    except: pass
     return results

@@ -132,6 +132,18 @@ def build_context():
             if cves:
                 top=cves[0]
                 ctx.append(f'  {vendor}: {len(cves)} CVEs highest={top.get("id")} CVSS={top.get("cvss")} [{top.get("severity")}]')
+    if 'beacon_alerts.json' in stack:
+        ba=stack['beacon_alerts.json'].get('alerts',[])
+        if ba:
+            ctx.append(f'\nBEACON ALERTS: {len(ba)} detected')
+            for a in ba:
+                ctx.append(f'  {a.get("ip")} interval={a.get("interval")}s')
+    if 'lateral_alerts.json' in stack:
+        la=stack['lateral_alerts.json'].get('alerts',[])
+        if la:
+            ctx.append(f'\nLATERAL MOVEMENT: {len(la)} new hosts')
+            for a in la:
+                ctx.append(f'  new host {a.get("ip")}')
     if 'alerts.json' in stack:
         alerts = stack['alerts.json'].get('alerts', [])
         if alerts:
