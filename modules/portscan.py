@@ -40,6 +40,23 @@ PORTS = {
     5672:"AMQP",9092:"KAFKA",
     4444:"MSFPORT-HIGHRISK",
     50050:"CSTRIKE-HIGHRISK",
+    3074:"XBOX-LIVE",3075:"XBOX-ALT",
+    3478:"PLAYSTATION",27015:"STEAM",
+    27036:"STEAM-REMOTE",25565:"MINECRAFT",
+    40000:"ROBLOX",49152:"ROBLOX-ALT",
+    8009:"CHROMECAST",7000:"AIRPLAY",
+    32400:"PLEX",32469:"PLEX-ALT",
+    1935:"RTMP-STREAM",8554:"RTSP",
+    9080:"SAMSUNG-TV",8001:"SAMSUNG-API",
+    55000:"SAMSUNG-ALT",7676:"LG-TV",
+    3000:"WEBOS-LG",9998:"VIZIO-TV",
+    5555:"ADB-FIRESTICK",8088:"FIRESTICK-ALT",
+    62078:"IPHONE-SYNC",5228:"GOOGLE-PUSH",
+    5554:"ADB-ANDROID",8123:"HOME-ASSISTANT",
+    1400:"SONOS",4070:"SPOTIFY-CONNECT",
+    2323:"TELNET-IOT-ALT",37777:"DAHUA-DVR",
+    34567:"DVR-CHINA",9527:"DVR-ALT",
+    81:"CAM-HTTP-ALT",
 }
 
 def check_port(ip, port, timeout=2):
@@ -61,7 +78,7 @@ def check_port(ip, port, timeout=2):
 
 C='[36m';G='[32m';R='[31m'
 Y='[33m';D='[2m';RS='[0m'
-HIGH={4444,50050,23,69,102,502,44818,20000}
+HIGH={4444,50050,23,69,102,502,44818,20000,5555,5554,2323,37777,34567,9527,81}
 OT={47808,47809,47810,1911,4911,502,802,
     44818,20000,102,4840,6454,5568,2430,
     41794,4059,9600,1962,2404,34964,1200}
@@ -97,8 +114,16 @@ def run_portscan(ip):
         mitre.append("T0843 Program Download S7Comm")
     if 20000 in plist:
         mitre.append("T0869 Standard App Layer DNP3")
+    if 5555 in plist or 5554 in plist:
+        mitre.append("ADB open — Android device exploitable")
+    if any(p in plist for p in [37777,34567,9527]):
+        mitre.append("DVR/Camera default port — likely unpatched")
+    if 2323 in plist:
+        mitre.append("Telnet alt — IoT Mirai botnet signature")
+    if 81 in plist:
+        mitre.append("Camera HTTP alt — default credential risk")
     if mitre:
-        print(f"  {R}MITRE ATT&CK ICS:{RS}")
+        print(f"  {R}FINDINGS:{RS}")
         for m in mitre:
             print(f"  {D}  {m}{RS}")
     try:
