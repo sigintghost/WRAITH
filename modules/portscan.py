@@ -140,7 +140,8 @@ def http_fingerprint(ip, port=80):
 def select_target_from_sweep():
     import os,json
     stack=os.path.expanduser("~/.wraith/loot/stack")
-    fp=os.path.join(stack,"hosts.json")
+    from modules.filestack import STACK
+    fp=os.path.join(STACK,"hosts.json")
     if not os.path.exists(fp):
         print(f"  {R}no sweep results — run sweep first{RS}")
         return None
