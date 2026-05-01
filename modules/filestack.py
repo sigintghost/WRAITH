@@ -15,6 +15,8 @@ def set_subnet(subnet):
     _subnet = subnet.replace('.','_').replace('/','_')
     STACK = os.path.join(LOOT,'stack',_subnet)
 
+def get_stack():
+    return STACK
 def ensure_stack():
     os.makedirs(STACK, exist_ok=True)
 

@@ -228,9 +228,11 @@ def run_portscan(ip):
         for p in http_open[:3]:
             http_fingerprint(ip,p)
     try:
-        from modules.filestack import write_json
-        write_json('portscan.json', {'target': ip, 'ports': [
-            {'port': p, 'service': s, 'state': st} for p,s,st in results
-        ]})
+        from modules.filestack import write_json, get_stack
+        import os, json
+        sp = os.path.join(get_stack(),'portscan.json')
+        existing = json.load(open(sp)) if os.path.exists(sp) else {'scans':[]}
+        existing['scans'].append({'target':ip,'time':__import__('datetime').datetime.now().isoformat(),'ports':[{'port':p,'service':s,'state':st} for p,s,st in results]})
+        write_json('portscan.json', existing)
     except: pass
     return results

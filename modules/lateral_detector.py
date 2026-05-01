@@ -12,6 +12,20 @@ def load_previous_hosts():
         return set(h.get("ip","") for h in data.get("hosts",[])
                   if isinstance(h,dict))
     except: return set()
+def load_baseline_from_filestack():
+    try:
+        from modules.filestack import get_stack
+        import os,json
+        fp=os.path.join(get_stack(),'baseline.json')
+        if os.path.exists(fp):
+            return set(json.load(open(fp)).get('hosts',[]))
+    except: pass
+    return set()
+def save_baseline_to_filestack(hosts):
+    try:
+        from modules.filestack import write_json
+        write_json('baseline.json',{'hosts':list(hosts)})
+    except: pass
 def load_session_baseline():
     fp=os.path.join(STACK,"hosts.json")
     if not os.path.exists(fp): return set()
@@ -27,7 +41,8 @@ def load_session_baseline():
 def check_lateral_movement(current_hosts):
     previous=load_previous_hosts()
     baseline=load_session_baseline()
-    known=previous|baseline
+    persistent=load_baseline_from_filestack()
+    known=previous|baseline|persistent
     new_hosts=[ip for ip in current_hosts if ip not in known and ip]
     alerts=[]
     for ip in new_hosts:
@@ -39,4 +54,5 @@ def check_lateral_movement(current_hosts):
             from modules.filestack import write_json
             write_json("lateral_alerts.json",{"alerts":alerts})
         except: pass
+    save_baseline_to_filestack(known|set(current_hosts))
     return alerts

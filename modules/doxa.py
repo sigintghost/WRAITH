@@ -295,9 +295,6 @@ def ask_doxa(question, api_key, history):
             if warnings:
                 for w in warnings:
                     print(f"  \033[31m[DOXA SECURITY] {w}\033[0m")
-            for char in reply:
-                print(char,end='',flush=True)
-            print()
             history.append({'role': 'assistant', 'content': reply})
             return reply
     except urllib.error.HTTPError as e:
