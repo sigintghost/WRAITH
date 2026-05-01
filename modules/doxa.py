@@ -62,7 +62,8 @@ When analyzing network data:
 
 def load_stack():
     import os, json
-    stack_dir = os.path.expanduser('~/.wraith/loot/stack')
+    from modules.filestack import STACK
+    stack_dir = STACK
     files = ['hosts.json','bacnet_inventory.json','modbus_map.json',
              'mqtt_brokers.json','snmp_inventory.json','mstp_topology.json',
              'alerts.json']
