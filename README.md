@@ -74,7 +74,7 @@ Keys at ~/.wraith/keys.py chmod 600
 
 ---
 
-## OSINT — 7 Sources Per IP
+## OSINT — 13 Sources Per IP
 
 | Source | Type |
 |--------|------|
@@ -136,14 +136,14 @@ Coming in v4.1.
 | v1.0 | raw socket recon, port scan, DNS |
 | v2.0 | BACnet/IP passive listener |
 | v3.0 | Modbus, MQTT, ghost module |
-| v3.3 | Oracle AI, OSINT x7, auth, ANSI menus |
+| v3.3 | DOXA AI, OSINT x7, auth, ANSI menus |
 | v3.4 | BACnet idle timeout, Censys fix |
 | v3.5 | DOXA reads full filestack, MAC OUI, TTL |
 | v3.6 | DOXA rename John 1:14, CVE, key mgmt |
 | v3.7 | beacon detector, lateral movement, netcheck |
 | v3.8 | DOXA streaming, OSINT pipeline, sanitize |
-| v3.9 | 80+ ports, HTTP fingerprint, MITRE ICS — current |
-| v4.0 | admin panel, Strata separation, DOXA memory |
+| v3.9 | 80+ ports, HTTP fingerprint, MITRE ICS, admin panel, login lockout, 13 OSINT sources — current |
+| v4.0 | role enforcement, DOXA memory, subnet filestack, persona JSONs |
 | v4.1 | Strata MVS, FDD, WebCTRL integration |
 | v5.0 | sensor nodes, WireGuard, per-building |
 | v5.1 | browser dashboard, zero dependencies |
