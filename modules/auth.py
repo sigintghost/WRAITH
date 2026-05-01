@@ -39,13 +39,30 @@ def change_password(username, old_pw, new_pw):
     return True
 def login(username, password):
     global SESSION_ID, CURRENT_USER, CURRENT_ROLE
+    import time
     users = _load_users()
-    if username not in users: return False
-    if users[username]["hash"] != _hash(password): return False
+    if username not in users: return "invalid"
+    u = users[username]
+    max_attempts = 5 if u.get("role")=="admin" else 3
+    locked_until = u.get("locked_until",0)
+    if time.time() < locked_until:
+        remaining = int(locked_until - time.time())
+        return f"locked:{remaining}"
+    if u["hash"] != _hash(password):
+        u["fails"] = u.get("fails",0) + 1
+        if u["fails"] >= max_attempts:
+            u["locked_until"] = time.time() + 300
+            u["fails"] = 0
+        _save_users(users)
+        remaining = max_attempts - u["fails"]
+        return f"fail:{remaining}"
+    u["fails"] = 0
+    u["locked_until"] = 0
+    _save_users(users)
     CURRENT_USER = username
-    CURRENT_ROLE = users[username]["role"]
+    CURRENT_ROLE = u["role"]
     SESSION_ID = str(uuid.uuid4())[:8]
-    _audit("LOGIN", "session started")
+    _audit("LOGIN","session started")
     return True
 def logout():
     global SESSION_ID, CURRENT_USER, CURRENT_ROLE

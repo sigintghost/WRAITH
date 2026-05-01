@@ -316,17 +316,23 @@ def run_auth():
         p = getpass.getpass("  password: ")
         create_user(u, p, "admin")
         print("  [+] admin account created")
-    attempts = 0
-    while attempts < 3:
+    while True:
         u = input("  username: ")
         p = getpass.getpass("  password: ")
-        if login(u, p):
-            s = get_session()
+        result = login(u, p)
+        if result is True:
+            get_session()
             print("  [+] access granted")
             main2()
             logout()
             return
-        attempts += 1
-        print(f"  [-] invalid — {3-attempts} remaining")
+        elif isinstance(result,str) and result.startswith("locked:"):
+            secs=result.split(":")[1]
+            print(f"  [!] account locked — try again in {secs}s")
+        elif isinstance(result,str) and result.startswith("fail:"):
+            left=result.split(":")[1]
+            print(f"  [-] invalid — {left} attempts remaining")
+        else:
+            print("  [-] invalid credentials")
     print("  [!] too many failed attempts. exiting.")
 run_auth()
