@@ -242,6 +242,8 @@ def main2():
     print(f"  WRAITH v{VERSION}")
     div()
     gateway,local_ip,base=get_network()
+    from modules.filestack import set_subnet
+    set_subnet(f"{base}.0_24")
     print(f"  gateway  : {gateway}")
     print(f"  local ip : {local_ip}")
     print(f"  subnet   : {base}.0/24")

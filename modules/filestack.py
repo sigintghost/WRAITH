@@ -9,6 +9,11 @@ import datetime
 
 LOOT = os.path.expanduser('~/.wraith/loot')
 STACK = os.path.join(LOOT, 'stack')
+_subnet = 'default'
+def set_subnet(subnet):
+    global STACK,_subnet
+    _subnet = subnet.replace('.','_').replace('/','_')
+    STACK = os.path.join(LOOT,'stack',_subnet)
 
 def ensure_stack():
     os.makedirs(STACK, exist_ok=True)
