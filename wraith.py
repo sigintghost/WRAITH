@@ -313,7 +313,12 @@ def run_auth():
     if first_run():
         print("  [*] first run — create admin account")
         u = input("  username: ")
-        p = getpass.getpass("  password: ")
+        while True:
+            p = getpass.getpass("  password: ")
+            from modules.auth import validate_password
+            err = validate_password(p)
+            if not err: break
+            print(f"  [!] {err} — try again")
         create_user(u, p, "admin")
         print("  [+] admin account created")
     while True:
