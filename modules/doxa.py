@@ -114,7 +114,8 @@ def load_stack():
     stack_dir = STACK
     files = ['hosts.json','bacnet_inventory.json','modbus_map.json',
              'mqtt_brokers.json','snmp_inventory.json','mstp_topology.json',
-             'alerts.json']
+             'alerts.json','portscan.json','ttl_fingerprints.json',
+             'arp_table.json','lateral_alerts.json']
     data = {}
     for fn in files:
         fp = os.path.join(stack_dir, fn)
@@ -285,19 +286,18 @@ def ask_doxa(question, api_key, history):
             data = json.loads(resp.read().decode('utf-8'))
             from modules.sanitize import validate_doxa_output
             print()
-            full_reply=""
+            raw=""
             for block in data.get('content',[]):
                 if block.get('type')=='text':
-                    for char in block.get('text',''):
-                        print(char,end='',flush=True)
-                        full_reply+=char
-            print()
-            warnings=validate_doxa_output(full_reply)
+                    raw+=block.get('text','')
+            reply=strip_md(raw)
+            warnings=validate_doxa_output(reply)
             if warnings:
                 for w in warnings:
                     print(f"  \033[31m[DOXA SECURITY] {w}\033[0m")
-            reply = data['content'][0]['text']
-            reply=strip_md(reply)
+            for char in reply:
+                print(char,end='',flush=True)
+            print()
             history.append({'role': 'assistant', 'content': reply})
             return reply
     except urllib.error.HTTPError as e:
