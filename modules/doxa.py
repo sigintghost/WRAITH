@@ -244,6 +244,15 @@ def pick_model(question):
     if len(question) > 200: return SONNET
     if any(k in q for k in COMPLEX_KEYWORDS): return SONNET
     return HAIKU
+def strip_md(text):
+    import re
+    text=re.sub(r'#{1,6}\s*','',text)
+    text=re.sub(r'\*{1,2}([^*]+)\*{1,2}','\\1',text)
+    text=re.sub(r'`{1,3}[^`]*`{1,3}','',text)
+    text=re.sub(r'^\s*[-*]\s+','  ',text,flags=re.MULTILINE)
+    text=re.sub(r'\|[^\n]+\|','',text)
+    text=re.sub(r'\n{3,}','\n\n',text)
+    return text.strip()
 def ask_doxa(question, api_key, history):
     from modules.sanitize import clean_wire_value
     question=clean_wire_value(question,"doxa_input")
@@ -288,6 +297,7 @@ def ask_doxa(question, api_key, history):
                 for w in warnings:
                     print(f"  \033[31m[DOXA SECURITY] {w}\033[0m")
             reply = data['content'][0]['text']
+            reply=strip_md(reply)
             history.append({'role': 'assistant', 'content': reply})
             return reply
     except urllib.error.HTTPError as e:
