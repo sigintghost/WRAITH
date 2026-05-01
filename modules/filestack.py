@@ -46,7 +46,7 @@ def write_json(filename, data):
     return path
 
 def read_json(filename):
-    path = os.path.join(STACK, filename)
+    path = os.path.join(get_stack(), filename)
     if not os.path.exists(path):
         return {}
     with open(path, 'r') as f:
@@ -100,6 +100,6 @@ def stack_summary():
     files = os.listdir(STACK)
     summary = {}
     for f in files:
-        path = os.path.join(STACK, f)
+        path = os.path.join(get_stack(), f)
         summary[f] = os.path.getsize(path)
     return summary
