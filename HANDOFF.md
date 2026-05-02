@@ -118,3 +118,51 @@ WRAITH observes. Strata understands. DOXA reveals.
 - Shodan: shodan.io — free tier limited
 
 WRAITH observes. Strata understands. DOXA reveals.
+
+## SESSION CLOSE — v4.0 FINAL 2026-05-02
+
+### Instagram Live
+- Two slide carousel posted — v4.0 announcement
+- Slide 1: clean terminal output — sweep/rogue/lateral/DOXA
+- Slide 2: L4/L5/L6 — WinRM/Tor/Kerberos/TTL — CRITICAL
+- Caption: WRAITH v4.0 passive persistent aware
+- Hashtags: purpleteam OTsecurity threathunting infosec redteam
+- Comment on anastasis_king WordPress pentest post
+- Comment on ekoms.is.my.savior OpenClaw post
+
+### Accounts Worth Watching
+- anastasis_king — WordPress pentest carousels, military bg
+- ekoms.is.my.savior — OpenClaw/AI agent crowd, casual tone
+- hexsecteam — liked anastasis post, team account
+- apex_shield — compliance/visibility competitor, watch only
+- venoxploit — OTP attack carousels, similar format to ours
+
+### Next Session Start Instructions
+Tell Claude: continuing WRAITH at v4.0
+Upload HANDOFF.md first
+Start by analyzing any Instagram screenshots for
+relevance to WRAITH, wishlist items, and content strategy
+Then build in this order:
+1. pg_connector.py — WebCTRL PostgreSQL into DOXA
+2. Telegram bot — control DOXA from anywhere
+3. Honeypot module — fake endpoints, log attackers
+4. Fix API keys — VirusTotal/ThreatFox/Censys
+5. Role enforcement — technician/viewer menus
+
+### Key Decisions Locked
+- PostgreSQL: WRAITH own DB + WebCTRL read-only
+- All SQL parameterized — no injection surface
+- Snowflake pipeline — future long term retention
+- Telegram as DOXA remote interface
+- Soul file — AGENTS.md for DOXA personality
+- Honeypot feeds directly into alerts.json
+- Topology map grows passively from filestack refs
+
+### OpenClaw Relevance
+- Soul file concept — AGENTS.md defines constraints
+- Telegram control — DOXA from anywhere
+- Local LLM — Ollama air-gapped mode
+- Honeypot pattern — fake WP login logs every IP
+- Constraint-first design — do no harm as core truth
+
+WRAITH observes. Strata understands. DOXA reveals.
