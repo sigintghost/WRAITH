@@ -214,6 +214,28 @@ def auto_chain(gateway, local_ip):
     log_result(gateway, "AUTO", "chain scan complete")
     print(f"\n  [AUTO] complete. log saved to ~/.wraith/loot/logs/")
 
+def doxa_login_alert():
+    import json, os
+    mem = os.path.expanduser('~/.wraith/memory.json')
+    alerts = os.path.expanduser('~/.wraith/loot/stack/alerts.json')
+    flags = []
+    if os.path.exists(alerts):
+        try:
+            with open(alerts) as f: a = json.load(f)
+            if a: flags.append(f"{len(a)} active alert(s) in filestack")
+        except: pass
+    if os.path.exists(mem):
+        try:
+            with open(mem) as f: h = json.load(f)
+            if h: flags.append(f"DOXA memory: {len(h)} prior exchanges loaded")
+        except: pass
+    if flags:
+        print(f"
+  [33m[DOXA BRIEFING][0m")
+        for f in flags:
+            print(f"  [33m! {f}[0m")
+        print()
+
 def show_main_menu():
     div()
     print(f"  {CYAN}[1]{RESET} RECON")
@@ -341,6 +363,7 @@ def run_auth():
         if result is True:
             get_session()
             print("  [+] access granted")
+            doxa_login_alert()
             main2()
             logout()
             return
