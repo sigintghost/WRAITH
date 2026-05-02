@@ -226,13 +226,18 @@ def run_portscan(ip):
         print(f"\n{C}  HTTP FINGERPRINT{RS}")
         print(f"  {D}{'─'*46}{RS}")
         for p in http_open[:3]:
-            http_fingerprint(ip,p)
+            try: http_fingerprint(ip,p)
+            except: pass
     try:
-        from modules.filestack import write_json, get_stack
-        import os, json
-        sp = os.path.join(get_stack(),'portscan.json')
-        existing = json.load(open(sp)) if os.path.exists(sp) else {'scans':[]}
-        existing['scans'].append({'target':ip,'time':__import__('datetime').datetime.now().isoformat(),'ports':[{'port':p,'service':s,'state':st} for p,s,st in results]})
-        write_json('portscan.json', existing)
-    except: pass
+        import os,json,datetime
+        from modules.filestack import write_json,get_stack
+        stack=get_stack()
+        print(f'  [DEBUG] stack={stack}')
+        sp=os.path.join(stack,'portscan.json')
+        data=json.load(open(sp)) if os.path.exists(sp) else {'scans':[]}
+        data['scans'].append({'target':ip,'ports':[{'port':p,'service':s,'state':st} for p,s,st in results if st=='OPEN']})
+        write_json('portscan.json',data)
+        print(f'  [DEBUG] wrote {len(data["scans"])} scans')
+    except Exception as e:
+        print(f'  [PORTSCAN ERR] {e}')
     return results
