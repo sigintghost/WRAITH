@@ -213,6 +213,12 @@ def run_sweep_module(gateway, local_ip, base):
     for ip, port, hostname in results:
         log_result(local_ip, "SWEEP", f"{ip} port={port} {hostname}")
     mark_scanned(f"{base}.0/24")
+    from modules.portscan import run_portscan
+    new_reg = get_new_hosts([(ip,'','') for ip,port,hostname in results])
+    for new_ip in new_reg[:3]:
+        print(f"  [33m[AUTO-SCAN] new host {new_ip} — scanning[0m")
+        try: run_portscan(new_ip)
+        except: pass
     discovered = discover_from_filestack(get_stack())
     current = base.rsplit('.',1)[0] if base.count('.')==3 else base
     for s in discovered:

@@ -41,7 +41,7 @@ PROMPT_MODES = {
 'timeline': 'Reconstruct the event sequence from all available data. Use registry first_seen/last_seen, alert timestamps, portscan history, and DOXA memory. What happened, in what order, and what does the pattern suggest?',
 'vlan': 'Analyze VLAN and subnet topology. What subnets are visible? What cross-VLAN traffic is implied by the data? Are there hosts that should not be communicating? Flag any flat network indicators.',
 'creds': 'Identify services running on this network that are known to ship with default credentials. Cross-reference open ports with known default credential risks for BAS, IoT, and OT devices. What should be tested first?',
-'ghost': 'From the perspective of an external attacker who just gained initial access, what do they see? What is the highest value target? What is the easiest lateral movement path? What would they do first?',
+'ghost': 'From the perspective of an external attacker who just gained initial access, what do they see? What is the highest value target? What is the easiest lateral movement path? What would they do first? End your response by explicitly proposing: run portscan on the highest risk host.',
 'rf': 'Analyze any available wireless, RF, Bluetooth, or Zigbee indicators in the filestack. Flag any unrecognized signal sources, rogue access points, or wireless BAS devices operating outside expected parameters.',
 }
 

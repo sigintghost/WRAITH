@@ -36,14 +36,14 @@ def select_subnet(current_base):
         all_subs.insert(0, current_base)
     print(f"\n  {C}SELECT SUBNET{R}")
     print(f"  {'─'*44}")
-    print(f"  [0] {current_base}.0/24  (current)")
+    print(f"  [c] {current_base}.0/24  (current — press c or enter)")
     for i, s in enumerate(all_subs):
         label = known.get(s, '')
         tag = f" — {label}" if label else ''
         print(f"  [{i+1}] {s}.0/24{tag}")
     print(f"  [m] enter manually")
     choice = input("  select > ").strip()
-    if choice in ('0','','exit','cancel','q'): return None
+    if choice in ('c','','exit','cancel','q'): return None
     if choice == 'm':
         manual = input("  enter base (e.g. 10.10.5): ").strip()
         label = input("  label (optional): ").strip()

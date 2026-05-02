@@ -110,6 +110,16 @@ def run_arp(gateway, local_ip):
     update_registry(hosts)
     if new_hosts:
         print(f"  [33m[REGISTRY] {len(new_hosts)} new host(s) first seen[0m")
+        for ip in new_hosts:
+            print(f"  [31m[ROGUE?] {ip} — first appearance[0m")
+            try:
+                from modules.filestack import get_stack
+                import json, os
+                ap = os.path.join(get_stack(), 'alerts.json')
+                alerts = json.load(open(ap)) if os.path.exists(ap) else []
+                alerts.append({'type':'rogue_device','ip':ip,'message':f'New host {ip}'})
+                json.dump(alerts, open(ap,'w'), indent=2)
+            except: pass
     if not hosts:
         print("  [ARP] no hosts found or raw socket unavailable")
     try:
