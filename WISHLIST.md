@@ -302,3 +302,15 @@ trycloudflare, serveo — as C2 indicators.
 - crt.sh subdomain recon integration
 - DNS deep dive — A/MX/NS/TXT records to filestack
 - Cloud enumeration — S3/Azure blob exposure check
+
+## FROM OPENCLAW/EKOMS ANALYSIS 2026-05-02
+- Telegram bot integration — control DOXA from anywhere
+- DOXA soul file — AGENTS.md defining personality/constraints
+- Local LLM via Ollama — air-gapped zero API cost
+- ZimaBoard/edge hardware deployment target
+- Honeypot module — fake upload endpoints, fake shells
+- Honeypot logger — log every IP that hits trap pages
+- AI agent 24/7 mode — persistent background DOXA loop
+- DOXA via VPS — remote deployment mode
+- Constraint-first agent design — do no harm as core truth
+- Web search tool for DOXA — live CVE research during session
