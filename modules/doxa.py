@@ -126,6 +126,13 @@ def load_stack():
     return data
 
 def build_context():
+    from modules.filestack import STACK, _subnet
+    from modules.subnet_selector import load_known
+    known = load_known()
+    subnet_display = _subnet.replace('_','.')
+    label = known.get(subnet_display.rsplit('.',1)[0], '')
+    subnet_ctx = f"ACTIVE SUBNET: {subnet_display}"
+    if label: subnet_ctx += f" — {label}"
     from modules.registry import load_registry
     reg = load_registry()
     reg_lines = []
@@ -251,7 +258,7 @@ def build_context():
             blines = [f"{b.get('ip')}:{b.get('port')} {b.get('server','')} {b.get('title','')}" for b in bdata[:10]]
             ctx.append('HTTP BANNERS:\n' + '\n'.join(blines))
     except: pass
-    return '\n'.join(ctx) + '\n\n' + reg_ctx
+    return subnet_ctx + '\n' + '\n'.join(ctx) + '\n\n' + reg_ctx
 
     return HAIKU
 HAIKU = "claude-haiku-4-5"
