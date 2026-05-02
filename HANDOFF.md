@@ -88,3 +88,33 @@ git clone https://github.com/sigintghost/WRAITH.git
 cd WRAITH && python3 wraith.py
 
 WRAITH observes. Strata understands. DOXA reveals.
+
+## SESSION UPDATE — v4.0 FINAL 2026-05-02
+
+### Completed Late Session
+- DOXA agent loop — propose/approve/deny HITL
+- 6 new DOXA modes: profile/timeline/vlan/creds/ghost/rf
+- Rogue device detection — alerts.json on first appearance
+- Auto-scan new hosts on sweep
+- Subnet selector UX fix — c/enter to cancel
+- Topology mapper — modules/topology.py
+- DOXA topology context — unscanned subnets surfaced
+- OSINT wired into DOXA context
+- Version bumped to 4.0
+- README: What It Could Be + longer vision section
+- L4/L5/L6 ports + VPN/Tor/AD/WinRM added
+
+### Next Session Start
+1. pg_connector.py — WebCTRL PostgreSQL
+2. RF/Bluetooth/Zigbee module scaffold
+3. Fix API keys — VirusTotal/ThreatFox/Censys
+4. DOXA persistent alert summary on login
+5. Instagram story — purple team content strategy
+
+### API Keys Needed
+- VirusTotal: virustotal.com free account
+- ThreatFox: auth.abuse.ch free account
+- Censys: censys.io — check if key expired
+- Shodan: shodan.io — free tier limited
+
+WRAITH observes. Strata understands. DOXA reveals.
