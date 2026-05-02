@@ -242,6 +242,15 @@ def build_context():
         else:
             ctx.append('\nMQTT: no devices in current session')
     except: pass
+    try:
+        from modules.filestack import STACK
+        import os, json
+        bp = os.path.join(STACK, 'http_banners.json')
+        if os.path.exists(bp):
+            with open(bp) as f: bdata = json.load(f)
+            blines = [f"{b.get('ip')}:{b.get('port')} {b.get('server','')} {b.get('title','')}" for b in bdata[:10]]
+            ctx.append('HTTP BANNERS:\n' + '\n'.join(blines))
+    except: pass
     return '\n'.join(ctx) + '\n\n' + reg_ctx
 
     return HAIKU

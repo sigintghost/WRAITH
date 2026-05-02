@@ -132,6 +132,18 @@ def http_fingerprint(ip, port=80):
             if keyword in resp.lower():
                 print(f"  {Y}DEVICE TYPE: {device}{RS}")
                 break
+        banner = {'ip': ip, 'port': port, 'status': status[:40], 'server': server, 'powered': powered, 'title': title}
+        try:
+            from modules.filestack import STACK
+            import os, json
+            bp = os.path.join(STACK, 'http_banners.json')
+            banners = []
+            if os.path.exists(bp):
+                with open(bp) as f: banners = json.load(f)
+            banners = [b for b in banners if not (b.get('ip')==ip and b.get('port')==port)]
+            banners.append(banner)
+            with open(bp,'w') as f: json.dump(banners, f, indent=2)
+        except: pass
         return resp
     except Exception as e:
         print(f"  {D}port {port}: {e}{RS}")
