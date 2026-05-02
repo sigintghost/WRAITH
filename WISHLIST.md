@@ -254,3 +254,39 @@ Dragos Year In Review — ICS threat landscape
 Claroty Team82 — OT research feed
 
 Status: wishlist — next sprint HIGH PRIORITY
+
+## DOXA INTELLIGENCE GAPS — from hunt mode analysis
+
+### Module Filestack Audit Required
+Every module must write to subnet-namespaced filestack.
+Current status unknown for most modules.
+Audit: arp.py, bacnet.py, modbus.py, mqtt.py, snmp.py,
+ttl.py, banner grabber, lateral_detector.py
+
+### MAC OUI to DOXA Context
+ARP table captures MAC addresses. OUI lookup gives vendor.
+This must be included in DOXA filestack context.
+Currently not fed into build_context().
+
+### HTTP Banner to Filestack
+Banner grabber runs during portscan but results not
+written to filestack. DOXA cannot see server headers,
+vendor strings, or HTML titles.
+
+### TTL Fingerprint to DOXA
+ttl.py writes ttl_fingerprints.json — verify DOXA
+reads and includes in hunt context.
+
+### SNMP sysDescr to Filestack
+SNMP module captures device type and firmware.
+Must be verified writing to subnet filestack.
+
+### BACnet Who-Is Results to DOXA
+BACnet inventory must be verified in DOXA context.
+Device ID, vendor, instance number are critical for
+OT threat assessment.
+
+### DNS Query Monitoring
+Log all DNS resolutions from discovered hosts.
+Flag known phishing infrastructure — ngrok,
+trycloudflare, serveo — as C2 indicators.
