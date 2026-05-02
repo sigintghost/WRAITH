@@ -290,3 +290,15 @@ OT threat assessment.
 Log all DNS resolutions from discovered hosts.
 Flag known phishing infrastructure — ngrok,
 trycloudflare, serveo — as C2 indicators.
+
+## FROM SESSION 2026-05-02
+- Subnet selector UX — cancel on invalid input
+- DOXA 6-layer attack map report mode
+- README: What It Could Be section
+- README: DOXA persistent memory mention
+- pg_connector.py — WebCTRL PostgreSQL
+- DOXA login alert upgrade — real threat + hunt target
+- Recon submenu — separate from auto-chain
+- crt.sh subdomain recon integration
+- DNS deep dive — A/MX/NS/TXT records to filestack
+- Cloud enumeration — S3/Azure blob exposure check
