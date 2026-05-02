@@ -1,7 +1,7 @@
 import socket, getpass
 import datetime
 
-VERSION = "3.9"
+VERSION = "4.0"
 
 PORTS = {
     21:"FTP",22:"SSH",23:"TELNET",80:"HTTP",
@@ -344,6 +344,7 @@ def main2():
         elif c == "1":
             recon(gateway,local_ip)
             try:
+                run_sweep_module(gateway, local_ip, base)
                 from modules.sweep import run_sweep
                 from modules.ttl import run_ttl
                 hosts = run_sweep(base, local_ip)
