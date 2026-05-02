@@ -99,7 +99,8 @@ Keys at ~/.wraith/keys.py chmod 600
 - Tamper-evident audit log
 - Keys chmod 600 — never in repo
 - 3 attempt lockout
-- NIST SP 800-82 + IEC 62443 aligned
+- Designed with NIST SP 800-82 and IEC 62443 principles
+- Relevant to HIPAA, NERC CIP, ISO 50001 environments
 
 ---
 
