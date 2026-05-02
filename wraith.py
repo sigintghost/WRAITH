@@ -237,10 +237,32 @@ def doxa_login_alert():
     mem = os.path.expanduser('~/.wraith/memory.json')
     alerts = os.path.expanduser('~/.wraith/loot/stack/alerts.json')
     flags = []
-    if os.path.exists(alerts):
+    from modules.filestack import get_stack
+    stack = get_stack()
+    alert_path = os.path.join(stack, 'alerts.json')
+    scan_path = os.path.join(stack, 'portscan.json')
+    hunt_target = None
+    if os.path.exists(alert_path):
         try:
-            with open(alerts) as f: a = json.load(f)
-            if a: flags.append(f"{len(a)} active alert(s) in filestack")
+            with open(alert_path) as f: a = json.load(f)
+            if a:
+                top = a[-1]
+                msg = top.get('message', top.get('type', str(top)))[:60]
+                flags.append(f"{len(a)} alert(s) — latest: {msg}")
+                hunt_target = top.get('ip') or top.get('src')
+        except: pass
+    if os.path.exists(scan_path):
+        try:
+            with open(scan_path) as f: s = json.load(f)
+            scans = s.get('scans', [])
+            if scans:
+                last = scans[-1]
+                ip = last.get('target','')
+                ports = [p.get('port') for p in last.get('ports',[])]
+                risky = [p for p in ports if p in [4444,50050,9001,9050,445,3389,5985,23]]
+                if risky:
+                    flags.append(f"RISK: {ip} has suspicious ports {risky}")
+                    if not hunt_target: hunt_target = ip
         except: pass
     if os.path.exists(mem):
         try:
@@ -251,6 +273,8 @@ def doxa_login_alert():
         print("\n  \033[33m[DOXA BRIEFING]\033[0m")
         for f in flags:
             print(f"  [33m! {f}[0m")
+        if hunt_target:
+            print(f"  [31m> suggested: hunt {hunt_target}[0m")
         print()
 
 def show_main_menu():
