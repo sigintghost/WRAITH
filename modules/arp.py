@@ -102,9 +102,14 @@ def arp_scan(network_prefix, src_ip, timeout=1):
     return alive
 
 def run_arp(gateway, local_ip):
+    from modules.registry import update_registry, get_new_hosts
     prefix = '.'.join(local_ip.split('.')[:3])
     print(f"\n  [ARP] scanning {prefix}.1-254")
     hosts = arp_scan(prefix, local_ip)
+    new_hosts = get_new_hosts(hosts)
+    update_registry(hosts)
+    if new_hosts:
+        print(f"  [33m[REGISTRY] {len(new_hosts)} new host(s) first seen[0m")
     if not hosts:
         print("  [ARP] no hosts found or raw socket unavailable")
     try:

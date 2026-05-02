@@ -126,6 +126,12 @@ def load_stack():
     return data
 
 def build_context():
+    from modules.registry import load_registry
+    reg = load_registry()
+    reg_lines = []
+    for ip, d in list(reg.items())[:20]:
+        reg_lines.append(f"{ip} mac={d.get('mac','')} vendor={d.get('vendor','')} first={d.get('first_seen','')[:10]} last={d.get('last_seen','')[:10]} seen={d.get('seen_count',1)}")
+    reg_ctx = 'DEVICE REGISTRY:\n' + '\n'.join(reg_lines) if reg_lines else ''
     ctx = []
     ctx.append('WRAITH LIVE NETWORK CONTEXT')
     ctx.append(f'timestamp: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
@@ -236,7 +242,7 @@ def build_context():
         else:
             ctx.append('\nMQTT: no devices in current session')
     except: pass
-    return '\n'.join(ctx)
+    return '\n'.join(ctx) + '\n\n' + reg_ctx
 
     return HAIKU
 HAIKU = "claude-haiku-4-5"
@@ -316,15 +322,27 @@ def run_doxa():
         print(f'  {RED}[DOXA] no API key found{RESET}')
         print(f'  {DIM}add ANTHROPIC_KEY to ~/.wraith/keys.py{RESET}')
         return
+    mem_path = os.path.expanduser('~/.wraith/memory.json')
     history = []
+    if os.path.exists(mem_path):
+        try:
+            with open(mem_path) as f:
+                history = json.load(f)
+        except: history = []
     while True:
         try:
             q = input(f'  {CYAN}ghost >{RESET} ').strip()
         except (KeyboardInterrupt, EOFError):
             print()
+            history = history[-50:]
+            with open(mem_path,'w') as f:
+                json.dump(history, f)
             break
         if not q: continue
         if q.lower() in ('exit','quit','back','q'):
+            history = history[-50:]
+            with open(mem_path,'w') as f:
+                json.dump(history, f)
             break
         print(f'  {DIM}thinking...{RESET}')
         reply = ask_doxa(q, api_key, history)
