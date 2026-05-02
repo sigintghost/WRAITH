@@ -13,9 +13,10 @@
 
 ## What It Is
 
-WRAITH is a passive network intelligence engine
-built from raw Python sockets for OT, BAS, and
-ICS environments.
+WRAITH is a passive network intelligence engine with deep OT/BAS protocol awareness. Built from raw Python sockets. No dependencies. Works on any network.
+
+Red team recon. Blue team awareness. Purple team permanent weapon.
+
 
 No nmap. No libpcap. No pip install.
 Pure Python standard library.
@@ -142,7 +143,7 @@ Coming in v4.1.
 | v3.5 | DOXA reads full filestack, MAC OUI, TTL |
 | v3.6 | DOXA rename John 1:14, CVE, key mgmt |
 | v3.7 | beacon detector, lateral movement, netcheck |
-| v3.8 | DOXA streaming, OSINT pipeline, sanitize |
+| v3.8 | DOXA streaming, OSINT pipeline, sanitize, prompt injection defense |
 | v3.9 | 80+ ports, HTTP fingerprint, MITRE ICS, admin panel, login lockout, 13 OSINT sources — current |
 | v4.0 | role enforcement, DOXA memory, subnet filestack, persona JSONs |
 | v4.1 | Strata MVS, FDD, WebCTRL integration |
