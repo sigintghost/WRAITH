@@ -196,6 +196,9 @@ def run_bacnet_module():
     run_bacnet()
 
 def run_sweep_module(gateway, local_ip, base):
+    from modules.topology import add_node, mark_scanned, discover_from_filestack
+    from modules.filestack import get_stack
+    add_node(f"{base}.0/24", source='sweep')
     import sys
     sys.path.insert(0, '.')
     from modules.sweep import run_sweep
@@ -209,6 +212,13 @@ def run_sweep_module(gateway, local_ip, base):
         print(f"  [33m[REGISTRY] {len(new_hosts)} new host(s) first seen[0m")
     for ip, port, hostname in results:
         log_result(local_ip, "SWEEP", f"{ip} port={port} {hostname}")
+    mark_scanned(f"{base}.0/24")
+    discovered = discover_from_filestack(get_stack())
+    current = base.rsplit('.',1)[0] if base.count('.')==3 else base
+    for s in discovered:
+        if s != current:
+            add_node(f"{s}.0/24", source='passive')
+            print(f"  [33m[TOPOLOGY] new subnet observed: {s}.0/24[0m")
 
 def auto_chain(gateway, local_ip):
     import sys

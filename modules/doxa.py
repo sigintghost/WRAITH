@@ -133,6 +133,18 @@ def build_context():
     label = known.get(subnet_display.rsplit('.',1)[0], '')
     subnet_ctx = f"ACTIVE SUBNET: {subnet_display}"
     if label: subnet_ctx += f" — {label}"
+    from modules.topology import load_topology
+    topo = load_topology()
+    nodes = topo.get('nodes', {})
+    unscanned = [s for s,d in nodes.items() if not d.get('scanned')]
+    topo_lines = []
+    for subnet, data in list(nodes.items())[:10]:
+        scanned = 'scanned' if data.get('scanned') else 'UNSCANNED'
+        label = data.get('label','')
+        topo_lines.append(f"{subnet} [{scanned}]{' — '+label if label else ''}")
+    if unscanned:
+        topo_lines.append(f"UNSCANNED SUBNETS: {len(unscanned)} awaiting recon")
+    topo_ctx = 'NETWORK TOPOLOGY:\n' + '\n'.join(topo_lines) if topo_lines else ''
     from modules.registry import load_registry
     reg = load_registry()
     reg_lines = []
@@ -258,7 +270,7 @@ def build_context():
             blines = [f"{b.get('ip')}:{b.get('port')} {b.get('server','')} {b.get('title','')}" for b in bdata[:10]]
             ctx.append('HTTP BANNERS:\n' + '\n'.join(blines))
     except: pass
-    return subnet_ctx + '\n' + '\n'.join(ctx) + '\n\n' + reg_ctx
+    return subnet_ctx + '\n' + topo_ctx + '\n' + '\n'.join(ctx) + '\n\n' + reg_ctx
 
     return HAIKU
 HAIKU = "claude-haiku-4-5"
