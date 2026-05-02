@@ -152,12 +152,14 @@ def build_context():
                 ctx.append(f'  ip={h.get("ip")} ttl={h.get("ttl")} os={h.get("os")}')
     if 'portscan.json' in stack:
         ps = stack['portscan.json']
-        target = ps.get('target','unknown')
-        ports = ps.get('ports', [])
-        open_ports = [p for p in ports if isinstance(p,dict) and p.get('state')=='OPEN']
-        ctx.append(f'\nPORTSCAN: target={target} open={len(open_ports)}')
-        for p in open_ports:
-            ctx.append(f'  port={p.get("port")} service={p.get("service")}')
+        scans = ps.get('scans', [])
+        for scan in scans:
+            target = scan.get('target','unknown')
+            ports = scan.get('ports',[])
+            open_ports = [p for p in ports if isinstance(p,dict) and p.get('state')=='OPEN']
+            ctx.append(f'\nPORTSCAN: target={target} open={len(open_ports)}')
+            for p in open_ports:
+                ctx.append(f'  port={p.get("port")} service={p.get("service")}')
     if 'modbus_map.json' in stack:
         devs = stack['modbus_map.json']
         if isinstance(devs, dict):

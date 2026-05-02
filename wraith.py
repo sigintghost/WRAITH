@@ -78,6 +78,17 @@ def portscan(gateway):
             pass
     if not found:
         print("  no open ports detected.")
+    try:
+        from modules.filestack import write_json,get_stack
+        import os
+        sp=os.path.join(get_stack(),'portscan.json')
+        import json
+        data=json.load(open(sp)) if os.path.exists(sp) else {'scans':[]}
+        data['scans'].append({'target':gateway,'ports':[{'port':p,'service':s,'state':'OPEN'} for p,s in found]})
+        write_json('portscan.json',data)
+        print(f'  stack written: portscan.json')
+    except Exception as e:
+        print(f'  [WARN] filestack: {e}')
     div()
 def dns():
     print(f"\n  [DNS] {ts()}")

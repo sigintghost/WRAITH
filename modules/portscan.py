@@ -170,6 +170,7 @@ def select_target_from_sweep():
     except: return None
 
 def run_portscan(ip):
+    print('PORTSCAN START')
     print(f"\n{C}  [PORTSCAN]{RS} target: {ip}")
     print(f"  {D}scanning {len(PORTS)} ports...{RS}")
     print(f"  {D}{'─'*46}{RS}")
