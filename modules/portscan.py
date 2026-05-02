@@ -136,7 +136,8 @@ def http_fingerprint(ip, port=80):
         try:
             from modules.filestack import STACK
             import os, json
-            bp = os.path.join(STACK, 'http_banners.json')
+            from modules.filestack import get_stack
+            bp = os.path.join(get_stack(), 'http_banners.json')
             banners = []
             if os.path.exists(bp):
                 with open(bp) as f: banners = json.load(f)

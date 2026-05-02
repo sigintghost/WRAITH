@@ -78,6 +78,12 @@ def portscan(gateway):
             pass
     if not found:
         print("  no open ports detected.")
+    http_ports = [p for p,l in found if p in [80,8080,8443,443,8888,8001,8008]]
+    if http_ports:
+        from modules.portscan import http_fingerprint
+        for p in http_ports[:2]:
+            try: http_fingerprint(gateway, p)
+            except: pass
     try:
         from modules.filestack import write_json,get_stack
         import os
@@ -189,6 +195,12 @@ def run_sweep_module(gateway, local_ip, base):
     from modules.sweep import run_sweep
     from modules.logger import log_result
     results = run_sweep(base, local_ip)
+    from modules.registry import update_registry, get_new_hosts
+    arp_hosts = [(ip, '', '') for ip, port, hostname in results]
+    new_hosts = get_new_hosts(arp_hosts)
+    update_registry(arp_hosts)
+    if new_hosts:
+        print(f"  [33m[REGISTRY] {len(new_hosts)} new host(s) first seen[0m")
     for ip, port, hostname in results:
         log_result(local_ip, "SWEEP", f"{ip} port={port} {hostname}")
 
@@ -230,8 +242,7 @@ def doxa_login_alert():
             if h: flags.append(f"DOXA memory: {len(h)} prior exchanges loaded")
         except: pass
     if flags:
-        print(f"
-  [33m[DOXA BRIEFING][0m")
+        print("\n  \033[33m[DOXA BRIEFING]\033[0m")
         for f in flags:
             print(f"  [33m! {f}[0m")
         print()
