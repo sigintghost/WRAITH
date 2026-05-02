@@ -320,9 +320,12 @@ def main2():
             from modules.subnet_selector import select_subnet
             from modules.filestack import set_subnet
             sel = select_subnet(base)
-            set_subnet(f"{sel}.0_24")
-            run_sweep_module(gateway,local_ip,sel)
-            set_subnet(f"{base}.0_24")
+            if sel is None:
+                print("  [SWEEP] cancelled")
+            else:
+                set_subnet(f"{sel}.0_24")
+                run_sweep_module(gateway,local_ip,sel)
+                set_subnet(f"{base}.0_24")
         elif c == "2":
             while True:
                 show_protocols_menu()

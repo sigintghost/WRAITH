@@ -43,7 +43,7 @@ def select_subnet(current_base):
         print(f"  [{i+1}] {s}.0/24{tag}")
     print(f"  [m] enter manually")
     choice = input("  select > ").strip()
-    if choice == '0' or choice == '': return current_base
+    if choice in ('0','','exit','cancel','q'): return None
     if choice == 'm':
         manual = input("  enter base (e.g. 10.10.5): ").strip()
         label = input("  label (optional): ").strip()
