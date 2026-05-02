@@ -87,6 +87,12 @@ Keys at ~/.wraith/keys.py chmod 600
 | [Shodan InternetDB](https://internetdb.shodan.io) | free |
 | [Censys](https://censys.io) | free |
 | [URLScan](https://urlscan.io) | free |
+| [VirusTotal](https://virustotal.com) | paid |
+| [CISA KEV](https://cisa.gov/known-exploited-vulnerabilities) | free |
+| [HackerTarget](https://hackertarget.com) | free |
+| [BGPView](https://bgpview.io) | free |
+| [ThreatFox](https://threatfox.abuse.ch) | free |
+| [Criminal IP](https://criminalip.io) | paid |
 
 ---
 
