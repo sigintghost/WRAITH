@@ -37,6 +37,12 @@ PROMPT_MODES = {
 'report': 'Generate a structured incident note. Include timestamp, device details, observed behavior, risk level, recommended actions. Format for a facilities director or IT security team.',
 'explain': 'Explain this finding in plain English for a non-technical building owner or facilities manager. No jargon. Focus on real-world impact.',
 'defend': 'As a BAS engineer and network defender, what specific actions can I take right now? Prioritize by impact. Include WebCTRL, switch-level, and protocol-level options.',
+'profile': 'Perform a full 6-layer attack map analysis. L1: internet presence and exposure. L2: gateway and perimeter. L3: accessible services and open ports. L4: running processes and protocols. L5: privilege indicators and credential exposure. L6: OS fingerprint and patch posture. Walk each layer.',
+'timeline': 'Reconstruct the event sequence from all available data. Use registry first_seen/last_seen, alert timestamps, portscan history, and DOXA memory. What happened, in what order, and what does the pattern suggest?',
+'vlan': 'Analyze VLAN and subnet topology. What subnets are visible? What cross-VLAN traffic is implied by the data? Are there hosts that should not be communicating? Flag any flat network indicators.',
+'creds': 'Identify services running on this network that are known to ship with default credentials. Cross-reference open ports with known default credential risks for BAS, IoT, and OT devices. What should be tested first?',
+'ghost': 'From the perspective of an external attacker who just gained initial access, what do they see? What is the highest value target? What is the easiest lateral movement path? What would they do first?',
+'rf': 'Analyze any available wireless, RF, Bluetooth, or Zigbee indicators in the filestack. Flag any unrecognized signal sources, rogue access points, or wireless BAS devices operating outside expected parameters.',
 }
 
 GHOST_SYSTEM = '''You are DOXA, the intelligence module inside WRAITH.
@@ -290,6 +296,36 @@ def strip_md(text):
     text=re.sub(r'\|[^\n]+\|','',text)
     text=re.sub(r'\n{3,}','\n\n',text)
     return text.strip()
+AGENT_ACTIONS = {
+    'run portscan': 'modules.portscan',
+    'run sweep': 'modules.sweep',
+    'run osint': 'modules.osint',
+    'check cve': 'modules.cve',
+}
+
+def parse_agent_action(reply):
+    rl = reply.lower()
+    for trigger in AGENT_ACTIONS:
+        if trigger in rl:
+            return trigger
+    return None
+
+def execute_agent_action(action, gateway, local_ip):
+    import importlib
+    from modules.filestack import get_stack
+    print(f"  [33m[DOXA ACTION] {action}[0m")
+    try:
+        if 'portscan' in action:
+            from modules.portscan import run_portscan
+            run_portscan(gateway)
+        elif 'sweep' in action:
+            from modules.sweep import run_sweep
+            base = '.'.join(local_ip.split('.')[:3])
+            run_sweep(base, local_ip)
+        print(f"  [32m[DOXA] action complete[0m")
+    except Exception as e:
+        print(f"  [31m[DOXA] action failed: {e}[0m")
+
 def ask_doxa(question, api_key, history):
     from modules.sanitize import clean_wire_value
     question=clean_wire_value(question,"doxa_input")
@@ -338,11 +374,12 @@ def ask_doxa(question, api_key, history):
     except Exception as e:
         return f'[DOXA] error: {e}'
 
-def run_doxa():
+def run_doxa(gateway=None, local_ip=None):
     print(f'\n  {CYAN}{BOLD}[DOXA]{RESET} ghost intelligence module')
     print(f"  {DIM}token routing active — Anthropic{RESET}")
     print(f'  {DIM}ask anything — or use a mode:{RESET}')
     print(f'  {DIM}hunt / isolate / baseline / report / explain / defend{RESET}')
+    print(f'  {DIM}profile / timeline / vlan / creds / ghost / rf{RESET}')
     print(f'  {DIM}example: hunt 192.168.1.72{RESET}')
     print(f'  {DIM}type exit to return to menu{RESET}\n')
     api_key = load_doxa_key()
@@ -367,6 +404,14 @@ def run_doxa():
                 json.dump(history, f)
             break
         if not q: continue
+        if q.lower() == 'approve' and hasattr(run_doxa, '_pending'):
+            execute_agent_action(run_doxa._pending, gateway, local_ip)
+            run_doxa._pending = None
+            continue
+        if q.lower() == 'deny' and hasattr(run_doxa, '_pending'):
+            print(f"  {DIM}action denied{RESET}")
+            run_doxa._pending = None
+            continue
         if q.lower() in ('exit','quit','back','q'):
             history = history[-50:]
             with open(mem_path,'w') as f:
@@ -377,4 +422,9 @@ def run_doxa():
         print()
         for line in reply.split('\n'):
             print(f'  {GREEN}{line}{RESET}')
+        action = parse_agent_action(reply)
+        if action:
+            run_doxa._pending = action
+            print(f"  {YELLOW}[DOXA] proposed action: {action}{RESET}")
+            print(f"  {DIM}type 'approve' to execute or 'deny' to skip{RESET}")
         print()

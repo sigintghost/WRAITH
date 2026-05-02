@@ -345,7 +345,7 @@ def main2():
             except Exception as e: pass
         elif c == "6":
             from modules.doxa import run_doxa
-            run_doxa()
+            run_doxa(gateway, local_ip)
         elif c == "7":
             from modules.admin import run_admin
             run_admin()
