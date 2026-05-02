@@ -1,5 +1,6 @@
 # WRAITH
-### passive OT/BAS network intelligence engine
+### passive network intelligence engine
+### deep OT/BAS protocol awareness
 ### v3.9 — dev branch active
 
 > *anomaly is the signal.*
