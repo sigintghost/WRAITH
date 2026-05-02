@@ -1,0 +1,90 @@
+# WRAITH PROJECT HANDOFF v4.0
+## Continue at v4.0 targeting v4.1
+
+## CRITICAL MOBILE RULES
+- iSH iPhone — max 20 lines per paste
+- cat > /tmp/fixXX.py << 'EOF' pattern always
+- All parts shown together, run separately
+- String replace not line insertion
+- Never assume a step worked
+
+## IDENTITY
+- GitHub: github.com/sigintghost/WRAITH
+- Brand: dark, technical, minimal, passive observer
+- PPCL Easter eggs: %X0.0 and %MW100
+
+## V4.0 CONFIRMED COMPLETE — 2026-05-02
+- DOXA persistent memory — cross-session context
+- Device registry — first_seen/last_seen JSON
+- HTTP banner filestack write + DOXA context
+- MAC OUI confirmed feeding DOXA context
+- DOXA login alert — briefing on startup
+- Login alert upgrade — real threat + hunt suggestion
+- Registry + banner subnet path bug fixed
+- Subnet selector — auto-discover + manual entry
+- Subnet selector UX — exit/cancel/q cancels
+- DOXA subnet-aware context with building label
+- L4/L5/L6 ports added — VPN/Tor/AD/WinRM/proxy
+- PII purged from git history — all 107 commits
+- HANDOFF scrubbed — public safe
+- Both branches synced
+
+## DOXA MODES
+hunt/isolate/baseline/report/explain/defend
+scan SUBNET/compare/risk/brief
+
+## FILESTACK
+hosts.json, arp_table.json, ttl_fingerprints.json,
+portscan.json, modbus_map.json, mqtt_brokers.json,
+bacnet_inventory.json, snmp_inventory.json,
+alerts.json, http_banners.json
+Subnet-namespaced: loot/stack/SUBNET/
+Registry: ~/.wraith/registry.json
+Memory: ~/.wraith/memory.json
+Subnets: ~/.wraith/subnets.json
+
+## KNOWN BUGS OPEN
+- SMTP shows MISSING after configuration
+- ThreatFox 401 — needs key from auth.abuse.ch
+- Censys 401 — key may be expired
+- Role enforcement not wired to menus yet
+- Self-service password change not built
+- Recon submenu not built — auto-runs on select
+
+## NEXT SESSION BUILD ORDER — v4.1
+1. pg_connector.py — WebCTRL PostgreSQL into DOXA
+2. Topology mapper — subnet graph from passive obs
+3. Role enforcement — technician/viewer restrictions
+4. DOXA 6-layer attack map report mode
+5. Alert correlation engine — compound triggers
+6. README update — What It Could Be section
+7. Self-service password change
+8. PDF report export — assessment deliverable
+
+## ARCHITECTURE LOCKED
+- User storage: ~/.wraith/users.json
+- Building assigned to account + selectable
+- Terminal is the interface
+- PostgreSQL planned — WRAITH own DB + WebCTRL RO
+- All SQL queries parameterized — no injection surface
+- Snowflake pipeline — long term retention future
+- Tableau — visualization layer future
+- Local LLM via Ollama — air-gapped DOXA planned
+
+## STRATA MODULE
+Building persona system — internal use only.
+Personas loaded at login per building assignment.
+Config: modules/strata/personas/
+Each persona: subnet, priority, alert threshold, voice.
+Details in private config — not stored in repo.
+
+## GIT WORKFLOW
+git add -A && git commit -m "msg" && git push
+Branch: dev active, main stable
+
+## AFTER iSH RESET
+apk add python3 git
+git clone https://github.com/sigintghost/WRAITH.git
+cd WRAITH && python3 wraith.py
+
+WRAITH observes. Strata understands. DOXA reveals.
