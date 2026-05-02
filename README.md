@@ -1,7 +1,7 @@
 # WRAITH
 ### passive network intelligence engine
 ### deep OT/BAS protocol awareness
-### v3.9 — dev branch active
+### v4.0 — dev branch active
 
 > *anomaly is the signal.*
 > — [sig.int.ghost](https://instagram.com/sig.int.ghost)
@@ -26,6 +26,52 @@ Most tools wrap nmap. WRAITH reads the wire directly.
 Built by a BAS engineer. For BAS engineers.
 Designed for hospital, campus, clinical, and
 critical infrastructure environments.
+
+---
+
+## What It Could Be
+
+WRAITH is a platform. The terminal is the first interface.
+
+- Per-subnet AI context — each network segment analyzed independently
+- Persistent cross-session memory — DOXA remembers what it saw last week
+- Building persona layer — each facility gets its own AI voice and priority model
+- PostgreSQL integration — real trend and alarm data from WebCTRL into DOXA
+- Topology mapping — passive subnet graph built from observation alone
+- OT assessment engine — passive recon to signed PDF report
+- Air-gapped mode — local LLM, zero API cost, zero data exposure
+- Enterprise scale — thousands of subnets, one engine
+
+Red team finds the gap. Blue team closes it. Purple team never loses it.
+
+---
+
+## The Longer Vision
+
+WRAITH was built for buildings. But the architecture has no ceiling.
+
+Any environment where machines operate autonomously, where humans cannot
+be present at every node, where anomaly detection must be passive and
+persistent — WRAITH applies.
+
+- **Defense & critical infrastructure** — OT networks in bases, depots,
+  and command facilities where BAS and ICS converge
+- **Data center automation** — passive monitoring of hyperscale
+  infrastructure, thermal systems, power distribution, cooling control
+- **Autonomous construction** — drone coordination networks, sensor mesh
+  monitoring, equipment telemetry from remote build sites
+- **Off-world infrastructure** — lunar and Martian habitat systems will
+  run on the same protocols. BACnet does not care about gravity.
+  HVAC, power, life support, pressurization — all OT, all monitorable.
+- **Swarm intelligence layer** — agentic networks of autonomous units
+  require the same passive observation, anomaly detection, and
+  AI-driven threat analysis that WRAITH provides today
+- **Signal intelligence expansion** — Zigbee, Z-Wave, Bluetooth,
+  802.15.4, RF mesh — the wire is just one attack surface
+
+The terminal is the seed. The platform is what grows from it.
+
+*WRAITH observes. Strata understands. DOXA reveals.*
 
 ---
 
