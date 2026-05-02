@@ -166,3 +166,19 @@ Then build in this order:
 - Constraint-first design — do no harm as core truth
 
 WRAITH observes. Strata understands. DOXA reveals.
+
+## FINAL FIXES — SESSION CLOSE 2026-05-02
+- PORTS dict unified — wraith.py now imports from portscan.py
+- 49152 was ROBLOX-ALT in portscan.py but missing in wraith.py
+- Root cause: two separate PORTS dicts out of sync
+- Fix: wraith.py imports PORTS directly — no more duplication
+- Next sweep will correctly identify port 49152 as ROBLOX-ALT
+- Galaxy-S23-FE identified on network — .67
+- New host .70 appeared — 49152 open — needs reidentification
+
+## NEXT SESSION START
+1. Upload HANDOFF.md
+2. Paste any Instagram screenshots for analysis
+3. Then build: pg_connector.py first
+4. Then Telegram bot integration
+5. Then honeypot module
