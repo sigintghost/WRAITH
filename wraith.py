@@ -227,6 +227,16 @@ def auto_chain(gateway, local_ip):
     log_result(gateway, "BANNER", "complete")
     osint_lookup(gateway)
     log_result(gateway, "OSINT", "complete")
+    try:
+        from modules.ttl import run_ttl
+        run_ttl([gateway])
+        log_result(gateway, "TTL", "complete")
+    except Exception as e: print(f'  [TTL] {e}')
+    try:
+        from modules.snmp import run_snmp
+        run_snmp(gateway)
+        log_result(gateway, "SNMP", "complete")
+    except Exception as e: print(f'  [SNMP] {e}')
     log_result(gateway, "AUTO", "chain scan complete")
     print(f"\n  [AUTO] complete. log saved to ~/.wraith/loot/logs/")
 
@@ -277,15 +287,14 @@ def doxa_login_alert():
 
 def show_main_menu():
     div()
-    print(f"  {CYAN}[1]{RESET} RECON")
-    print(f"  {CYAN}[2]{RESET} PROTOCOLS")
-    print(f"  {CYAN}[3]{RESET} INTELLIGENCE")
-    print(f"  {CYAN}[4]{RESET} ALERTS")
-    print(f"  {CYAN}[5]{RESET} SWEEP")
-    print(f"  {CYAN}[6]{RESET} DOXA")
-    print(f"  {CYAN}[7]{RESET} ADMIN")
-    print(f"  {CYAN}[8]{RESET} KEY MANAGEMENT")
-    print(f"  {CYAN}[9]{RESET} WISHLIST")
+    print(f"  {CYAN}[1]{RESET} SWEEP        {DIM}discover + TTL{RESET}")
+    print(f"  {CYAN}[2]{RESET} SCAN         {DIM}portscan + banner + SNMP{RESET}")
+    print(f"  {CYAN}[3]{RESET} PROTOCOLS    {DIM}BACnet Modbus MQTT MSTP{RESET}")
+    print(f"  {CYAN}[4]{RESET} INTEL        {DIM}OSINT CVE DNS{RESET}")
+    print(f"  {CYAN}[5]{RESET} DOXA         {DIM}AI agent{RESET}")
+    print(f"  {CYAN}[6]{RESET} ALERTS       {DIM}active alerts{RESET}")
+    print(f"  {CYAN}[7]{RESET} ADMIN        {DIM}users audit wishlist{RESET}")
+    print(f"  {CYAN}[8]{RESET} KEYS         {DIM}API key management{RESET}")
     print(f"  {DIM}[0] EXIT{RESET}")
     div()
 def show_protocols_menu():
@@ -301,10 +310,9 @@ def show_protocols_menu():
 def show_intel_menu():
     div()
     print(f"  {CYAN}[1]{RESET} OSINT")
-    print(f"  {CYAN}[2]{RESET} DOXA")
-    print(f"  {CYAN}[3]{RESET} AUTO")
-    print(f"  {CYAN}[4]{RESET} DNS")
-    print(f"  {CYAN}[5]{RESET} BANNER")
+    print(f"  {CYAN}[2]{RESET} CVE")
+    print(f"  {CYAN}[3]{RESET} DNS")
+    print(f"  {CYAN}[4]{RESET} BANNER")
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def main2():
@@ -324,15 +332,23 @@ def main2():
         c = input(" > ")
         if c == "0": break
         elif c == "1":
-            recon(gateway,local_ip)
-            try:
-                run_sweep_module(gateway, local_ip, base)
-                from modules.sweep import run_sweep
-                from modules.ttl import run_ttl
-                hosts = run_sweep(base, local_ip)
-                if hosts: run_ttl(hosts)
-            except Exception as e: pass
-        elif c == "6":
+            from modules.subnet_selector import select_subnet
+            from modules.filestack import set_subnet
+            sel = select_subnet(base)
+            if sel is None: print("  [SWEEP] cancelled")
+            else:
+                set_subnet(f"{sel}.0_24")
+                run_sweep_module(gateway,local_ip,sel)
+                set_subnet(f"{base}.0_24")
+        elif c == "2":
+            from modules.portscan import select_target_from_sweep
+            t=select_target_from_sweep()
+            if not t: t=input("  enter IP > ").strip()
+            if t:
+                portscan(t)
+                banner(t)
+                run_snmp_module()
+        elif c == "5":
             from modules.doxa import run_doxa
             run_doxa(gateway, local_ip)
         elif c == "7":
@@ -341,11 +357,8 @@ def main2():
         elif c == "8":
             from modules.keys_manager import run_keys_manager
             run_keys_manager()
-        elif c == "9":
-            from modules.wishlist_agent import run_wishlist_agent
-            run_wishlist_agent()
-        elif c == "4": run_alerts_module()
-        elif c == "5":
+        elif c == "6": run_alerts_module()
+        elif c == "99":
             from modules.subnet_selector import select_subnet
             from modules.filestack import set_subnet
             sel = select_subnet(base)
@@ -379,13 +392,11 @@ def main2():
                 p = input(" > ")
                 if p == "0": break
                 elif p == "1": run_osint(gateway)
-                elif p == "2": run_doxa_module()
-                elif p == "6":
+                elif p == "2":
                     from modules.cve import run_cve_module
                     run_cve_module()
-                elif p == "3": auto_chain(gateway,local_ip)
-                elif p == "4": dns()
-                elif p == "5": banner(gateway)
+                elif p == "3": dns()
+                elif p == "4": banner(gateway)
                 else: print("  invalid")
         else: print("  invalid option")
     from modules.ghost import ghost_exit

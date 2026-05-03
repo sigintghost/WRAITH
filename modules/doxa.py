@@ -121,7 +121,8 @@ def load_stack():
     files = ['hosts.json','bacnet_inventory.json','modbus_map.json',
              'mqtt_brokers.json','snmp_inventory.json','mstp_topology.json',
              'alerts.json','portscan.json','ttl_fingerprints.json',
-             'arp_table.json','lateral_alerts.json']
+             'arp_table.json','lateral_alerts.json',
+             'osint_results.json','cve_findings.json','beacon_alerts.json']
     data = {}
     for fn in files:
         fp = os.path.join(stack_dir, fn)
@@ -151,17 +152,6 @@ def build_context():
     if unscanned:
         topo_lines.append(f"UNSCANNED SUBNETS: {len(unscanned)} awaiting recon")
     topo_ctx = 'NETWORK TOPOLOGY:\n' + '\n'.join(topo_lines) if topo_lines else ''
-    try:
-        import os, json
-        from modules.filestack import get_stack
-        op = os.path.join(get_stack(), 'osint_results.json')
-        if os.path.exists(op):
-            with open(op) as f: od = json.load(f)
-            ip = od.get('ip','')
-            org = od.get('org','')
-            rep = od.get('reputation','')
-            ctx.append(f'OSINT: {ip} org={org} reputation={rep}')
-    except: pass
     from modules.registry import load_registry
     reg = load_registry()
     reg_lines = []
@@ -242,9 +232,13 @@ def build_context():
     if 'lateral_alerts.json' in stack:
         la=stack['lateral_alerts.json'].get('alerts',[])
         if la:
-            ctx.append(f'\nLATERAL MOVEMENT: {len(la)} new hosts')
+            ctx.append(f'\nLATERAL MOVEMENT: {len(la)} events')
             for a in la:
-                ctx.append(f'  new host {a.get("ip")}')
+                ip=a.get('ip','?')
+                ports=a.get('ports',[])
+                proto=a.get('protocol','?')
+                pivot=a.get('pivot_from','?')
+                ctx.append(f'  {ip} ports={ports} proto={proto} pivot_from={pivot}')
     if 'alerts.json' in stack:
         alerts = stack['alerts.json'].get('alerts', [])
         if alerts:
