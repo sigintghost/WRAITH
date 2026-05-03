@@ -186,6 +186,10 @@ def run_sweep_module(gateway, local_ip, base):
     from modules.sweep import run_sweep
     from modules.logger import log_result
     results = run_sweep(base, local_ip)
+    try:
+        from modules.arp import run_arp
+        run_arp(gateway, local_ip)
+    except Exception as e: print(f"  [ARP] {e}")
     from modules.registry import update_registry, get_new_hosts
     arp_hosts = [(ip, '', '') for ip, port, hostname in results]
     new_hosts = get_new_hosts(arp_hosts)
