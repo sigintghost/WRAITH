@@ -124,7 +124,7 @@ def load_stack():
              'arp_table.json','lateral_alerts.json',
              'osint_results.json','cve_findings.json','beacon_alerts.json',
              'mac_findings.json','baseline.json',
-             'dns_findings.json']
+             'dns_findings.json','icmp_findings.json']
     data = {}
     for fn in files:
         fp = os.path.join(stack_dir, fn)
@@ -241,6 +241,12 @@ def build_context():
                 proto=a.get('protocol','?')
                 pivot=a.get('pivot_from','?')
                 ctx.append(f'  {ip} ports={ports} proto={proto} pivot_from={pivot}')
+    if 'icmp_findings.json' in stack:
+        icf=stack['icmp_findings.json'].get('findings',[])
+        if icf:
+            ctx.append(f'\nICMP ANOMALIES: {len(icf)} flagged')
+            for i in icf:
+                ctx.append(f'  {i.get("ip")} flags={i.get("flags")} payload={i.get("payload_len")}b')
     if 'dns_findings.json' in stack:
         df=stack['dns_findings.json'].get('findings',[])
         if df:
