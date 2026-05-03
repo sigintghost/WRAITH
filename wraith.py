@@ -294,6 +294,7 @@ def get_public_ip():
         return 'unknown'
 
 def show_main_menu():
+    print(f"\n  {CYAN}WRAITH v{VERSION}{RESET} > {DIM}main{RESET}")
     div()
     print(f"  {CYAN}[1]{RESET} SWEEP        {DIM}discover + TTL{RESET}")
     print(f"  {CYAN}[2]{RESET} SCAN         {DIM}portscan + banner + SNMP{RESET}")
@@ -306,6 +307,7 @@ def show_main_menu():
     print(f"  {DIM}[0] EXIT{RESET}")
     div()
 def show_protocols_menu():
+    print(f"\n  {CYAN}WRAITH{RESET} > {CYAN}PROTOCOLS{RESET}")
     div()
     print(f"  {CYAN}[1]{RESET} BACnet/IP  {DIM}47808{RESET}")
     print(f"  {CYAN}[2]{RESET} Modbus TCP {DIM}502{RESET}")
@@ -316,6 +318,7 @@ def show_protocols_menu():
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def show_intel_menu():
+    print(f"\n  {CYAN}WRAITH{RESET} > {CYAN}INTEL{RESET}")
     div()
     print(f"  {CYAN}[1]{RESET} OSINT")
     print(f"  {CYAN}[2]{RESET} CVE")
