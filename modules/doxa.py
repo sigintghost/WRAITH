@@ -125,7 +125,8 @@ def load_stack():
              'osint_results.json','cve_findings.json','beacon_alerts.json',
              'mac_findings.json','baseline.json',
              'dns_findings.json','icmp_findings.json',
-             'traffic_findings.json','vlan_findings.json']
+             'traffic_findings.json','vlan_findings.json',
+             'rf_findings.json']
     data = {}
     for fn in files:
         fp = os.path.join(stack_dir, fn)
@@ -242,6 +243,12 @@ def build_context():
                 proto=a.get('protocol','?')
                 pivot=a.get('pivot_from','?')
                 ctx.append(f'  {ip} ports={ports} proto={proto} pivot_from={pivot}')
+    if 'rf_findings.json' in stack:
+        rf=stack['rf_findings.json'].get('findings',[])
+        if rf:
+            ctx.append(f'\nRF INDICATORS: {len(rf)} detected')
+            for r in rf:
+                ctx.append(f'  {r.get("ip")} type={r.get("type")} port={r.get("port")} detail={r.get("detail",r.get("device",""))}')
     if 'vlan_findings.json' in stack:
         vf=stack['vlan_findings.json'].get('findings',[])
         if vf:
