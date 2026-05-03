@@ -512,7 +512,6 @@ def main2():
     ghost_exit()
     import sys; sys.path.insert(0,'.')
 def run_first_run_check():
-def run_first_run_check():
     from modules.first_run import is_first_run, run_first_run
     if is_first_run():
         run_first_run()
