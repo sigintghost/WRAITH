@@ -101,6 +101,31 @@ def arp_scan(network_prefix, src_ip, timeout=1):
     s.close()
     return alive
 
+def read_arp_cache():
+    import subprocess, os
+    from modules.filestack import write_json
+    import datetime
+    try:
+        result = subprocess.run(['arp','-a'],
+            capture_output=True, text=True)
+        hosts = []
+        for line in result.stdout.splitlines():
+            parts = line.split()
+            if len(parts) < 4: continue
+            ip = parts[1].strip('()')
+            mac = parts[3]
+            if mac == '<incomplete>': continue
+            hosts.append({'ip':ip,'mac':mac,
+                'vendor':'unknown',
+                'ts':datetime.datetime.now().isoformat()})
+        if hosts:
+            write_json('arp_table.json',{'hosts':hosts})
+            print(f'  [ARP] {len(hosts)} hosts from system cache')
+        return hosts
+    except Exception as e:
+        print(f'  [ARP] cache read failed: {e}')
+        return []
+
 def run_arp(gateway, local_ip):
     from modules.registry import update_registry, get_new_hosts
     prefix = '.'.join(local_ip.split('.')[:3])

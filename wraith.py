@@ -187,9 +187,14 @@ def run_sweep_module(gateway, local_ip, base):
     from modules.logger import log_result
     results = run_sweep(base, local_ip)
     try:
-        from modules.arp import run_arp
+        from modules.arp import run_arp, read_arp_cache
         run_arp(gateway, local_ip)
-    except Exception as e: print(f"  [ARP] {e}")
+    except Exception as e:
+        print(f"  [ARP] raw socket unavailable — reading system cache")
+        try:
+            from modules.arp import read_arp_cache
+            read_arp_cache()
+        except Exception as e2: print(f"  [ARP] {e2}")
     from modules.registry import update_registry, get_new_hosts
     arp_hosts = [(ip, '', '') for ip, port, hostname in results]
     new_hosts = get_new_hosts(arp_hosts)
