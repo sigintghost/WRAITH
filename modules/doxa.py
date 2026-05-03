@@ -128,7 +128,8 @@ def load_stack():
              'dns_findings.json','icmp_findings.json',
              'traffic_findings.json','vlan_findings.json',
              'rf_findings.json',
-             'webctrl_alarms.json','webctrl_trends.json']
+             'webctrl_alarms.json','webctrl_trends.json',
+             'iso50001_gaps.json']
     data = {}
     for fn in files:
         fp = os.path.join(stack_dir, fn)
@@ -245,6 +246,12 @@ def build_context():
                 proto=a.get('protocol','?')
                 pivot=a.get('pivot_from','?')
                 ctx.append(f'  {ip} ports={ports} proto={proto} pivot_from={pivot}')
+    if 'iso50001_gaps.json' in stack:
+        ig=stack['iso50001_gaps.json'].get('gaps',[])
+        if ig:
+            ctx.append(f'\nISO 50001 ENERGY GAPS: {len(ig)} deviations')
+            for g in ig[:5]:
+                ctx.append(f'  {g.get("point")} dev={g.get("deviation_pct")}% [{g.get("severity")}]')
     if 'webctrl_alarms.json' in stack:
         wa=stack['webctrl_alarms.json'].get('alarms',[])
         if wa:

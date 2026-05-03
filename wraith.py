@@ -332,6 +332,7 @@ def show_intel_menu():
     print(f"  {CYAN}[d]{RESET} SNOWFLAKE")
     print(f"  {CYAN}[e]{RESET} WORK ORDERS")
     print(f"  {CYAN}[f]{RESET} WEBCTRL DB")
+    print(f"  {CYAN}[g]{RESET} ISO 50001")
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def main2():
@@ -446,6 +447,9 @@ def main2():
                 elif p == "f":
                     from modules.pg_connector import run_pg_connector
                     run_pg_connector()
+                elif p == "g":
+                    from modules.iso50001_gap import run_iso50001
+                    run_iso50001()
                 else: print("  invalid")
         else: print("  invalid option")
     from modules.ghost import ghost_exit
