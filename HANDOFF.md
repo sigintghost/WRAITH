@@ -182,3 +182,42 @@ WRAITH observes. Strata understands. DOXA reveals.
 3. Then build: pg_connector.py first
 4. Then Telegram bot integration
 5. Then honeypot module
+
+## SESSION UPDATE — v4.0 2026-05-02 late
+
+### Confirmed Working
+- Menu redesign live — 1/2/3/4/5/6/7/8
+- SCAN chain — portscan + banner + SNMP on target
+- INTEL → OSINT defaults to public egress IP
+- DOXA context loading fixed — filestack wired
+- DOXA profile mode — Samsung TV .72 identified
+- DOXA ghost mode self-limiting — HITL working
+- Public IP: 172.14.141.247 AT&T Oklahoma City
+
+### Next Build Order
+1. baseline.py — per-host behavioral baseline
+2. dns_tunnel.py — DNS tunneling detection
+3. icmp_tunnel.py — ICMP payload anomaly
+4. mac_verify.py — OUI spoofing detection
+5. traffic_anomaly.py — micro-exfiltration
+6. vlan_hop.py — 802.1Q detection
+7. rf.py — RF/Bluetooth/Zigbee scaffold
+8. Fix API keys — VT/ThreatFox/Censys/Shodan
+9. DOXA active mode — auth-gated cred testing
+10. pg_connector.py — WebCTRL PostgreSQL
+
+### Key Findings This Session
+- .72 Samsung TV — 8080/9080/8001 open
+- 8001 returns 401 Unauthorized — API exposed
+- .69 consumer device — IPHONE-SYNC ports
+- Public egress confirmed AT&T OKC residential
+- DOXA blind spots: DNS tunnel, ICMP tunnel,
+  MAC spoof, VLAN hop, micro-exfil, RF
+
+### Architecture Decision
+- WRAITH = sensor layer, stays sovereign
+- Strata = separate repo, consumes filestack
+- DOXA = bridge agent, seed of swarm
+- Active mode gates on auth role
+
+WRAITH observes. Strata understands. DOXA reveals.
