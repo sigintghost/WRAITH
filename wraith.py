@@ -358,6 +358,8 @@ def main2():
                 run_snmp_module()
                 from modules.baseline import run_baseline
                 run_baseline()
+                from modules.mac_verify import verify_macs
+                verify_macs()
         elif c == "5":
             from modules.doxa import run_doxa
             run_doxa(gateway, local_ip)

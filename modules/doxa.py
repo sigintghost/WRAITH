@@ -122,7 +122,8 @@ def load_stack():
              'mqtt_brokers.json','snmp_inventory.json','mstp_topology.json',
              'alerts.json','portscan.json','ttl_fingerprints.json',
              'arp_table.json','lateral_alerts.json',
-             'osint_results.json','cve_findings.json','beacon_alerts.json']
+             'osint_results.json','cve_findings.json','beacon_alerts.json',
+             'mac_findings.json','baseline.json']
     data = {}
     for fn in files:
         fp = os.path.join(stack_dir, fn)
@@ -239,6 +240,16 @@ def build_context():
                 proto=a.get('protocol','?')
                 pivot=a.get('pivot_from','?')
                 ctx.append(f'  {ip} ports={ports} proto={proto} pivot_from={pivot}')
+    if 'mac_findings.json' in stack:
+        mf=stack['mac_findings.json'].get('findings',[])
+        if mf:
+            ctx.append(f'\nMAC ANOMALIES: {len(mf)} flagged')
+            for m in mf:
+                ctx.append(f'  {m.get("ip")} mac={m.get("mac")} flags={m.get("flags")}')
+    if 'baseline.json' in stack:
+        bh=stack['baseline.json'].get('hosts',{})
+        if bh:
+            ctx.append(f'\nBASELINE: {len(bh)} hosts profiled')
     if 'alerts.json' in stack:
         alerts = stack['alerts.json'].get('alerts', [])
         if alerts:
