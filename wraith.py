@@ -330,6 +330,7 @@ def show_intel_menu():
     print(f"  {CYAN}[b]{RESET} RF SIGNAL")
     print(f"  {CYAN}[c]{RESET} FSI ASSETS")
     print(f"  {CYAN}[d]{RESET} SNOWFLAKE")
+    print(f"  {CYAN}[e]{RESET} WORK ORDERS")
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def main2():
@@ -438,6 +439,9 @@ def main2():
                 elif p == "d":
                     from modules.snowflake_connector import run_snowflake
                     run_snowflake()
+                elif p == "e":
+                    from modules.workorder_agent import run_workorder_agent
+                    run_workorder_agent()
                 else: print("  invalid")
         else: print("  invalid option")
     from modules.ghost import ghost_exit
