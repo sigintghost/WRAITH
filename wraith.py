@@ -285,6 +285,14 @@ def doxa_login_alert():
             print(f"  [31m> suggested: hunt {hunt_target}[0m")
         print()
 
+def get_public_ip():
+    try:
+        import urllib.request
+        r = urllib.request.urlopen('https://api.ipify.org', timeout=5)
+        return r.read().decode().strip()
+    except:
+        return 'unknown'
+
 def show_main_menu():
     div()
     print(f"  {CYAN}[1]{RESET} SWEEP        {DIM}discover + TTL{RESET}")
@@ -292,9 +300,9 @@ def show_main_menu():
     print(f"  {CYAN}[3]{RESET} PROTOCOLS    {DIM}BACnet Modbus MQTT MSTP{RESET}")
     print(f"  {CYAN}[4]{RESET} INTEL        {DIM}OSINT CVE DNS{RESET}")
     print(f"  {CYAN}[5]{RESET} DOXA         {DIM}AI agent{RESET}")
-    print(f"  {CYAN}[6]{RESET} ALERTS       {DIM}active alerts{RESET}")
-    print(f"  {CYAN}[7]{RESET} ADMIN        {DIM}users audit wishlist{RESET}")
-    print(f"  {CYAN}[8]{RESET} KEYS         {DIM}API key management{RESET}")
+    print(f"  {CYAN}[6]{RESET} ALERTS")
+    print(f"  {CYAN}[7]{RESET} ADMIN")
+    print(f"  {CYAN}[8]{RESET} KEYS")
     print(f"  {DIM}[0] EXIT{RESET}")
     div()
 def show_protocols_menu():
@@ -351,24 +359,14 @@ def main2():
         elif c == "5":
             from modules.doxa import run_doxa
             run_doxa(gateway, local_ip)
+        elif c == "6": run_alerts_module()
         elif c == "7":
             from modules.admin import run_admin
             run_admin()
         elif c == "8":
             from modules.keys_manager import run_keys_manager
             run_keys_manager()
-        elif c == "6": run_alerts_module()
-        elif c == "99":
-            from modules.subnet_selector import select_subnet
-            from modules.filestack import set_subnet
-            sel = select_subnet(base)
-            if sel is None:
-                print("  [SWEEP] cancelled")
-            else:
-                set_subnet(f"{sel}.0_24")
-                run_sweep_module(gateway,local_ip,sel)
-                set_subnet(f"{base}.0_24")
-        elif c == "2":
+        elif c == "3":
             while True:
                 show_protocols_menu()
                 p = input(" > ")
@@ -386,12 +384,15 @@ def main2():
                         if custom: portscan(custom)
                 elif p == "6": run_snmp_module()
                 else: print("  invalid")
-        elif c == "3":
+        elif c == "4":
             while True:
                 show_intel_menu()
                 p = input(" > ")
                 if p == "0": break
-                elif p == "1": run_osint(gateway)
+                elif p == "1":
+                    pub = get_public_ip()
+                    t = input(f"  target [{pub}]: ").strip() or pub
+                    run_osint(t)
                 elif p == "2":
                     from modules.cve import run_cve_module
                     run_cve_module()
