@@ -124,6 +124,7 @@ def load_stack():
              'arp_table.json','lateral_alerts.json',
              'osint_results.json','cve_findings.json','beacon_alerts.json',
              'mac_findings.json','baseline.json',
+             'fsi_assets.json',
              'dns_findings.json','icmp_findings.json',
              'traffic_findings.json','vlan_findings.json',
              'rf_findings.json']
@@ -279,6 +280,21 @@ def build_context():
             ctx.append(f'\nMAC ANOMALIES: {len(mf)} flagged')
             for m in mf:
                 ctx.append(f'  {m.get("ip")} mac={m.get("mac")} flags={m.get("flags")}')
+    if 'fsi_assets.json' in stack:
+        fa=stack['fsi_assets.json']
+        assets=fa.get('assets',[])
+        gaps=fa.get('gaps',[])
+        ctx.append(f'\nFSI ASSET DATABASE: {len(assets)} assets')
+        rogues=[g for g in gaps if g.get('type')=='ROGUE']
+        offline=[g for g in gaps if g.get('type')=='OFFLINE']
+        if rogues:
+            ctx.append(f'  ROGUES NOT IN FSI: {len(rogues)}')
+            for r in rogues:
+                ctx.append(f'    {r.get("ip")} — NOT IN ASSET DB')
+        if offline:
+            ctx.append(f'  OFFLINE ASSETS: {len(offline)}')
+            for o in offline:
+                ctx.append(f'    {o.get("ip")} {o.get("asset","")} — MISSING FROM WIRE')
     if 'baseline.json' in stack:
         bh=stack['baseline.json'].get('hosts',{})
         if bh:
