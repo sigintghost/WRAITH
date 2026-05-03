@@ -101,6 +101,25 @@ def arp_scan(network_prefix, src_ip, timeout=1):
     s.close()
     return alive
 
+def seed_arp_from_hosts():
+    import os, json, datetime
+    from modules.filestack import get_stack, write_json
+    hp = os.path.join(get_stack(), 'hosts.json')
+    if not os.path.exists(hp): return []
+    with open(hp) as f: data = json.load(f)
+    hosts = data.get('hosts', {})
+    if isinstance(hosts, dict): hosts = list(hosts.values())
+    entries = []
+    for h in hosts:
+        if not isinstance(h, dict): continue
+        entries.append({'ip':h.get('ip',''),'mac':'unknown',
+            'vendor':'unknown',
+            'ts':datetime.datetime.now().isoformat()})
+    if entries:
+        write_json('arp_table.json',{'hosts':entries})
+        print(f'  [ARP] seeded {len(entries)} hosts from sweep data')
+    return entries
+
 def read_arp_cache():
     import subprocess, os
     from modules.filestack import write_json

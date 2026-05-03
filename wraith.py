@@ -192,8 +192,15 @@ def run_sweep_module(gateway, local_ip, base):
     except: pass
     try:
         from modules.arp import read_arp_cache
-        read_arp_cache()
-    except Exception as e: print(f'  [ARP] cache: {e}')
+        result = read_arp_cache()
+        if not result:
+            from modules.arp import seed_arp_from_hosts
+            seed_arp_from_hosts()
+    except Exception as e:
+        try:
+            from modules.arp import seed_arp_from_hosts
+            seed_arp_from_hosts()
+        except: pass
     from modules.registry import update_registry, get_new_hosts
     arp_hosts = [(ip, '', '') for ip, port, hostname in results]
     new_hosts = get_new_hosts(arp_hosts)
