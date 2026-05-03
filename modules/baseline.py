@@ -59,7 +59,7 @@ def save_baseline(snap):
     })
 
 def run_baseline():
-    from modules.alerts import add_alert
+    from modules.alerts import fire as add_alert
     print('\n  [BASELINE] building snapshot...')
     existing = load_json('baseline.json')
     old_snap = existing.get('hosts', {})

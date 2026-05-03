@@ -45,7 +45,7 @@ def build_energy_snapshot(trends):
     return snapshot
 
 def gap_analysis(snapshot, baseline):
-    from modules.alerts import add_alert
+    from modules.alerts import fire as add_alert
     gaps = []
     if not baseline:
         print('  [ISO] no baseline — set baseline first')

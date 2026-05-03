@@ -48,7 +48,7 @@ def normalize(raw):
     return normalized
 
 def gap_analysis(assets):
-    from modules.alerts import add_alert
+    from modules.alerts import fire as add_alert
     stack = get_stack()
     p = os.path.join(stack, 'hosts.json')
     if not os.path.exists(p): return []

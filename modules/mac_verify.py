@@ -18,7 +18,7 @@ def get_oui(mac):
     return OUI.get(prefix, 'unknown')
 
 def verify_macs():
-    from modules.alerts import add_alert
+    from modules.alerts import fire as add_alert
     stack = get_stack()
     ap = os.path.join(stack, 'arp_table.json')
     if not os.path.exists(ap):

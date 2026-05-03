@@ -22,7 +22,7 @@ def parse_frame(data):
     return result
 
 def run_vlan_hop(duration=WATCH_SECS):
-    from modules.alerts import add_alert
+    from modules.alerts import fire as add_alert
     print(f'\n  [VLAN] hop detection — {duration}s')
     findings = []
     try:

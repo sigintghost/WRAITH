@@ -16,7 +16,7 @@ def parse_icmp(data):
     return {'type':typ,'code':code,'payload_len':payload_len}
 
 def run_icmp_tunnel(duration=WATCH_SECS):
-    from modules.alerts import add_alert
+    from modules.alerts import fire as add_alert
     print(f'\n  [ICMP] tunnel monitor — {duration}s')
     findings = []
     rate_map = {}

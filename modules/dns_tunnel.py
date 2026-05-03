@@ -13,7 +13,7 @@ def check_dns_length(hostname):
     return len(hostname) > 100
 
 def scan_dns_passive(hosts, duration=WATCH_SECS):
-    from modules.alerts import add_alert
+    from modules.alerts import fire as add_alert
     print(f'\n  [DNS] passive monitor — {duration}s')
     findings = []
     query_counts = {}

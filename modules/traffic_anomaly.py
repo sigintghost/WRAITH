@@ -8,7 +8,7 @@ MICRO_EXFIL_BYTES = 100
 MICRO_EXFIL_COUNT = 30
 
 def run_traffic_anomaly(duration=WATCH_SECS):
-    from modules.alerts import add_alert
+    from modules.alerts import fire as add_alert
     print(f'\n  [TRAFFIC] anomaly monitor — {duration}s')
     findings = []
     byte_map = {}

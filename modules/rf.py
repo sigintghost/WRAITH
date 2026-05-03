@@ -15,7 +15,7 @@ WIRELESS_BAS = {
 }
 
 def analyze_rf():
-    from modules.alerts import add_alert
+    from modules.alerts import fire as add_alert
     print('\n  [RF] signal intelligence scan')
     findings = []
     stack = get_stack()
