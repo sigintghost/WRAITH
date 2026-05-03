@@ -63,6 +63,7 @@ def run_baseline():
     print('\n  [BASELINE] building snapshot...')
     existing = load_json('baseline.json')
     old_snap = existing.get('hosts', {})
+    if isinstance(old_snap, list): old_snap = {}
     new_snap = build_snapshot()
     if not old_snap:
         save_baseline(new_snap)
