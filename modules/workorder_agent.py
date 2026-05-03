@@ -114,15 +114,27 @@ def setup_workorder():
         'watch_path':watch})
 
 def run_workorder_agent():
-    print('\n  [WO] work order agent')
-    print('  [1] setup 1Call connection')
-    print('  [2] scan fault folder now')
-    print('  [3] show config')
+    print('\n  [WO] 1Call Cloud work orders')
+    print('  [1] setup connection')
+    print('  [2] scan fault folder')
+    print('  [3] view config')
+    print('  [4] edit config')
     print('  [0] back')
     c = input('  > ').strip()
     if c == '1': setup_workorder()
     elif c == '2': watch_fault_folder()
     elif c == '3':
         cfg = load_config()
-        if cfg: print(f'  [WO] building={cfg.get("building")} assignee={cfg.get("default_assignee")}')
+        if cfg:
+            for k,v in cfg.items(): print(f'  {k}: {v}')
         else: print('  [WO] no config — run setup')
+    elif c == '4':
+        cfg = load_config() or {}
+        building = input(f'  building [{cfg.get("building","")}]: ').strip()
+        assignee = input(f'  assignee [{cfg.get("default_assignee","")}]: ').strip()
+        api_url = input(f'  API URL [{cfg.get("api_url","")}]: ').strip()
+        if building: cfg['building'] = building
+        if assignee: cfg['default_assignee'] = assignee
+        if api_url: cfg['api_url'] = api_url
+        save_config(cfg)
+        print('  [WO] config updated')

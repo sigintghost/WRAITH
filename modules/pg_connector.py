@@ -116,11 +116,20 @@ def setup_pg():
     save_config({'host':host,'port':int(port),
         'dbname':dbname,'user':user,'password':password})
 
+def view_pg_config():
+    cfg = load_config()
+    if not cfg: print('  [PG] no config'); return
+    print(f'  host:     {cfg.get("host","not set")}')
+    print(f'  port:     {cfg.get("port",5432)}')
+    print(f'  database: {cfg.get("dbname","not set")}')
+    print(f'  user:     {cfg.get("user","not set")}')
+
 def run_pg_connector():
     print('\n  [PG] WebCTRL PostgreSQL')
     print('  [1] setup connection')
     print('  [2] sync to filestack')
     print('  [3] test connection')
+    print('  [4] view config')
     print('  [0] back')
     c = input('  > ').strip()
     if c == '1': setup_pg()
@@ -130,5 +139,6 @@ def run_pg_connector():
         if conn:
             print('  [PG] connected OK')
             conn.close()
+    elif c == '4': view_pg_config()
     elif c == '0': return
     else: print('  invalid')

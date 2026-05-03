@@ -86,11 +86,34 @@ def setup_snowflake():
     save_config(cfg)
     print('  [SNOW] setup complete')
 
+def edit_snowflake():
+    cfg = load_config() or {}
+    print('\n  [SNOW] edit configuration')
+    print(f'  current endpoint: {cfg.get("endpoint","not set")}')
+    print(f'  current account:  {cfg.get("account","not set")}')
+    print(f'  current database: {cfg.get("database","not set")}')
+    print(f'  current schema:   {cfg.get("schema","not set")}')
+    print('  press enter to keep current value')
+    ep = input(f'  endpoint [{cfg.get("endpoint","")}]: ').strip()
+    ac = input(f'  account [{cfg.get("account","")}]: ').strip()
+    wh = input(f'  warehouse [{cfg.get("warehouse","")}]: ').strip()
+    db = input(f'  database [{cfg.get("database","")}]: ').strip()
+    sc = input(f'  schema [{cfg.get("schema","WRAITH")}]: ').strip()
+    if ep: cfg['endpoint'] = ep
+    if ac: cfg['account'] = ac
+    if wh: cfg['warehouse'] = wh
+    if db: cfg['database'] = db
+    if sc: cfg['schema'] = sc
+    save_config(cfg)
+    print('  [SNOW] config updated')
+
 def run_snowflake():
     print('\n  [SNOW] Snowflake pipeline')
     print('  [1] setup connection')
     print('  [2] push filestack now')
     print('  [3] test connection')
+    print('  [4] view config')
+    print('  [5] edit config')
     print('  [0] back')
     c = input('  > ').strip()
     if c == '1': setup_snowflake()
@@ -102,4 +125,10 @@ def run_snowflake():
         if cfg:
             print(f'  [SNOW] account={cfg.get("account")} db={cfg.get("database")}')
         else: print('  [SNOW] no config — run setup')
+    elif c == '4':
+        cfg = load_config()
+        if cfg:
+            for k,v in cfg.items(): print(f'  {k}: {v}')
+        else: print('  [SNOW] no config')
+    elif c == '5': edit_snowflake()
     else: return
