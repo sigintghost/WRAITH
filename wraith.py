@@ -321,6 +321,13 @@ def show_intel_menu():
     print(f"  {CYAN}[2]{RESET} CVE")
     print(f"  {CYAN}[3]{RESET} DNS")
     print(f"  {CYAN}[4]{RESET} BANNER")
+    print(f"  {CYAN}[5]{RESET} BASELINE")
+    print(f"  {CYAN}[6]{RESET} MAC VERIFY")
+    print(f"  {CYAN}[7]{RESET} DNS TUNNEL")
+    print(f"  {CYAN}[8]{RESET} ICMP TUNNEL")
+    print(f"  {CYAN}[9]{RESET} TRAFFIC")
+    print(f"  {CYAN}[a]{RESET} VLAN HOP")
+    print(f"  {CYAN}[b]{RESET} RF SIGNAL")
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def main2():
@@ -402,6 +409,27 @@ def main2():
                     run_cve_module()
                 elif p == "3": dns()
                 elif p == "4": banner(gateway)
+                elif p == "5":
+                    from modules.baseline import run_baseline
+                    run_baseline()
+                elif p == "6":
+                    from modules.mac_verify import verify_macs
+                    verify_macs()
+                elif p == "7":
+                    from modules.dns_tunnel import run_dns_tunnel
+                    run_dns_tunnel()
+                elif p == "8":
+                    from modules.icmp_tunnel import run_icmp_tunnel
+                    run_icmp_tunnel()
+                elif p == "9":
+                    from modules.traffic_anomaly import run_traffic_anomaly
+                    run_traffic_anomaly()
+                elif p == "a":
+                    from modules.vlan_hop import run_vlan_hop
+                    run_vlan_hop()
+                elif p == "b":
+                    from modules.rf import run_rf
+                    run_rf()
                 else: print("  invalid")
         else: print("  invalid option")
     from modules.ghost import ghost_exit
