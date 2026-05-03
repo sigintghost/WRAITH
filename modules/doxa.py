@@ -127,7 +127,8 @@ def load_stack():
              'fsi_assets.json',
              'dns_findings.json','icmp_findings.json',
              'traffic_findings.json','vlan_findings.json',
-             'rf_findings.json']
+             'rf_findings.json',
+             'webctrl_alarms.json','webctrl_trends.json']
     data = {}
     for fn in files:
         fp = os.path.join(stack_dir, fn)
@@ -244,6 +245,16 @@ def build_context():
                 proto=a.get('protocol','?')
                 pivot=a.get('pivot_from','?')
                 ctx.append(f'  {ip} ports={ports} proto={proto} pivot_from={pivot}')
+    if 'webctrl_alarms.json' in stack:
+        wa=stack['webctrl_alarms.json'].get('alarms',[])
+        if wa:
+            ctx.append(f'\nWEBCTRL ALARMS: {len(wa)} recent')
+            for a in wa[:5]:
+                ctx.append(f'  [{a.get("priority")}] {a.get("point")} {a.get("text")}')
+    if 'webctrl_trends.json' in stack:
+        wt=stack['webctrl_trends.json'].get('trends',[])
+        if wt:
+            ctx.append(f'\nWEBCTRL TRENDS: {len(wt)} samples')
     if 'rf_findings.json' in stack:
         rf=stack['rf_findings.json'].get('findings',[])
         if rf:
