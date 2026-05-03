@@ -345,6 +345,7 @@ def show_intel_menu():
     print(f"  {CYAN}[7]{RESET} DNS TUNNEL")
     print(f"  {CYAN}[8]{RESET} ICMP TUNNEL")
     print(f"  {CYAN}[9]{RESET} TRAFFIC")
+    print(f"  {CYAN}[p]{RESET} PORT HOP")
     print(f"  {CYAN}[a]{RESET} VLAN HOP")
     print(f"  {CYAN}[b]{RESET} RF SIGNAL")
     print(f"  {CYAN}[c]{RESET} FSI ASSETS")
@@ -453,6 +454,9 @@ def main2():
                 elif p == "9":
                     from modules.traffic_anomaly import run_traffic_anomaly
                     run_traffic_anomaly()
+                elif p == "p":
+                    from modules.port_hop_detector import run_port_hop
+                    run_port_hop()
                 elif p == "a":
                     from modules.vlan_hop import run_vlan_hop
                     run_vlan_hop()

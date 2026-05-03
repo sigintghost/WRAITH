@@ -129,7 +129,7 @@ def load_stack():
              'traffic_findings.json','vlan_findings.json',
              'rf_findings.json',
              'webctrl_alarms.json','webctrl_trends.json',
-             'iso50001_gaps.json']
+             'iso50001_gaps.json','port_hop_findings.json']
     data = {}
     for fn in files:
         fp = os.path.join(stack_dir, fn)
@@ -246,6 +246,12 @@ def build_context():
                 proto=a.get('protocol','?')
                 pivot=a.get('pivot_from','?')
                 ctx.append(f'  {ip} ports={ports} proto={proto} pivot_from={pivot}')
+    if 'port_hop_findings.json' in stack:
+        ph=stack['port_hop_findings.json'].get('findings',[])
+        if ph:
+            ctx.append(f'\nPORT HOP ANOMALIES: {len(ph)} detected')
+            for p in ph:
+                ctx.append(f'  {p.get("ip")} type={p.get("type")} ports={p.get("ports")}')
     if 'iso50001_gaps.json' in stack:
         ig=stack['iso50001_gaps.json'].get('gaps',[])
         if ig:
