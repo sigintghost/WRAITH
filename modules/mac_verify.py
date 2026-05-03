@@ -49,7 +49,7 @@ def verify_macs():
             findings.append({'ip':ip,'mac':mac,'oui':oui_vendor,
                 'claimed':claimed,'flags':flags,
                 'ts':datetime.datetime.now().isoformat()})
-            add_alert(f'MAC ANOMALY {detail}', severity='HIGH')
+            add_alert('MAC_ANOMALY', f'MAC ANOMALY {detail}', severity='HIGH', source='mac_verify', ip=ip)
     write_json('mac_findings.json',{
         'timestamp':datetime.datetime.now().isoformat(),
         'findings':findings})
