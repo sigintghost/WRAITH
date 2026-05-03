@@ -356,6 +356,8 @@ def main2():
                 portscan(t)
                 banner(t)
                 run_snmp_module()
+                from modules.baseline import run_baseline
+                run_baseline()
         elif c == "5":
             from modules.doxa import run_doxa
             run_doxa(gateway, local_ip)
