@@ -300,6 +300,14 @@ def doxa_login_alert():
             print(f"  [31m> suggested: hunt {hunt_target}[0m")
         print()
 
+def check_role(required):
+    from modules.auth import CURRENT_ROLE
+    order = ['readonly','technician','admin']
+    if order.index(CURRENT_ROLE) >= order.index(required):
+        return True
+    print(f"  [AUTH] {required} role required — you are {CURRENT_ROLE}")
+    return False
+
 def get_public_ip():
     try:
         import urllib.request
@@ -383,6 +391,7 @@ def main2():
                 from modules.mac_table import show_mac_table
                 show_mac_table()
         elif c == "2":
+            if not check_role('technician'): continue
             from modules.portscan import select_target_from_sweep
             t=select_target_from_sweep()
             if not t: t=input("  enter IP > ").strip()
@@ -395,16 +404,20 @@ def main2():
                 from modules.mac_verify import verify_macs
                 verify_macs()
         elif c == "5":
+            if not check_role('technician'): continue
             from modules.doxa import run_doxa
             run_doxa(gateway, local_ip)
         elif c == "6": run_alerts_module()
         elif c == "7":
+            if not check_role('admin'): continue
             from modules.admin import run_admin
             run_admin()
         elif c == "8":
+            if not check_role('admin'): continue
             from modules.keys_manager import run_keys_manager
             run_keys_manager()
         elif c == "3":
+            if not check_role('technician'): continue
             while True:
                 show_protocols_menu()
                 p = input(" > ")
@@ -423,6 +436,7 @@ def main2():
                 elif p == "6": run_snmp_module()
                 else: print("  invalid")
         elif c == "4":
+            if not check_role('technician'): continue
             while True:
                 show_intel_menu()
                 p = input(" > ")
