@@ -322,11 +322,12 @@ def show_main_menu():
     print(f"  {CYAN}[1]{RESET} SWEEP        {DIM}discover + TTL{RESET}")
     print(f"  {CYAN}[2]{RESET} SCAN         {DIM}portscan + banner + SNMP{RESET}")
     print(f"  {CYAN}[3]{RESET} PROTOCOLS    {DIM}BACnet Modbus MQTT MSTP{RESET}")
-    print(f"  {CYAN}[4]{RESET} INTEL        {DIM}OSINT CVE DNS{RESET}")
+    print(f"  {CYAN}[4]{RESET} INTEL        {DIM}OSINT CVE DNS signals{RESET}")
     print(f"  {CYAN}[5]{RESET} DOXA         {DIM}AI agent{RESET}")
     print(f"  {CYAN}[6]{RESET} ALERTS")
-    print(f"  {CYAN}[7]{RESET} ADMIN")
-    print(f"  {CYAN}[8]{RESET} KEYS")
+    print(f"  {CYAN}[7]{RESET} INTEGRATIONS {DIM}FSI Snowflake 1Call WebCTRL{RESET}")
+    print(f"  {CYAN}[8]{RESET} ADMIN")
+    print(f"  {CYAN}[9]{RESET} KEYS")
     print(f"  {DIM}[0] EXIT{RESET}")
     div()
 def show_protocols_menu():
@@ -356,11 +357,6 @@ def show_intel_menu():
     print(f"  {CYAN}[p]{RESET} PORT HOP")
     print(f"  {CYAN}[a]{RESET} VLAN HOP")
     print(f"  {CYAN}[b]{RESET} RF SIGNAL")
-    print(f"  {CYAN}[c]{RESET} FSI ASSETS")
-    print(f"  {CYAN}[d]{RESET} SNOWFLAKE")
-    print(f"  {CYAN}[e]{RESET} WORK ORDERS")
-    print(f"  {CYAN}[f]{RESET} WEBCTRL DB")
-    print(f"  {CYAN}[g]{RESET} ISO 50001")
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def main2():
@@ -409,10 +405,32 @@ def main2():
             run_doxa(gateway, local_ip)
         elif c == "6": run_alerts_module()
         elif c == "7":
+            if not check_role('technician'): continue
+            while True:
+                show_integrations_menu()
+                p = input(" > ")
+                if p == "0": break
+                elif p == "1":
+                    from modules.fsi_connector import run_fsi_connector
+                    run_fsi_connector()
+                elif p == "2":
+                    from modules.snowflake_connector import run_snowflake
+                    run_snowflake()
+                elif p == "3":
+                    from modules.workorder_agent import run_workorder_agent
+                    run_workorder_agent()
+                elif p == "4":
+                    from modules.pg_connector import run_pg_connector
+                    run_pg_connector()
+                elif p == "5":
+                    from modules.iso50001_gap import run_iso50001
+                    run_iso50001()
+                else: print("  invalid")
+        elif c == "8":
             if not check_role('admin'): continue
             from modules.admin import run_admin
             run_admin()
-        elif c == "8":
+        elif c == "9":
             if not check_role('admin'): continue
             from modules.keys_manager import run_keys_manager
             run_keys_manager()
@@ -477,21 +495,6 @@ def main2():
                 elif p == "b":
                     from modules.rf import run_rf
                     run_rf()
-                elif p == "c":
-                    from modules.fsi_connector import run_fsi_connector
-                    run_fsi_connector()
-                elif p == "d":
-                    from modules.snowflake_connector import run_snowflake
-                    run_snowflake()
-                elif p == "e":
-                    from modules.workorder_agent import run_workorder_agent
-                    run_workorder_agent()
-                elif p == "f":
-                    from modules.pg_connector import run_pg_connector
-                    run_pg_connector()
-                elif p == "g":
-                    from modules.iso50001_gap import run_iso50001
-                    run_iso50001()
                 else: print("  invalid")
         else: print("  invalid option")
     from modules.ghost import ghost_exit
@@ -532,3 +535,14 @@ def run_auth():
             print("  [-] invalid credentials")
     print("  [!] too many failed attempts. exiting.")
 run_auth()
+
+def show_integrations_menu():
+    print(f"\n  {CYAN}WRAITH{RESET} > {CYAN}INTEGRATIONS{RESET}")
+    div()
+    print(f"  {CYAN}[1]{RESET} FSI ASSETS   {DIM}asset ground truth{RESET}")
+    print(f"  {CYAN}[2]{RESET} SNOWFLAKE    {DIM}data pipeline{RESET}")
+    print(f"  {CYAN}[3]{RESET} 1CALL CLOUD  {DIM}work orders{RESET}")
+    print(f"  {CYAN}[4]{RESET} WEBCTRL DB   {DIM}PostgreSQL{RESET}")
+    print(f"  {CYAN}[5]{RESET} ISO 50001    {DIM}energy gap analysis{RESET}")
+    print(f"  {DIM}[0] BACK{RESET}")
+    div()
