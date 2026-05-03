@@ -329,6 +329,7 @@ def show_intel_menu():
     print(f"  {CYAN}[a]{RESET} VLAN HOP")
     print(f"  {CYAN}[b]{RESET} RF SIGNAL")
     print(f"  {CYAN}[c]{RESET} FSI ASSETS")
+    print(f"  {CYAN}[d]{RESET} SNOWFLAKE")
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def main2():
@@ -434,6 +435,9 @@ def main2():
                 elif p == "c":
                     from modules.fsi_connector import run_fsi_connector
                     run_fsi_connector()
+                elif p == "d":
+                    from modules.snowflake_connector import run_snowflake
+                    run_snowflake()
                 else: print("  invalid")
         else: print("  invalid option")
     from modules.ghost import ghost_exit
