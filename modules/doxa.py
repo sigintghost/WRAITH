@@ -123,7 +123,8 @@ def load_stack():
              'alerts.json','portscan.json','ttl_fingerprints.json',
              'arp_table.json','lateral_alerts.json',
              'osint_results.json','cve_findings.json','beacon_alerts.json',
-             'mac_findings.json','baseline.json']
+             'mac_findings.json','baseline.json',
+             'dns_findings.json']
     data = {}
     for fn in files:
         fp = os.path.join(stack_dir, fn)
@@ -240,6 +241,12 @@ def build_context():
                 proto=a.get('protocol','?')
                 pivot=a.get('pivot_from','?')
                 ctx.append(f'  {ip} ports={ports} proto={proto} pivot_from={pivot}')
+    if 'dns_findings.json' in stack:
+        df=stack['dns_findings.json'].get('findings',[])
+        if df:
+            ctx.append(f'\nDNS ANOMALIES: {len(df)} flagged')
+            for d in df:
+                ctx.append(f'  {d.get("ip")} type={d.get("type")} detail={d.get("hostname",d.get("count",""))}')
     if 'mac_findings.json' in stack:
         mf=stack['mac_findings.json'].get('findings',[])
         if mf:
