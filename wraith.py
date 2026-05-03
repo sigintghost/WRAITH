@@ -330,6 +330,7 @@ def show_intel_menu():
     print(f"  {CYAN}[4]{RESET} BANNER")
     print(f"  {CYAN}[5]{RESET} BASELINE")
     print(f"  {CYAN}[6]{RESET} MAC VERIFY")
+    print(f"  {CYAN}[m]{RESET} MAC TABLE")
     print(f"  {CYAN}[7]{RESET} DNS TUNNEL")
     print(f"  {CYAN}[8]{RESET} ICMP TUNNEL")
     print(f"  {CYAN}[9]{RESET} TRAFFIC")
@@ -367,6 +368,8 @@ def main2():
                 set_subnet(f"{sel}.0_24")
                 run_sweep_module(gateway,local_ip,sel)
                 set_subnet(f"{base}.0_24")
+                from modules.mac_table import show_mac_table
+                show_mac_table()
         elif c == "2":
             from modules.portscan import select_target_from_sweep
             t=select_target_from_sweep()
@@ -427,6 +430,9 @@ def main2():
                 elif p == "6":
                     from modules.mac_verify import verify_macs
                     verify_macs()
+                elif p == "m":
+                    from modules.mac_table import show_mac_table
+                    show_mac_table()
                 elif p == "7":
                     from modules.dns_tunnel import run_dns_tunnel
                     run_dns_tunnel()
