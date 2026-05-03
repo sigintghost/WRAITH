@@ -1,7 +1,7 @@
 # WRAITH
 ### passive network intelligence engine
 ### deep OT/BAS protocol awareness
-### v4.1 — dev branch active
+### v4.2 — dev branch active
 
 > *anomaly is the signal.*
 > — [sig.int.ghost](https://instagram.com/sig.int.ghost)
@@ -211,6 +211,7 @@ Coming in v5.0.
 | v3.9 | 80+ ports, HTTP fingerprint, MITRE ICS, admin panel, login lockout, 13 OSINT sources |
 | v4.0 | HITL loop, 6 DOXA modes, rogue detection, topology mapper, auto-scan |
 | v4.1 | signal intel suite, menu redesign, FSI connector, baseline, MAC verify |
+| v4.2 | integrations menu, role enforcement, first run wizard, port hop detection |
 | v5.0 | sensor nodes, WireGuard, per-building |
 | v5.1 | browser dashboard, zero dependencies |
 | v6.0 | platform, SaaS, API, integrations |
