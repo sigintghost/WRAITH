@@ -95,6 +95,17 @@ The terminal is the seed. The platform is what grows from it.
 | logger.py | logging | — | session logs |
 | filestack.py | JSON stack | — | persistent loot |
 | ghost.py | ANSI/brand | — | easter eggs |
+| baseline.py | behavioral | — | host snapshot, deviation detection |
+| mac_verify.py | MAC/OUI | L2 | spoof detection, vendor validation |
+| dns_tunnel.py | DNS | 53 | tunnel detection, query anomaly |
+| icmp_tunnel.py | ICMP | — | covert channel, payload anomaly |
+| traffic_anomaly.py | TCP | — | micro-exfil, volume detection |
+| vlan_hop.py | 802.1Q | L2 | double-tag detection |
+| rf.py | RF/wireless | — | Zigbee/BT/ZWave scaffold |
+| fsi_connector.py | asset DB | — | FSI ground truth, gap analysis |
+| topology.py | graph | — | passive subnet mapping |
+| registry.py | registry | — | device tracking, first/last seen |
+| subnet_selector.py | subnet | — | multi-subnet context switcher |
 
 ---
 
