@@ -316,6 +316,17 @@ def get_public_ip():
     except:
         return 'unknown'
 
+
+def show_integrations_menu():
+    print(f"\n  {CYAN}WRAITH{RESET} > {CYAN}INTEGRATIONS{RESET}")
+    div()
+    print(f"  {CYAN}[1]{RESET} FSI ASSETS   {DIM}asset ground truth{RESET}")
+    print(f"  {CYAN}[2]{RESET} SNOWFLAKE    {DIM}data pipeline{RESET}")
+    print(f"  {CYAN}[3]{RESET} 1CALL CLOUD  {DIM}work orders{RESET}")
+    print(f"  {CYAN}[4]{RESET} WEBCTRL DB   {DIM}PostgreSQL{RESET}")
+    print(f"  {CYAN}[5]{RESET} ISO 50001    {DIM}energy gap analysis{RESET}")
+    print(f"  {DIM}[0] BACK{RESET}")
+    div()
 def show_main_menu():
     print(f"\n  {CYAN}WRAITH v{VERSION}{RESET} > {DIM}main{RESET}")
     div()
@@ -535,14 +546,3 @@ def run_auth():
             print("  [-] invalid credentials")
     print("  [!] too many failed attempts. exiting.")
 run_auth()
-
-def show_integrations_menu():
-    print(f"\n  {CYAN}WRAITH{RESET} > {CYAN}INTEGRATIONS{RESET}")
-    div()
-    print(f"  {CYAN}[1]{RESET} FSI ASSETS   {DIM}asset ground truth{RESET}")
-    print(f"  {CYAN}[2]{RESET} SNOWFLAKE    {DIM}data pipeline{RESET}")
-    print(f"  {CYAN}[3]{RESET} 1CALL CLOUD  {DIM}work orders{RESET}")
-    print(f"  {CYAN}[4]{RESET} WEBCTRL DB   {DIM}PostgreSQL{RESET}")
-    print(f"  {CYAN}[5]{RESET} ISO 50001    {DIM}energy gap analysis{RESET}")
-    print(f"  {DIM}[0] BACK{RESET}")
-    div()
