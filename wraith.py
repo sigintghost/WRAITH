@@ -146,10 +146,10 @@ def run_alerts_module():
         print(chr(32)*2 + chr(91) + chr(42) + chr(93) + chr(32) + chr(78) + chr(111) + chr(32) + chr(97) + chr(108) + chr(101) + chr(114) + chr(116) + chr(115) + chr(32) + chr(111) + chr(110) + chr(32) + chr(102) + chr(105) + chr(108) + chr(101))
         return
     for a in alerts:
-        sev = a.get(chr(115)+chr(101)+chr(118)+chr(101)+chr(114)+chr(105)+chr(116)+chr(121))
-        ts = a.get(chr(116)+chr(105)+chr(109)+chr(101)+chr(115)+chr(116)+chr(97)+chr(109)+chr(112))[11:19]
-        msg = a.get(chr(109)+chr(101)+chr(115)+chr(115)+chr(97)+chr(103)+chr(101))
-        print(chr(32)*2 + ts + chr(32) + sev + chr(32) + msg)
+        ts = a.get("ts", "")[11:19] if a.get("ts") else "unknown"
+        msg = a.get("message") or a.get("type","unknown")
+        sev = a.get("severity","?")
+        print("  " + ts + " " + sev + " " + msg)
 
 def run_snmp_module():
     from modules.snmp import run_snmp
