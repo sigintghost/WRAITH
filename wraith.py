@@ -149,7 +149,8 @@ def run_alerts_module():
         ts = a.get("ts", "")[11:19] if a.get("ts") else "unknown"
         msg = a.get("message") or a.get("type","unknown")
         sev = a.get("severity","?")
-        print("  " + ts + " " + sev + " " + msg)
+        c = "\033[91m" if sev=="HIGH" else "\033[93m" if sev=="MEDIUM" else "\033[92m"
+        print("  " + c + sev + "\033[0m" + " " + ts + " " + msg)
 
 def run_snmp_module():
     from modules.snmp import run_snmp
