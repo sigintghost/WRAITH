@@ -1,5 +1,6 @@
 import os, json, datetime, time
 from modules.filestack import get_stack, write_json
+from modules.alerts import fire
 
 HOP_WINDOW_SECS = 60
 HOP_THRESHOLD = 5
@@ -39,16 +40,14 @@ def analyze_port_hops():
             findings.append({'ip':ip,'ports':ports,
                 'type':'PORT_HOP','count':len(ports),
                 'ts':datetime.datetime.now().isoformat()})
-            add_alert(msg, severity='HIGH',
-                source='port_hop', ip=ip)
+            fire('SUSPICIOUS_PORTS', msg, severity='HIGH', source='port_hop', ip=ip)
         if suspicious:
             msg = f'{ip} suspicious ports — {suspicious}'
             print(f'  [!] {msg}')
             findings.append({'ip':ip,'ports':suspicious,
                 'type':'SUSPICIOUS_PORTS',
                 'ts':datetime.datetime.now().isoformat()})
-            add_alert(msg, severity='HIGH',
-                source='port_hop', ip=ip)
+            fire('SUSPICIOUS_PORTS', msg, severity='HIGH', source='port_hop', ip=ip)
     return findings
 
 def run_port_hop():
