@@ -314,3 +314,51 @@ trycloudflare, serveo — as C2 indicators.
 - DOXA via VPS — remote deployment mode
 - Constraint-first agent design — do no harm as core truth
 - Web search tool for DOXA — live CVE research during session
+
+## FROM INSTAGRAM RECON — 2026-05-04
+
+### cPanel/WHM Port Coverage
+Ports 2082/2083/2086/2087 added to COMMON_PORTS.
+CVE-2026-41940 CRLF session hijack — in-the-wild CVSS 10.0.
+INTEL module: flag these ports as critical on discovery.
+DOXA: surface cPanel exposure in hunt mode automatically.
+Status: wishlist — quick win
+
+### CRLF Injection Banner Detection
+HTTP banner grabber checks for CRLF in headers.
+Flag: carriage return in Authorization or Set-Cookie.
+Ties to session poisoning detection pattern.
+Status: wishlist — INTEL module
+
+### ChromaDB as DOXA Vector Store
+Confirmed implementation path for RAG memory layer.
+Local, zero config, no cloud dependency.
+Air-gap safe — correct for hospital deploy.
+Replaces generic "vector database" in RAG item above.
+Status: wishlist — RAG dependency
+
+### InfluxDB Time-Series Filestack
+Sweep results, port history, confidence decay scores
+are all time-series data. Flat JSON loses trend data.
+InfluxDB or SQLite time-series gives DOXA trending:
+port open duration, device uptime curves, decay velocity.
+DOXA can answer: "has this device been degrading for weeks?"
+Status: wishlist — v5 architecture
+
+### Redis Hot Cache for DOXA
+Current filestack read is cold — full reload per query.
+Redis stores active session context as hot key-value.
+CAG pattern: cold ChromaDB + hot Redis per query.
+Status: wishlist — v5 architecture
+
+### Vault Integration for KEYS Module
+Current KEYS module stores credentials as flat file.
+HashiCorp Vault or local equivalent for secret management.
+Rotate, revoke, audit all credentials from one place.
+Status: wishlist — Tier 2 security hardening
+
+### DOXA Streaming — DEDUPLICATED
+Listed twice in wishlist above. This is the canonical entry.
+One line change in ask_doxa() — print tokens as generated.
+Priority: quick win, high UX impact.
+Status: wishlist — next sprint
