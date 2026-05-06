@@ -431,6 +431,7 @@ def ask_doxa(question, api_key, history):
         'max_tokens': 1024,
         'system': system,
         'messages': history,
+        'stream': True,
     }).encode('utf-8')
     req = urllib.request.Request(
         'https://api.anthropic.com/v1/messages',
@@ -443,14 +444,27 @@ def ask_doxa(question, api_key, history):
         method='POST'
     )
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read().decode('utf-8'))
+        with urllib.request.urlopen(req, timeout=60) as resp:
             from modules.sanitize import validate_doxa_output
             print()
             raw=""
-            for block in data.get('content',[]):
-                if block.get('type')=='text':
-                    raw+=block.get('text','')
+            for line in resp:
+                line=line.decode('utf-8').strip()
+                if not line.startswith('data:'):
+                    continue
+                chunk=line[5:].strip()
+                if chunk=='[DONE]':
+                    break
+                try:
+                    obj=json.loads(chunk)
+                    delta=obj.get('delta',{})
+                    if delta.get('type')=='text_delta':
+                        t=delta.get('text','')
+                        print(t,end='',flush=True)
+                        raw+=t
+                except Exception:
+                    continue
+            print()
             reply=strip_md(raw)
             warnings=validate_doxa_output(reply)
             if warnings:
@@ -509,8 +523,6 @@ def run_doxa(gateway=None, local_ip=None):
         print(f'  {DIM}thinking...{RESET}')
         reply = ask_doxa(q, api_key, history)
         print()
-        for line in reply.split('\n'):
-            print(f'  {GREEN}{line}{RESET}')
         action = parse_agent_action(reply)
         if action:
             run_doxa._pending = action
