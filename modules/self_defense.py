@@ -32,3 +32,31 @@ def resolve_and_check(host, port):
 
 def add_to_allowlist(entry):
     ALLOWLIST.add(entry)
+
+def check_websocket_beacon(host, path):
+    suspicious = ['/ws','/api/v1/beacon','/api/v1/result']
+    for p in suspicious:
+        if path.startswith(p):
+            _alert(host, 80)
+            return True
+    return False
+
+def check_dns_tunnel(query):
+    import re
+    b32 = re.compile(r'^[A-Z2-7]{15,}$')
+    label = query.split('.')[0].upper()
+    if b32.match(label):
+        _alert(query, 53)
+        return True
+    return False
+
+def check_cron_persistence(filepath):
+    cron_paths = [
+        '/etc/cron','/var/spool/cron',
+        '/etc/systemd/system','/etc/anacrontab'
+    ]
+    for p in cron_paths:
+        if filepath.startswith(p):
+            _alert('localhost', 0)
+            return True
+    return False
