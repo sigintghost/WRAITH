@@ -1,5 +1,5 @@
 # WRAITH — MODULE REFERENCE
-# v4.2 — modules/
+# v4.3 — modules/
 
 ## NETWORK DISCOVERY
 arp.py — ARP host discovery, MAC OUI vendor lookup
