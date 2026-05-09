@@ -365,6 +365,22 @@ def build_context():
             blines = [f"{b.get('ip')}:{b.get('port')} {b.get('server','')} {b.get('title','')}" for b in bdata[:10]]
             ctx.append('HTTP BANNERS:\n' + '\n'.join(blines))
     except: pass
+    try:
+        from modules.drift_detector import check_drift
+        from modules.sanitize import Sanitizer
+        _s = Sanitizer()
+        drift_alerts = check_drift()
+        if drift_alerts:
+            ctx.append(f'\nFIELD DRIFT ALERTS: {len(drift_alerts)}')
+            for a in drift_alerts:
+                ip = _s.sanitize(str(a.get('ip','')), 'drift', 'ip')
+                field = _s.sanitize(str(a.get('field','')), 'drift', 'field')
+                old_v = _s.sanitize(str(a.get('old_value','')), 'drift', 'old_value')
+                new_v = _s.sanitize(str(a.get('new_value','')), 'drift', 'new_value')
+                sev = a.get('severity','WARNING')
+                count = int(a.get('change_count', 1))
+                ctx.append(f'  [{sev}] {ip} {field}: {old_v} -> {new_v} (x{count})')
+    except: pass
     return subnet_ctx + '\n' + topo_ctx + '\n' + '\n'.join(ctx) + '\n\n' + reg_ctx
 
     return HAIKU
@@ -416,8 +432,8 @@ def execute_agent_action(action, gateway, local_ip):
         print(f"  [31m[DOXA] action failed: {e}[0m")
 
 def ask_doxa(question, api_key, history):
-    from modules.sanitize import clean_wire_value
-    question=clean_wire_value(question,"doxa_input")
+    from modules.sanitize import Sanitizer
+    question=Sanitizer().sanitize(question,"doxa_input","user_query")
     mode_ctx=''
     for mode,desc in PROMPT_MODES.items():
         if question.lower().startswith(mode):
