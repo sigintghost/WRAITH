@@ -57,11 +57,11 @@ def setup_integrations():
     if ans == 'y':
         from modules.pg_connector import setup_pg
         setup_pg()
-    ans = input('  Setup 1Call work orders? [y/N]: ').strip().lower()
+    ans = input('  Setup CMMS work orders? [y/N]: ').strip().lower()
     if ans == 'y':
         from modules.workorder_agent import setup_workorder
         setup_workorder()
-    ans = input('  Setup FSI asset database? [y/N]: ').strip().lower()
+    ans = input('  Setup asset database connector? [y/N]: ').strip().lower()
     if ans == 'y':
         print('  FSI API key needed — get from Joan or Richard')
         fsi_key = input('  FSI API key [enter to skip]: ').strip()

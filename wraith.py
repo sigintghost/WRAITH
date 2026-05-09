@@ -551,4 +551,5 @@ def run_auth():
         else:
             print("  [-] invalid credentials")
     print("  [!] too many failed attempts. exiting.")
+run_first_run_check()
 run_auth()
