@@ -1,7 +1,6 @@
 # WRAITH
 ### passive network intelligence engine
-### deep OT/BAS protocol awareness
-### v4.5 — dev branch active
+### v4.5 — universal OT/IT/RF signal awareness
 
 > *anomaly is the signal.*
 > — [sig.int.ghost](https://instagram.com/sig.int.ghost)
@@ -13,241 +12,188 @@
 
 ## What It Is
 
-WRAITH is a passive network intelligence engine with deep OT/BAS protocol awareness. Built from raw Python sockets. No dependencies. Works on any network.
-
-Red team recon. Blue team awareness. Purple team permanent weapon.
-
-
+WRAITH is a passive network intelligence engine.
 No nmap. No libpcap. No pip install.
-Pure Python standard library.
+Pure Python standard library. Raw sockets.
+Works on any network. Leaves no trace.
 
-Most tools wrap nmap. WRAITH reads the wire directly.
+Built by a BAS/OT engineer from field experience —
+not from a security textbook.
+The threat model comes from inside the infrastructure.
 
-Built by a BAS engineer. For BAS engineers.
-Designed for hospital, campus, clinical, and
-critical infrastructure environments.
-
----
-
-## What It Could Be
-
-WRAITH is a platform. The terminal is the first interface.
-
-- Per-subnet AI context — each network segment analyzed independently
-- Persistent cross-session memory — DOXA remembers what it saw last week
-- Building persona layer — each facility gets its own AI voice and priority model
-- PostgreSQL integration — real trend and alarm data from WebCTRL into DOXA
-- Topology mapping — passive subnet graph built from observation alone
-- OT assessment engine — passive recon to signed PDF report
-- Air-gapped mode — local LLM, zero API cost, zero data exposure
-- Enterprise scale — thousands of subnets, one engine
-
-Red team finds the gap. Blue team closes it. Purple team never loses it.
+OT/BAS is the origin. Every network that emits
+observable signal is the scope.
 
 ---
 
-## The Longer Vision
+## What It Does
 
-WRAITH was built for buildings. But the architecture has no ceiling.
+WRAITH passively observes network traffic and device
+responses across OT, IT, IoT, and RF environments.
+It builds a structured intelligence stack and feeds
+it to DOXA — an AI agent that reasons about what
+the network is doing, what is wrong, and what to
+do about it.
 
-Any environment where machines operate autonomously, where humans cannot
-be present at every node, where anomaly detection must be passive and
-persistent — WRAITH applies.
-
-- **Defense & critical infrastructure** — OT networks in bases, depots,
-  and command facilities where BAS and ICS converge
-- **Data center automation** — passive monitoring of hyperscale
-  infrastructure, thermal systems, power distribution, cooling control
-- **Autonomous construction** — drone coordination networks, sensor mesh
-  monitoring, equipment telemetry from remote build sites
-- **Off-world infrastructure** — lunar and Martian habitat systems will
-  run on the same protocols. BACnet does not care about gravity.
-  HVAC, power, life support, pressurization — all OT, all monitorable.
-- **Swarm intelligence layer** — agentic networks of autonomous units
-  require the same passive observation, anomaly detection, and
-  AI-driven threat analysis that WRAITH provides today
-- **Signal intelligence expansion** — Zigbee, Z-Wave, Bluetooth,
-  802.15.4, RF mesh — the wire is just one attack surface
-
-The terminal is the seed. The platform is what grows from it.
-
-*WRAITH observes. Strata understands. DOXA reveals.*
-
----
-
-## Active Modules
-
-| Module | Protocol | Port | Notes |
-|--------|----------|------|-------|
-| arp.py | ARP | L2 | MAC OUI vendor lookup |
-| sweep.py | ICMP/TCP | subnet | writes hosts.json |
-| portscan.py | TCP | OT/BAS/ICS | writes portscan.json |
-| ttl.py | ICMP | all hosts | OS fingerprinting |
-| bacnet.py | BACnet/IP | 47808 | idle timeout |
-| modbus.py | Modbus TCP | 502 | writes modbus_map.json |
-| mqtt.py | MQTT | 1883 | writes mqtt_brokers.json |
-| serial_mstp.py | BACnet MSTP | RS485 | USB adapter |
-| snmp.py | SNMP | 161 | requires root |
-| osint.py | 13 source APIs | — | threat intel |
-| doxa.py | Claude API | — | reads full filestack |
-| alerts.py | throttling | — | severity + cooldowns |
-| auth.py | login/audit | — | SHA256, roles, UUID |
-| logger.py | logging | — | session logs |
-| filestack.py | JSON stack | — | persistent loot |
-| ghost.py | ANSI/brand | — | easter eggs |
-| baseline.py | behavioral | — | host snapshot, deviation detection |
-| mac_verify.py | MAC/OUI | L2 | spoof detection, vendor validation |
-| dns_tunnel.py | DNS | 53 | tunnel detection, query anomaly |
-| icmp_tunnel.py | ICMP | — | covert channel, payload anomaly |
-| traffic_anomaly.py | TCP | — | micro-exfil, volume detection |
-| vlan_hop.py | 802.1Q | L2 | double-tag detection |
-| rf.py | RF/wireless | — | Zigbee/BT/ZWave scaffold |
-| fsi_connector.py | asset DB | — | FSI ground truth, gap analysis |
-| topology.py | graph | — | passive subnet mapping |
-| registry.py | registry | — | device tracking, first/last seen |
-| subnet_selector.py | subnet | — | multi-subnet context switcher |
+Passive first. Always. No packet injection. Ever.
+Active scanning in OT environments causes real
+equipment failures. This is non-negotiable.
 
 ---
 
 ## DOXA
 
-AI agent powered by Claude API.
-Reads everything WRAITH captures before every query.
+AI intelligence layer powered by Claude API.
+Reads the full intelligence stack before every query.
+Reasons across protocols, topology, behavior, and time.
 
-Context fed to DOXA on every session:
-- Sweep hosts and hostnames
-- ARP table with MAC vendor lookup
-- OS fingerprints via ICMP TTL
-- Open OT/BAS ports per host
-- Modbus device inventory
-- MQTT broker topology
-- BACnet device inventory
-- Active alerts
+DOXA is not a chatbot.
+DOXA is a passive network intelligence agent
+operating across OT, IT, RF, IoT, industrial,
+and enterprise environments.
+OT/BAS is the origin.
+Every network that emits observable signal is the scope.
+
+Modes: hunt / isolate / baseline / report /
+explain / defend / scan / compare / risk / brief
 
 Token routing:
 - Haiku — fast queries, low cost
 - Sonnet — deep analysis, complex reasoning
-- Domain locked — OT/BAS/ICS context only
 
-Keys at ~/.wraith/keys.py chmod 600
-
----
-
-## OSINT — 13 Sources Per IP
-
-| Source | Type |
-|--------|------|
-| [Shodan](https://shodan.io) | paid |
-| [IPInfo](https://ipinfo.io) | paid |
-| [GreyNoise](https://greynoise.io) | paid |
-| [AbuseIPDB](https://abuseipdb.com) | paid |
-| [Shodan InternetDB](https://internetdb.shodan.io) | free |
-| [Censys](https://censys.io) | free |
-| [URLScan](https://urlscan.io) | free |
-| [VirusTotal](https://virustotal.com) | paid |
-| [CISA KEV](https://cisa.gov/known-exploited-vulnerabilities) | free |
-| [HackerTarget](https://hackertarget.com) | free |
-| [BGPView](https://bgpview.io) | free |
-| [ThreatFox](https://threatfox.abuse.ch) | free |
-| [Criminal IP](https://criminalip.io) | paid |
+Keys at ~/.wraith/keys.py — chmod 600 — never in repo
 
 ---
 
-## Security
+## Defense Architecture
 
-- Passive-first — no packet injection ever
-- SHA256 hashed passwords, getpass hidden input
-- Roles: admin, technician, readonly
-- Session UUID per login
-- Tamper-evident audit log
-- Keys chmod 600 — never in repo
-- 3 attempt lockout
-- Designed with NIST SP 800-82 and IEC 62443 principles
-- Relevant to HIPAA, NERC CIP, ISO 50001 environments
+WRAITH implements a multi-layer defense posture
+for its own intelligence pipeline:
 
----
+**Ingestion layer** — sanitize.py guards every
+intelligence stack write. Untrusted network data
+is sanitized before it reaches DOXA context.
+Chained encoding detection strips base64/gzip/url
+encoding chains up to 3 layers deep before any
+injection check runs.
 
-## Filestack — Persistent Intelligence
+**Identity layer** — AGENTS.md loaded into system
+prompt. Identity separated from observations.
+Network data never contaminates DOXA's soul file.
 
-All findings written to ~/.wraith/loot/stack/
+**Drift detection** — drift_detector.py watches
+per-asset field values across scan cycles. Gradual
+field manipulation flagged as WARNING or CRITICAL.
+Answer to multi-turn injection attacks.
 
-hosts.json, arp_table.json, ttl_fingerprints.json,
-portscan.json, bacnet_inventory.json,
-modbus_map.json, mqtt_brokers.json,
-snmp_inventory.json, alerts.json
+**Presence monitoring** — presence_monitor.py
+cross-references wire observations against the
+operator-owned asset registry. Unauthorized devices
+flagged immediately. Pulse evasion detected across
+scan cycles.
 
-DOXA reads all of these before every query.
+**Execution control** — doxa_execute.py provides
+a five-layer guardrail execution engine.
+Confirmation gate. Hardcoded allowlist. Dry run.
+Append-only audit log. Pre-execution rollback.
 
----
-
-## Strata
-
-Strata is the interpretation layer above WRAITH.
-
-WRAITH observes. Strata understands.
-
-Strata integrates WebCTRL fault exports, trend
-CSVs, and COV events with WRAITH network
-intelligence to produce unified building
-diagnostics with confidence scoring.
-
-Coming in v4.5.
+**Deception layer** — honeypot.py deploys passive
+BACnet/Modbus traps with authorization gate.
+Protocol listeners log probe attempts automatically.
 
 ---
 
-## Version History
+## Active Modules — v4.5
 
-| Version | Milestone |
-|---------|-----------|
-| v1.0 | raw socket recon, port scan, DNS |
-| v2.0 | BACnet/IP passive listener |
-| v3.0 | Modbus, MQTT, ghost module |
-| v4.4 | DOXA AI, OSINT x7, auth, ANSI menus |
-| v4.4 | BACnet idle timeout, Censys fix |
-| v3.5 | DOXA reads full filestack, MAC OUI, TTL |
-| v3.6 | DOXA rename John 1:14, CVE, key mgmt |
-| v3.7 | beacon detector, lateral movement, netcheck |
-| v3.8 | DOXA streaming, OSINT pipeline, sanitize, prompt injection defense |
-| v3.9 | 80+ ports, HTTP fingerprint, MITRE ICS, admin panel, login lockout, 13 OSINT sources |
-| v4.4 | HITL loop, 6 DOXA modes, rogue detection, topology mapper, auto-scan |
-| v4.4 | signal intel suite, menu redesign, FSI connector, baseline, MAC verify |
-| v4.2 | integrations menu, role enforcement, first run wizard, port hop detection |
-| v4.3 | secure_connector, self_defense, confidence_decay, portscan_detector, allowlist_monitor, port_watch, alerts color |
-| v4.4 | sensor nodes, WireGuard, per-building |
-| v5.1 | browser dashboard, zero dependencies |
-| v6.0 | platform, SaaS, API, integrations |
+### Core
+| Module | Function |
+|--------|----------|
+| sweep.py | ICMP/TCP host discovery |
+| arp.py | MAC OUI vendor lookup |
+| portscan.py | OT/BAS/ICS port scanning |
+| ttl.py | OS fingerprinting via TTL |
+| registry.py | Device tracking, first/last seen |
+| topology.py | Passive subnet graph |
+| filestack.py | Persistent intelligence stack |
+| baseline.py | Host behavioral snapshot |
+| subnet_selector.py | Multi-subnet context |
 
----
+### Defense
+| Module | Function |
+|--------|----------|
+| sanitize.py | Ingestion path hardening |
+| drift_detector.py | Field stability monitoring |
+| self_defense.py | C2 signature detection |
+| presence_monitor.py | Unauthorized asset detection |
+| jitter_beacon.py | Statistical beacon detection |
+| secure_connector.py | TLS enforcement |
+| confidence_decay.py | Asset freshness scoring |
+| portscan_detector.py | Incoming recon detection |
+| allowlist_monitor.py | Unexpected destination flagging |
+| port_watch.py | Continuous port monitoring |
+| honeypot.py | Passive BACnet/Modbus trap |
+
+### Protocols
+| Module | Protocol | Port |
+|--------|----------|------|
+| bacnet.py | BACnet/IP | 47808 |
+| bacnet_sc.py | BACnet/SC | TCP |
+| modbus.py | Modbus TCP | 502 |
+| mqtt.py | MQTT | 1883 |
+| snmp.py | SNMP | 161 |
+| serial_mstp.py | BACnet MSTP | RS485 |
+
+### Intelligence
+| Module | Function |
+|--------|----------|
+| osint.py | 13-source threat intel |
+| cve.py | CVE/CISA KEV lookup |
+| ioc_extractor.py | IOC extraction from banners |
+| mitre_attack_map.py | ATT&CK ICS technique mapping |
+| dns_tunnel.py | DNS tunnel detection |
+| icmp_tunnel.py | ICMP covert channel detection |
+| traffic_anomaly.py | Volume anomaly detection |
+| vlan_hop.py | 802.1Q double-tag detection |
+| rf.py | RF/wireless signal scaffold |
+| mac_verify.py | MAC spoof detection |
+
+### DOXA
+| Module | Function |
+|--------|----------|
+| doxa.py | AI agent, streaming SSE |
+| doxa_execute.py | Controlled execution engine |
+
+### Integrations
+| Module | Function |
+|--------|----------|
+| asset_registry.py | Operator-owned asset ground truth |
+| webctrl.py | WebCTRL PostgreSQL integration |
+| fsi_connector.py | Generic asset DB connector |
+| snowflake_connector.py | Data pipeline connector |
 
 ## Install
 
-apk add python3 git
-git clone https://github.com/sigintghost/WRAITH.git
-cd WRAITH
-python3 wraith.py
+    apk add python3 git
+    git clone https://github.com/sigintghost/WRAITH
+    cd WRAITH
+    python3 wraith.py
 
 Keys go in ~/.wraith/keys.py
 See modules/keys_template.py
 
----
-
 ## Legal
 
-Source Available — All Rights Reserved.
+Source Available. All Rights Reserved.
 Passive observation only. No packet injection.
 Use only on networks you own or have explicit
 written authorization to monitor.
 Commercial use requires written permission.
 
----
-
 ## Author
 
-**sig.int.ghost** — passive observer
+sig.int.ghost — passive observer
 
-- Instagram: [@sig.int.ghost](https://instagram.com/sig.int.ghost)
-- GitHub: [sigintghost](https://github.com/sigintghost/WRAITH)
+Instagram: @sig.int.ghost
+GitHub: sigintghost/WRAITH
 
-*systems reveal themselves under observation.*
-
-*WRAITH observes. Strata understands.*
+WRAITH observes. Strata understands. DOXA reveals.

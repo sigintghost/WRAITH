@@ -1,53 +1,72 @@
-# WRAITH — MODULE REFERENCE
-# v4.5 — modules/
+# WRAITH Modules — v4.5
 
-## NETWORK DISCOVERY
-arp.py — ARP host discovery, MAC OUI vendor lookup
-sweep.py — TCP subnet sweep, writes hosts.json, progress bar
-portscan.py — 80+ port OT/BAS/ICS/IoT signatures, MITRE ATT&CK tagged
-ttl.py — ICMP TTL OS fingerprinting, writes ttl_fingerprints.json
+59 modules across 5 functional categories.
+Refactor to subdirectory structure planned for v4.6.
 
-## PROTOCOL LISTENERS
-bacnet.py — BACnet/IP UDP 47808, idle timeout 30s/300s
-modbus.py — Modbus TCP 502, register map, writes modbus_map.json
-mqtt.py — MQTT 1883, broker/topic discovery, writes mqtt_brokers.json
-serial_mstp.py — BACnet MSTP via USB RS485
-snmp.py — SNMP 161, raw socket, writes snmp_inventory.json
+## Core — network observation foundation
+sweep.py — ICMP/TCP host discovery, writes hosts.json
+arp.py — MAC OUI vendor lookup, seeds registry
+portscan.py — OT/BAS/ICS port scanning
+ttl.py — OS fingerprinting via ICMP TTL
+registry.py — device tracking, first/last seen
+topology.py — passive subnet graph builder
+filestack.py — persistent JSON intelligence stack
+baseline.py — host behavioral snapshot
+subnet_selector.py — multi-subnet context switcher
+ghost.py — ANSI/brand, easter eggs
+logger.py — session logging
+auth.py — SHA256 auth, roles, UUID, lockout
+alerts.py — severity throttling, cooldowns
 
-## INTELLIGENCE
-osint.py — 13-source threat intel: Shodan, IPInfo, GreyNoise,
-  AbuseIPDB, Censys, URLScan, InternetDB, VirusTotal,
-  CISA KEV, HackerTarget, BGPView, ThreatFox, Criminal IP
-doxa.py — DOXA AI agent, full filestack context, OT/BAS locked
-cve.py — NIST NVD CVE lookup, wired into DOXA context
-wishlist_agent.py — self-building roadmap, DOXA reads WISHLIST.md
+## Defense — pipeline hardening
+sanitize.py — ingestion path, chained encoding
+drift_detector.py — field stability across cycles
+self_defense.py — C2 signatures, beacon detection
+presence_monitor.py — unauthorized asset detection
+jitter_beacon.py — statistical beacon analysis
+secure_connector.py — TLS enforcement
+confidence_decay.py — asset freshness scoring
+portscan_detector.py — incoming recon detection
+allowlist_monitor.py — unexpected destinations
+port_watch.py — continuous port monitoring
+port_history.py — per-host port union tracking
+honeypot.py — passive BACnet/Modbus trap
 
-## SECURITY & VALIDATION
-sanitize.py — prompt injection defense, HTML escape, pattern blocking
-beacon_detector.py — C2 beacon timing analysis, fixed interval detection
-lateral_detector.py — ARP delta, new host baseline comparison
-netcheck.py — network context validator, session change detection
-input_validator.py — IP/port/subnet validation, text sanitization
+## Protocols — OT/BAS/ICS listeners
+bacnet.py — BACnet/IP passive listener
+bacnet_sc.py — BACnet/SC hub fingerprinting
+modbus.py — Modbus TCP device mapping
+mqtt.py — MQTT broker discovery
+snmp.py — SNMP inventory
+serial_mstp.py — BACnet MSTP via RS485
 
-## SYSTEM
-alerts.py — throttled severity alerting, writes alerts.json
-auth.py — SHA256 login, roles, session UUID, audit log
-logger.py — session logging to loot/logs/
-filestack.py — persistent JSON stack to loot/stack/
-ghost.py — ANSI color engine, brand voice, PPCL easter eggs
-keys_manager.py — API key add/update/delete/test, ~/.wraith/keys.py
-keys_template.py — copy to ~/.wraith/keys.py chmod 600
-admin.py — user management, role assignment, building selector
+## Intelligence — analysis and detection
+osint.py — 13-source threat intel pipeline
+cve.py — CVE/CISA KEV lookup
+ioc_extractor.py — IOC extraction from banners
+mitre_attack_map.py — ATT&CK ICS mapping
+dns_tunnel.py — DNS tunnel detection
+icmp_tunnel.py — ICMP covert channel detection
+traffic_anomaly.py — volume anomaly detection
+vlan_hop.py — 802.1Q double-tag detection
+rf.py — RF/wireless signal scaffold
+mac_verify.py — MAC spoof detection
+banner.py — HTTP banner harvesting
+dns.py — DNS enumeration
 
-## FUTURE — modules/strata/
-fdd_agent.py — WebCTRL fault file watcher, DOXA context injection
-energy_agent.py, trend_agent.py, cov_agent.py
-context_engine.py, baseline.py, anomaly.py
-correlator.py, explainer.py, dead_man.py
+## DOXA — AI intelligence layer
+doxa.py — Claude API agent, streaming SSE
+doxa_execute.py — five-layer execution engine
 
-## FILESTACK — loot/stack/
-hosts.json, arp_table.json, ttl_fingerprints.json
-portscan.json, modbus_map.json, mqtt_brokers.json
-bacnet_inventory.json, snmp_inventory.json, alerts.json
+## Integrations — external connectors
+asset_registry.py — operator-owned asset ground truth
+webctrl.py — WebCTRL PostgreSQL integration
+fsi_connector.py — generic asset DB connector
+snowflake_connector.py — data pipeline connector
+keys_template.py — API key scaffold
 
-WRAITH observes. Strata understands. DOXA reveals.
+## Planned — v4.6 refactor
+Modules will move to subdirectories:
+core/ defense/ protocols/ intel/ doxa/ integrations/
+Each subdirectory will have its own README.
+Each module will have inline docstrings.
