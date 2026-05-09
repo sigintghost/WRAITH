@@ -89,6 +89,11 @@ class Sanitizer:
         value, flag = self._check_field_context(value, field)
         if flag:
             self._write_alert(source, field, value, flag)
+        _, chain_flag = check_chained_encoding(
+            value, source, field)
+        if chain_flag:
+            self._write_alert(source, field,
+                value, chain_flag)
         return value
 
 if __name__ == "__main__":
@@ -130,3 +135,49 @@ def validate_doxa_output(reply):
     if len(reply) > 8000:
         warnings.append("OUTPUT_LENGTH: unusually long response")
     return warnings
+
+def _try_decode(value):
+    import base64, gzip, urllib.parse
+    attempts = []
+    v = value.strip()
+    try:
+        decoded = base64.b64decode(v + '==',
+            validate=False).decode('utf-8', errors='ignore')
+        if decoded and decoded != v:
+            attempts.append(('base64', decoded))
+    except: pass
+    try:
+        decoded = urllib.parse.unquote(v)
+        if decoded != v:
+            attempts.append(('url', decoded))
+    except: pass
+    try:
+        if v.startswith('1f8b') or v.startswith('\\x1f\\x8b'):
+            raw = bytes.fromhex(v.replace('\\x',''))
+            decoded = gzip.decompress(raw).decode(
+                'utf-8', errors='ignore')
+            attempts.append(('gzip', decoded))
+    except: pass
+    return attempts
+
+def check_chained_encoding(value, source="unknown",
+        field="unknown", depth=0):
+    if depth >= 3 or not isinstance(value, str):
+        return value, None
+    s = Sanitizer()
+    attempts = _try_decode(value)
+    for method, decoded in attempts:
+        _, flag = s._check_injection(decoded)
+        if not flag:
+            _, flag = s._check_escalation(decoded)
+        if not flag:
+            _, flag = s._check_structure(decoded)
+        if flag:
+            reason = f"CHAINED_ENCODING:{method}:{flag}"
+            s._write_alert(source, field, value, reason)
+            return value, reason
+        inner, inner_flag = check_chained_encoding(
+            decoded, source, field, depth+1)
+        if inner_flag:
+            return value, inner_flag
+    return value, None
