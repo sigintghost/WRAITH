@@ -31,7 +31,7 @@ def build_payload():
         'traffic_findings.json': 'TRAFFIC',
         'vlan_findings.json': 'VLAN',
         'rf_findings.json': 'RF',
-        'fsi_assets.json': 'FSI',
+        'asset_db.json': 'ASSET DB',
     }
     for fn, record_type in files.items():
         fp = os.path.join(stack, fn)

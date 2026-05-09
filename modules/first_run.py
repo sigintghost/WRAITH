@@ -63,15 +63,14 @@ def setup_integrations():
         setup_workorder()
     ans = input('  Setup asset database connector? [y/N]: ').strip().lower()
     if ans == 'y':
-        print('  FSI API key needed — get from Joan or Richard')
-        fsi_key = input('  FSI API key [enter to skip]: ').strip()
-        fsi_url = input('  FSI base URL [enter to skip]: ').strip()
+        fsi_key = input('  Asset DB API key [enter to skip]: ').strip()
+        fsi_url = input('  Asset DB base URL [enter to skip]: ').strip()
         if fsi_key and fsi_url:
             cfg = {'api_key': fsi_key, 'base_url': fsi_url}
-            kp = os.path.expanduser('~/.wraith/fsi.json')
+            kp = os.path.expanduser('~/.wraith/asset_db.json')
             with open(kp,'w') as f: json.dump(cfg,f,indent=2)
             os.chmod(kp, 0o600)
-            print('  [+] FSI config saved')
+            print('  [+] asset DB config saved')
     print('  [+] integrations configured')
 
 def run_first_run():

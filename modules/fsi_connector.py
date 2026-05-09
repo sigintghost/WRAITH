@@ -62,37 +62,37 @@ def gap_analysis(assets):
     offline = asset_ips - live_ips
     gaps = []
     for ip in rogues:
-        msg = f'ROGUE: {ip} on wire — not in FSI asset database'
+        msg = f'ROGUE: {ip} on wire — not in asset database'
         print(f'  [!!!] {msg}')
-        gaps.append({'ip':ip,'type':'ROGUE','source':'fsi_gap'})
+        gaps.append({'ip':ip,'type':'ROGUE','source':'asset_db_gap'})
         add_alert(msg, severity='CRITICAL')
     for ip in offline:
         asset = next((a for a in assets if a.get('ip')==ip), {})
-        msg = f'OFFLINE: {ip} in FSI but not on wire — {asset.get("name","")}'
+        msg = f'OFFLINE: {ip} in asset DB but not on wire — {asset.get("name","")}'
         print(f'  [!] {msg}')
-        gaps.append({'ip':ip,'type':'OFFLINE','source':'fsi_gap',
+        gaps.append({'ip':ip,'type':'OFFLINE','source':'asset_db_gap',
             'asset':asset.get('name','')})
         add_alert(msg, severity='MEDIUM')
     return gaps
 
-def run_fsi_connector():
-    print('\n  [FSI] asset connector')
+def run_asset_db_connector():
+    print('\n  [ASSET DB] asset connector')
     print('  supported formats: CSV, JSON')
-    path = input('  FSI export path: ').strip()
+    path = input('  Asset DB file path (CSV or JSON): ').strip()
     if not path or not os.path.exists(path):
-        print('  [FSI] file not found')
+        print('  [ASSET DB] file not found')
         return
     fmt = detect_format(path)
-    print(f'  [FSI] detected format: {fmt}')
+    print(f'  [ASSET DB] detected format: {fmt}')
     raw = parse_json(path) if fmt=='json' else parse_csv(path)
     assets = normalize(raw)
-    print(f'  [FSI] {len(assets)} assets loaded')
+    print(f'  [ASSET DB] {len(assets)} assets loaded')
     gaps = gap_analysis(assets)
-    write_json('fsi_assets.json', {
+    write_json('asset_db.json', {
         'timestamp': datetime.datetime.now().isoformat(),
         'source': path,
         'format': fmt,
         'assets': assets,
         'gaps': gaps
     })
-    print(f'  [FSI] {len(gaps)} gaps — fsi_assets.json written')
+    print(f'  [ASSET DB] {len(gaps)} gaps — asset_db.json written')

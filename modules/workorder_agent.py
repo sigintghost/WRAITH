@@ -103,8 +103,8 @@ def watch_fault_folder():
     })
 
 def setup_workorder():
-    print('\n  [WO] 1Call work order setup')
-    api_url = input('  1Call API endpoint: ').strip()
+    print('\n  [WO] CMMS work order setup')
+    api_url = input('  CMMS API endpoint: ').strip()
     api_key = input('  API key: ').strip()
     building = input('  building name: ').strip()
     assignee = input('  default assignee: ').strip()
@@ -114,7 +114,7 @@ def setup_workorder():
         'watch_path':watch})
 
 def run_workorder_agent():
-    print('\n  [WO] 1Call Cloud work orders')
+    print('\n  [WO] CMMS work orders')
     print('  [1] setup connection')
     print('  [2] scan fault folder')
     print('  [3] view config')

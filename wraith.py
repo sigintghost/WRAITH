@@ -423,8 +423,8 @@ def main2():
                 p = input(" > ")
                 if p == "0": break
                 elif p == "1":
-                    from modules.fsi_connector import run_fsi_connector
-                    run_fsi_connector()
+                    from modules.fsi_connector import run_asset_db_connector
+                    run_asset_db_connector()
                 elif p == "2":
                     from modules.snowflake_connector import run_snowflake
                     run_snowflake()

@@ -124,7 +124,7 @@ def load_stack():
              'arp_table.json','lateral_alerts.json',
              'osint_results.json','cve_findings.json','beacon_alerts.json',
              'mac_findings.json','baseline.json',
-             'fsi_assets.json',
+             'asset_db.json',
              'dns_findings.json','icmp_findings.json',
              'traffic_findings.json','vlan_findings.json',
              'rf_findings.json',
@@ -304,15 +304,15 @@ def build_context():
             ctx.append(f'\nMAC ANOMALIES: {len(mf)} flagged')
             for m in mf:
                 ctx.append(f'  {m.get("ip")} mac={m.get("mac")} flags={m.get("flags")}')
-    if 'fsi_assets.json' in stack:
-        fa=stack['fsi_assets.json']
+    if 'asset_db.json' in stack:
+        fa=stack['asset_db.json']
         assets=fa.get('assets',[])
         gaps=fa.get('gaps',[])
-        ctx.append(f'\nFSI ASSET DATABASE: {len(assets)} assets')
+        ctx.append(f'\nASSET DATABASE: {len(assets)} assets')
         rogues=[g for g in gaps if g.get('type')=='ROGUE']
         offline=[g for g in gaps if g.get('type')=='OFFLINE']
         if rogues:
-            ctx.append(f'  ROGUES NOT IN FSI: {len(rogues)}')
+            ctx.append(f'  ROGUES NOT IN ASSET DB: {len(rogues)}')
             for r in rogues:
                 ctx.append(f'    {r.get("ip")} — NOT IN ASSET DB')
         if offline:
