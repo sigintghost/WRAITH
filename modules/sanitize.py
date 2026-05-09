@@ -98,3 +98,35 @@ if __name__ == "__main__":
         "A" * 300, "base64:SGVsbG8gV29ybGQ="]
     for t in tests:
         print(s.sanitize(t, "test", "device_name"))
+
+def sanitize_filestack(data, filename="unknown"):
+    s = Sanitizer()
+    if isinstance(data, dict):
+        return {k: sanitize_filestack(v, filename)
+            if isinstance(v, (dict, list))
+            else s.sanitize(v, filename, k)
+            if isinstance(v, str) else v
+            for k, v in data.items()}
+    elif isinstance(data, list):
+        return [sanitize_filestack(i, filename)
+            if isinstance(i, (dict, list))
+            else s.sanitize(i, filename, "item")
+            if isinstance(i, str) else i
+            for i in data]
+    return data
+
+def validate_doxa_output(reply):
+    if not isinstance(reply, str):
+        return []
+    warnings = []
+    s = Sanitizer()
+    for phrase in INJECT_PHRASES:
+        if phrase in reply.lower():
+            warnings.append(f"OUTPUT_INJECTION: {phrase}")
+    for pattern in ESCALATION_PATTERNS:
+        import re
+        if re.search(pattern, reply, re.IGNORECASE):
+            warnings.append(f"OUTPUT_ESCALATION: {pattern}")
+    if len(reply) > 8000:
+        warnings.append("OUTPUT_LENGTH: unusually long response")
+    return warnings
