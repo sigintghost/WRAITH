@@ -424,7 +424,14 @@ def ask_doxa(question, api_key, history):
             mode_ctx=f'\n\nACTIVE MODE: {mode.upper()}\n{desc}'
             break
     context = build_context()
-    system  = GHOST_SYSTEM + f'\n\nCURRENT NETWORK STATE:\n{context}' + mode_ctx
+    agents_ctx = ''
+    try:
+        ap = os.path.expanduser('~/WRAITH/AGENTS.md')
+        if os.path.exists(ap):
+            with open(ap) as f:
+                agents_ctx = '\n\nAGENT SOUL FILE:\n' + f.read()
+    except: pass
+    system  = GHOST_SYSTEM + agents_ctx + f'\n\nCURRENT NETWORK STATE:\n{context}' + mode_ctx
     history.append({'role': 'user', 'content': question})
     payload = json.dumps({
         'model': pick_model(question),
