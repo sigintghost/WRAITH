@@ -1,7 +1,7 @@
 # WRAITH
 ### passive network intelligence engine
 ### deep OT/BAS protocol awareness
-### v4.3 — dev branch active
+### v4.5 — dev branch active
 
 > *anomaly is the signal.*
 > — [sig.int.ghost](https://instagram.com/sig.int.ghost)
@@ -191,7 +191,7 @@ CSVs, and COV events with WRAITH network
 intelligence to produce unified building
 diagnostics with confidence scoring.
 
-Coming in v4.4.
+Coming in v4.5.
 
 ---
 
