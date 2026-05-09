@@ -22,11 +22,12 @@ def save_json(path, data):
 
 def load_authorized():
     authorized = set()
-    fsi = load_json(os.path.join(STACK, "fsi_assets.json"))
-    for a in fsi.get("assets", []):
+    registry = load_json(os.path.join(STACK,
+        "asset_registry.json"))
+    for a in registry.get("assets", []):
         if isinstance(a, dict):
             ip = _s.sanitize(str(a.get("ip","")),
-                "fsi","ip")
+                "registry","ip")
             if ip: authorized.add(ip)
     return authorized
 

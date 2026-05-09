@@ -1,7 +1,7 @@
 import socket, getpass
 import datetime
 
-VERSION = "4.4"
+VERSION = "4.5"
 
 from modules.portscan import PORTS
 
@@ -321,9 +321,9 @@ def get_public_ip():
 def show_integrations_menu():
     print(f"\n  {CYAN}WRAITH{RESET} > {CYAN}INTEGRATIONS{RESET}")
     div()
-    print(f"  {CYAN}[1]{RESET} FSI ASSETS   {DIM}asset ground truth{RESET}")
-    print(f"  {CYAN}[2]{RESET} SNOWFLAKE    {DIM}data pipeline{RESET}")
-    print(f"  {CYAN}[3]{RESET} 1CALL CLOUD  {DIM}work orders{RESET}")
+    print(f"  {CYAN}[1]{RESET} ASSET REG    {DIM}operator asset registry{RESET}")
+    print(f"  {CYAN}[2]{RESET} DATA EXPORT  {DIM}pipeline connector{RESET}")
+    print(f"  {CYAN}[3]{RESET} CMMS         {DIM}work order connector{RESET}")
     print(f"  {CYAN}[4]{RESET} WEBCTRL DB   {DIM}PostgreSQL{RESET}")
     print(f"  {CYAN}[5]{RESET} ISO 50001    {DIM}energy gap analysis{RESET}")
     print(f"  {DIM}[0] BACK{RESET}")
@@ -337,7 +337,7 @@ def show_main_menu():
     print(f"  {CYAN}[4]{RESET} INTEL        {DIM}OSINT CVE DNS signals{RESET}")
     print(f"  {CYAN}[5]{RESET} DOXA         {DIM}AI agent{RESET}")
     print(f"  {CYAN}[6]{RESET} ALERTS")
-    print(f"  {CYAN}[7]{RESET} INTEGRATIONS {DIM}FSI Snowflake 1Call WebCTRL{RESET}")
+    print(f"  {CYAN}[7]{RESET} INTEGRATIONS {DIM}Asset DB WebCTRL Connectors{RESET}")
     print(f"  {CYAN}[8]{RESET} ADMIN")
     print(f"  {CYAN}[9]{RESET} KEYS")
     print(f"  {DIM}[0] EXIT{RESET}")
