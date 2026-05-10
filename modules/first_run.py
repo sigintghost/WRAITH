@@ -80,8 +80,8 @@ def run_first_run():
     print('  All steps can be skipped and configured later.\n')
     ans = input('  Begin setup? [Y/n]: ').strip().lower()
     if ans == 'n':
-        print('  [*] setup skipped — configure via KEYS and INTEGRATIONS menus
-  [*] if first login: you will be prompted to create an admin account')
+        print('  [*] setup skipped — configure via KEYS and INTEGRATIONS menus')
+        print('  [*] if first login: you will be prompted to create an admin account')
         mark_initialized()
         return
     setup_api_keys()
