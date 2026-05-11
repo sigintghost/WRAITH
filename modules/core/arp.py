@@ -4,6 +4,7 @@
 # the device does not know it has been seen.
 
 import socket
+from modules.core.asset_registry import upsert as reg_upsert
 OUI = {
     '00:50:56':'VMware','00:0c:29':'VMware','00:1a:11':'Google',
     '00:17:88':'Philips Hue','b8:27:eb':'Raspberry Pi',
@@ -25,11 +26,22 @@ OUI = {
     'b4:e6:2d':'Apple','3c:22:fb':'Apple',
     'ac:bc:32':'Apple','00:11:32':'Synology',
 }
+_oui_cache = {}
+def _load_oui():
+    import os
+    p = os.path.expanduser('~/.wraith/oui.txt')
+    if not os.path.exists(p): return
+    with open(p) as f:
+        for ln in f:
+            if '(hex)' in ln:
+                pts=ln.split('(hex)')
+                if len(pts)==2:
+                    k=pts[0].strip().replace('-',':').lower()[:8]
+                    _oui_cache[k]=pts[1].strip()
 def oui_lookup(mac):
-    prefix = mac[:8].lower()
-    for k,v in OUI.items():
-        if prefix == k.lower(): return v
-    return 'unknown'
+    if not _oui_cache: _load_oui()
+    if not mac: return 'unknown'
+    return _oui_cache.get(mac[:8].lower(),'unknown')
 import struct
 import os
 import sys
@@ -93,6 +105,7 @@ def arp_scan(network_prefix, src_ip, timeout=1):
                 vendor = oui_lookup(mac)
                 print(f"  [ARP] {ip} — {mac} ({vendor})")
                 alive.append((ip, mac, vendor))
+                reg_upsert(ip=ip, mac=mac, source='arp', **{'network.vendor':vendor})
         except socket.timeout:
             break
         except:

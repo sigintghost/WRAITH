@@ -1,6 +1,6 @@
 # WRAITH
 ### passive network intelligence engine
-### v4.5 — universal OT/IT/RF signal awareness
+### v4.6 — universal OT/IT/RF signal awareness
 
 > *anomaly is the signal.*
 > — [sig.int.ghost](https://instagram.com/sig.int.ghost)
@@ -103,7 +103,7 @@ Protocol listeners log probe attempts automatically.
 
 ---
 
-## Active Modules — v4.5
+## Active Modules — v4.6
 
 ### Core
 | Module | Function |

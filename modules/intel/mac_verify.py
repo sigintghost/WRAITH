@@ -1,4 +1,5 @@
 import json, os, datetime
+from modules.core.asset_registry import upsert as reg_upsert
 from modules.core.filestack import get_stack, write_json
 
 OUI = {

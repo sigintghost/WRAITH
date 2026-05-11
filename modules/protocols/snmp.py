@@ -1,6 +1,7 @@
 # modules/snmp.py
 # WRAITH SNMP passive listener
-import socket, os, json
+import socket
+from modules.core.asset_registry import upsert as reg_upsert, os, json
 from datetime import datetime
 STACK_DIR = os.path.expanduser("~/.wraith/loot/stack")
 SNMP_FILE = os.path.join(STACK_DIR, "snmp_inventory.json")

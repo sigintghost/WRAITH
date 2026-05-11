@@ -5,6 +5,7 @@
 # open is a confession. filtered is a whisper.
 
 import socket
+from modules.core.asset_registry import upsert as reg_upsert
 import errno
 
 PORTS = {

@@ -4,6 +4,7 @@
 # registers don't lie. read the state directly.
 
 import socket
+from modules.core.asset_registry import upsert as reg_upsert
 import struct
 import datetime
 import threading
@@ -114,6 +115,7 @@ def update_modbus_inventory(parsed):
     if parsed.get('exception'):
         exc = parsed.get('exception_name', '?')
         dev['exceptions'].append(exc)
+        reg_upsert(ip=dev.get('ip',''), mac='', source='modbus', **{'type':'controller','protocols':['Modbus'],'ot.modbus_unit_id':str(dev.get('unit_id',''))})
         print(f'  {RED}[EXCEPTION]{RESET} {ip} unit {uid} {exc}')
     elif parsed.get('type') == 'write':
         reg = parsed.get('reg_addr', '?')

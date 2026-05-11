@@ -13,6 +13,7 @@
 # passive observer. anomaly is the signal. — @sig.int.ghost
 
 import socket
+from modules.core.asset_registry import upsert as reg_upsert
 import threading
 import os
 
@@ -41,6 +42,7 @@ def tcp_ping(ip, results, counter, lock, timeout=0.5):
                 except:
                     hostname = ""
                 results.append((ip, port, hostname))
+                reg_upsert(ip=ip, mac='', source='sweep', **{'network.hostname':hostname})
                 found = True
                 break
             s.close()
@@ -55,6 +57,7 @@ def tcp_ping(ip, results, counter, lock, timeout=0.5):
                 except:
                     hostname = ""
                 results.append((ip, 0, hostname))
+                reg_upsert(ip=ip, mac='', source='sweep', **{'network.hostname':hostname})
         except:
             pass
     with lock:

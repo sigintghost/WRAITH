@@ -1,4 +1,5 @@
 import re, json, os
+from modules.core.asset_registry import upsert as reg_upsert
 from datetime import datetime
 from modules.defense.sanitize import Sanitizer
 

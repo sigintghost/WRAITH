@@ -1,4 +1,5 @@
-import os, json, datetime
+import os
+from modules.core.asset_registry import upsert as reg_upsert, json, datetime
 from modules.core.filestack import get_stack, write_json
 
 ZIGBEE_PORTS = [17754, 17755, 17756]

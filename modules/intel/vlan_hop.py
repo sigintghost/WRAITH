@@ -1,4 +1,5 @@
 import socket, os, time, datetime, json, struct
+from modules.core.asset_registry import upsert as reg_upsert
 from modules.core.filestack import get_stack, write_json
 
 ETHERTYPE_8021Q = 0x8100

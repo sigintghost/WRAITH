@@ -4,6 +4,7 @@
 # topics reveal architecture. payloads reveal state.
 
 import socket
+from modules.core.asset_registry import upsert as reg_upsert
 import struct
 import datetime
 import threading
@@ -120,6 +121,7 @@ def parse_mqtt(data, src_ip, src_port):
                 topic = bytes(data[offset:offset+tlen]).decode('utf-8','ignore')
                 offset += tlen + 1
                 topics.append(topic)
+                reg_upsert(ip='', mac='', source='mqtt', **{'type':'iot','protocols':['MQTT'],'services':['mqtt-broker']})
             result['topics'] = topics
         return result
     except Exception:

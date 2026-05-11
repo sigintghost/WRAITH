@@ -1,7 +1,7 @@
 import socket, getpass
 import datetime
 
-VERSION = "4.5"
+VERSION = "4.6"
 
 from modules.core.portscan import PORTS
 

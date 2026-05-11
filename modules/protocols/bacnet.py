@@ -5,6 +5,7 @@
 # instance is identity. network is territory.
 
 import socket
+from modules.core.asset_registry import upsert as reg_upsert
 import struct
 import threading
 import datetime
@@ -311,6 +312,7 @@ def parse_bdt(data, offset):
         ip   = '.'.join(str(b) for b in data[offset:offset+4])
         mask = '.'.join(str(b) for b in data[offset+4:offset+8])
         entries.append({'ip': ip, 'mask': mask})
+        reg_upsert(ip=ip, mac='', source='bacnet', **{'type':'controller','protocols':['BACnet'],'network.subnet':mask})
         offset += 8
     return entries
 

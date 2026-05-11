@@ -1,3 +1,9 @@
+import traceback
+def _caller():
+    for f in traceback.extract_stack()[:-2]:
+        n=f.filename.split('/')[-1].replace('.py','')
+        if n not in ('alerts','wraith'): return n
+    return 'wraith'
 # modules/alerts.py
 # WRAITH alert throttling engine
 import os, json, time
@@ -33,14 +39,14 @@ def _throttled(alert_type):
     if now - last < cooldown: return True
     _last_fired[alert_type] = now
     return False
-def fire(alert_type, message, severity="WARN", source="unknown", ip=""):
+def fire(alert_type, message, severity="WARN", source=None, ip=""):
     if _throttled(alert_type): return False
     ts = datetime.now().isoformat()
     alert = {
         "timestamp": ts,
         "type": alert_type,
         "severity": severity,
-        "source": source,
+        "source": source or _caller(),
         "ip": ip,
         "message": message,
     }
