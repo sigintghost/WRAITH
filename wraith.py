@@ -3,7 +3,7 @@ import datetime
 
 VERSION = "4.5"
 
-from modules.portscan import PORTS
+from modules.core.portscan import PORTS
 
 GREEN  = '\033[32m'
 CYAN   = '\033[36m'
@@ -68,12 +68,12 @@ def portscan(gateway):
         print("  no open ports detected.")
     http_ports = [p for p,l in found if p in [80,8080,8443,443,8888,8001,8008]]
     if http_ports:
-        from modules.portscan import http_fingerprint
+        from modules.core.portscan import http_fingerprint
         for p in http_ports[:2]:
             try: http_fingerprint(gateway, p)
             except: pass
     try:
-        from modules.filestack import write_json,get_stack
+        from modules.core.filestack import write_json,get_stack
         import os
         sp=os.path.join(get_stack(),'portscan.json')
         import json
@@ -123,7 +123,7 @@ def banner(gateway):
 def run_osint(gateway):
     import sys
     sys.path.insert(0,'.')
-    from modules.osint import osint_lookup
+    from modules.intel.osint import osint_lookup
     custom = input("  enter target IP [default: " + gateway + "]: ").strip()
     target = custom if custom else gateway
     osint_lookup(target)
@@ -136,11 +136,11 @@ def run_osint(gateway):
 def run_mqtt_module():
     import sys
     sys.path.insert(0, '.')
-    from modules.mqtt import run_mqtt
+    from modules.protocols.mqtt import run_mqtt
     run_mqtt()
 
 def run_alerts_module():
-    from modules.alerts import get_recent, clear_alerts
+    from modules.core.alerts import get_recent, clear_alerts
     alerts = get_recent(20)
     if not alerts:
         print(chr(32)*2 + chr(91) + chr(42) + chr(93) + chr(32) + chr(78) + chr(111) + chr(32) + chr(97) + chr(108) + chr(101) + chr(114) + chr(116) + chr(115) + chr(32) + chr(111) + chr(110) + chr(32) + chr(102) + chr(105) + chr(108) + chr(101))
@@ -163,29 +163,29 @@ def run_mstp_module():
 def run_doxa_module():
     import sys
     sys.path.insert(0, '.')
-    from modules.doxa import run_doxa
+    from modules.doxa.doxa import run_doxa
     run_doxa()
 
 def run_modbus_module():
     import sys
     sys.path.insert(0, '.')
-    from modules.modbus import run_modbus
+    from modules.protocols.modbus import run_modbus
     run_modbus()
 
 def run_bacnet_module():
     import sys
     sys.path.insert(0, '.')
-    from modules.bacnet import run_bacnet
+    from modules.protocols.bacnet import run_bacnet
     run_bacnet()
 
 def run_sweep_module(gateway, local_ip, base):
-    from modules.topology import add_node, mark_scanned, discover_from_filestack
-    from modules.filestack import get_stack
+    from modules.core.topology import add_node, mark_scanned, discover_from_filestack
+    from modules.core.filestack import get_stack
     add_node(f"{base}.0/24", source='sweep')
     import sys
     sys.path.insert(0, '.')
-    from modules.sweep import run_sweep
-    from modules.logger import log_result
+    from modules.core.sweep import run_sweep
+    from modules.core.logger import log_result
     results = run_sweep(base, local_ip)
     try:
         from modules.arp import run_arp
@@ -202,7 +202,7 @@ def run_sweep_module(gateway, local_ip, base):
             from modules.arp import seed_arp_from_hosts
             seed_arp_from_hosts()
         except: pass
-    from modules.registry import update_registry, get_new_hosts
+    from modules.core.registry import update_registry, get_new_hosts
     arp_hosts = [(ip, '', '') for ip, port, hostname in results]
     new_hosts = get_new_hosts(arp_hosts)
     update_registry(arp_hosts)
@@ -211,7 +211,7 @@ def run_sweep_module(gateway, local_ip, base):
     for ip, port, hostname in results:
         log_result(local_ip, "SWEEP", f"{ip} port={port} {hostname}")
     mark_scanned(f"{base}.0/24")
-    from modules.portscan import run_portscan
+    from modules.core.portscan import run_portscan
     new_reg = get_new_hosts([(ip,'','') for ip,port,hostname in results])
     for new_ip in new_reg[:3]:
         print(f"  [33m[AUTO-SCAN] new host {new_ip} — scanning[0m")
@@ -227,9 +227,9 @@ def run_sweep_module(gateway, local_ip, base):
 def auto_chain(gateway, local_ip):
     import sys
     sys.path.insert(0, '.')
-    from modules.logger import log_result
-    from modules.portscan import run_portscan
-    from modules.osint import osint_lookup
+    from modules.core.logger import log_result
+    from modules.core.portscan import run_portscan
+    from modules.intel.osint import osint_lookup
     print(f"\n  [AUTO] starting full chain on {gateway}")
     log_result(gateway, "AUTO", "chain scan started")
     recon(gateway, local_ip)
@@ -261,7 +261,7 @@ def doxa_login_alert():
     mem = os.path.expanduser('~/.wraith/memory.json')
     alerts = os.path.expanduser('~/.wraith/loot/stack/alerts.json')
     flags = []
-    from modules.filestack import get_stack
+    from modules.core.filestack import get_stack
     stack = get_stack()
     alert_path = os.path.join(stack, 'alerts.json')
     scan_path = os.path.join(stack, 'portscan.json')
@@ -302,7 +302,7 @@ def doxa_login_alert():
         print()
 
 def check_role(required):
-    from modules.auth import CURRENT_ROLE
+    from modules.admin.auth import CURRENT_ROLE
     order = ['readonly','technician','admin']
     if order.index(CURRENT_ROLE) >= order.index(required):
         return True
@@ -372,13 +372,13 @@ def show_intel_menu():
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def main2():
-    from modules.netcheck import run_network_check
+    from modules.core.netcheck import run_network_check
     ok=run_network_check()
     if not ok: return
     print(f"  WRAITH v{VERSION}")
     div()
     gateway,local_ip,base=get_network()
-    from modules.filestack import set_subnet
+    from modules.core.filestack import set_subnet
     set_subnet(f"{base}.0_24")
     print(f"  gateway  : {gateway}")
     print(f"  local ip : {local_ip}")
@@ -388,8 +388,8 @@ def main2():
         c = input(" > ")
         if c == "0": break
         elif c == "1":
-            from modules.subnet_selector import select_subnet
-            from modules.filestack import set_subnet
+            from modules.core.subnet_selector import select_subnet
+            from modules.core.filestack import set_subnet
             sel = select_subnet(base)
             if sel is None: print("  [SWEEP] cancelled")
             else:
@@ -400,20 +400,20 @@ def main2():
                 show_mac_table()
         elif c == "2":
             if not check_role('technician'): continue
-            from modules.portscan import select_target_from_sweep
+            from modules.core.portscan import select_target_from_sweep
             t=select_target_from_sweep()
             if not t: t=input("  enter IP > ").strip()
             if t:
                 portscan(t)
                 banner(t)
                 run_snmp_module()
-                from modules.baseline import run_baseline
+                from modules.core.baseline import run_baseline
                 run_baseline()
                 from modules.mac_verify import verify_macs
                 verify_macs()
         elif c == "5":
             if not check_role('technician'): continue
-            from modules.doxa import run_doxa
+            from modules.doxa.doxa import run_doxa
             run_doxa(gateway, local_ip)
         elif c == "6": run_alerts_module()
         elif c == "7":
@@ -423,16 +423,16 @@ def main2():
                 p = input(" > ")
                 if p == "0": break
                 elif p == "1":
-                    from modules.fsi_connector import run_asset_db_connector
+                    from modules.integrations.fsi_connector import run_asset_db_connector
                     run_asset_db_connector()
                 elif p == "2":
-                    from modules.snowflake_connector import run_snowflake
+                    from modules.integrations.snowflake_connector import run_snowflake
                     run_snowflake()
                 elif p == "3":
-                    from modules.workorder_agent import run_workorder_agent
+                    from modules.integrations.workorder_agent import run_workorder_agent
                     run_workorder_agent()
                 elif p == "4":
-                    from modules.pg_connector import run_pg_connector
+                    from modules.integrations.pg_connector import run_pg_connector
                     run_pg_connector()
                 elif p == "5":
                     from modules.iso50001_gap import run_iso50001
@@ -440,11 +440,11 @@ def main2():
                 else: print("  invalid")
         elif c == "8":
             if not check_role('admin'): continue
-            from modules.admin import run_admin
+            from modules.admin.admin import run_admin
             run_admin()
         elif c == "9":
             if not check_role('admin'): continue
-            from modules.keys_manager import run_keys_manager
+            from modules.admin.keys_manager import run_keys_manager
             run_keys_manager()
         elif c == "3":
             if not check_role('technician'): continue
@@ -457,7 +457,7 @@ def main2():
                 elif p == "3": run_mqtt_module()
                 elif p == "4": run_mstp_module()
                 elif p == "5":
-                    from modules.portscan import select_target_from_sweep
+                    from modules.core.portscan import select_target_from_sweep
                     t=select_target_from_sweep()
                     if t: portscan(t)
                     else:
@@ -481,7 +481,7 @@ def main2():
                 elif p == "3": dns()
                 elif p == "4": banner(gateway)
                 elif p == "5":
-                    from modules.baseline import run_baseline
+                    from modules.core.baseline import run_baseline
                     run_baseline()
                 elif p == "6":
                     from modules.mac_verify import verify_macs
@@ -509,23 +509,23 @@ def main2():
                     run_rf()
                 else: print("  invalid")
         else: print("  invalid option")
-    from modules.ghost import ghost_exit
+    from modules.core.ghost import ghost_exit
     ghost_exit()
     import sys; sys.path.insert(0,'.')
 def run_first_run_check():
-    from modules.first_run import is_first_run, run_first_run
+    from modules.core.first_run import is_first_run, run_first_run
     if is_first_run():
         run_first_run()
 
 def run_auth():
-    from modules.auth import first_run, create_user, login, logout, get_session
+    from modules.admin.auth import first_run, create_user, login, logout, get_session
     print("  [WRAITH] authentication required")
     if first_run():
         print("  [*] first run — create admin account")
         u = input("  username: ")
         while True:
             p = getpass.getpass("  password: ")
-            from modules.auth import validate_password
+            from modules.admin.auth import validate_password
             err = validate_password(p)
             if not err: break
             print(f"  [!] {err} — try again")
