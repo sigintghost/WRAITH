@@ -1,5 +1,5 @@
 # modules/admin.py — WRAITH admin panel
-import modules.auth as auth
+import modules.admin.auth as auth
 CYAN='\033[36m';GREEN='\033[32m';RED='\033[31m'
 YELLOW='\033[33m';BOLD='\033[1m';DIM='\033[2m';RESET='\033[0m'
 ROLES_ALL = ["admin","technician","viewer"]
