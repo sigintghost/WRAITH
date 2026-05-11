@@ -153,11 +153,11 @@ def run_alerts_module():
         print("  " + c + sev + "\033[0m" + " " + ts + " " + msg)
 
 def run_snmp_module():
-    from modules.snmp import run_snmp
+    from modules.protocols.snmp import run_snmp
     run_snmp()
 
 def run_mstp_module():
-    from modules.serial_mstp import run_mstp
+    from modules.protocols.serial_mstp import run_mstp
     run_mstp()
 
 def run_doxa_module():
@@ -249,7 +249,7 @@ def auto_chain(gateway, local_ip):
         log_result(gateway, "TTL", "complete")
     except Exception as e: print(f'  [TTL] {e}')
     try:
-        from modules.snmp import run_snmp
+        from modules.protocols.snmp import run_snmp
         run_snmp(gateway)
         log_result(gateway, "SNMP", "complete")
     except Exception as e: print(f'  [SNMP] {e}')
@@ -396,7 +396,7 @@ def main2():
                 set_subnet(f"{sel}.0_24")
                 run_sweep_module(gateway,local_ip,sel)
                 set_subnet(f"{base}.0_24")
-                from modules.mac_table import show_mac_table
+                from modules.core.mac_table import show_mac_table
                 show_mac_table()
         elif c == "2":
             if not check_role('technician'): continue
@@ -409,7 +409,7 @@ def main2():
                 run_snmp_module()
                 from modules.core.baseline import run_baseline
                 run_baseline()
-                from modules.mac_verify import verify_macs
+                from modules.intel.mac_verify import verify_macs
                 verify_macs()
         elif c == "5":
             if not check_role('technician'): continue
@@ -435,7 +435,7 @@ def main2():
                     from modules.integrations.pg_connector import run_pg_connector
                     run_pg_connector()
                 elif p == "5":
-                    from modules.iso50001_gap import run_iso50001
+                    from modules.integrations.iso50001_gap import run_iso50001
                     run_iso50001()
                 else: print("  invalid")
         elif c == "8":
@@ -476,7 +476,7 @@ def main2():
                     t = input(f"  target [{pub}]: ").strip() or pub
                     run_osint(t)
                 elif p == "2":
-                    from modules.cve import run_cve_module
+                    from modules.intel.cve import run_cve_module
                     run_cve_module()
                 elif p == "3": dns()
                 elif p == "4": banner(gateway)
@@ -484,28 +484,28 @@ def main2():
                     from modules.core.baseline import run_baseline
                     run_baseline()
                 elif p == "6":
-                    from modules.mac_verify import verify_macs
+                    from modules.intel.mac_verify import verify_macs
                     verify_macs()
                 elif p == "m":
-                    from modules.mac_table import show_mac_table
+                    from modules.core.mac_table import show_mac_table
                     show_mac_table()
                 elif p == "7":
-                    from modules.dns_tunnel import run_dns_tunnel
+                    from modules.intel.dns_tunnel import run_dns_tunnel
                     run_dns_tunnel()
                 elif p == "8":
-                    from modules.icmp_tunnel import run_icmp_tunnel
+                    from modules.intel.icmp_tunnel import run_icmp_tunnel
                     run_icmp_tunnel()
                 elif p == "9":
-                    from modules.traffic_anomaly import run_traffic_anomaly
+                    from modules.intel.traffic_anomaly import run_traffic_anomaly
                     run_traffic_anomaly()
                 elif p == "p":
-                    from modules.port_hop_detector import run_port_hop
+                    from modules.defense.port_hop_detector import run_port_hop
                     run_port_hop()
                 elif p == "a":
-                    from modules.vlan_hop import run_vlan_hop
+                    from modules.intel.vlan_hop import run_vlan_hop
                     run_vlan_hop()
                 elif p == "b":
-                    from modules.rf import run_rf
+                    from modules.intel.rf import run_rf
                     run_rf()
                 else: print("  invalid")
         else: print("  invalid option")
