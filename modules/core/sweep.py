@@ -14,6 +14,7 @@
 
 import socket
 from modules.core.asset_registry import upsert as reg_upsert
+from modules.core.arp import run_arp
 import threading
 import os
 
@@ -91,6 +92,8 @@ def run_sweep(base, local_ip):
     print(f"\r  ghost [{'|'*40}] 100% — {found} found")
     print(f"  {'HOST':<18} {'PORT':<8} {'HOSTNAME'}")
     print(f"  {'-'*18} {'-'*8} {'-'*20}")
+    print(f'\n  [ARP] resolving MACs...')
+    run_arp(prefix+'.1', local_ip)
     results.sort(key=lambda x: int(x[0].split('.')[-1]))
     for ip, port, hostname in results:
         print(f"  {ip:<18} {port:<8} {hostname}")
