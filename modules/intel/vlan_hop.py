@@ -46,6 +46,7 @@ def run_vlan_hop(duration=WATCH_SECS):
                 vlans = parsed['vlan_ids']
                 msg = f'DOUBLE-TAG src={src_mac} vlans={vlans}'
                 print(f'  [!!!] VLAN HOP DETECTED {msg}')
+                reg_upsert(ip=pkt.get('ip',''), mac='', source='vlan_hop', **{'threat.ioc_flags':['VLAN_HOP']})
                 findings.append({
                     'src_mac':src_mac,
                     'vlan_ids':vlans,

@@ -223,6 +223,7 @@ def run_portscan(ip):
     print(f"  {D}{'─'*46}{RS}")
     print(f"  {C}open: {open_count}{RS} of {len(PORTS)} scanned")
     plist=[p for p,s,st in results if st=="OPEN"]
+    reg_upsert(ip=ip, mac='', source='portscan', **{'network.open_ports':plist})
     mitre=[]
     if any(p in plist for p in [502,44818]):
         mitre.append("T0855 Unauthorized Command Message")

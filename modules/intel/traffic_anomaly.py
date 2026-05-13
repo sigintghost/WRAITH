@@ -41,6 +41,7 @@ def run_traffic_anomaly(duration=WATCH_SECS):
             if micro_map.get(ip,0) > MICRO_EXFIL_COUNT:
                 flags.append(f'MICRO_EXFIL:{micro_map[ip]}pkts')
             if flags:
+                reg_upsert(ip=ip, mac='', source='traffic_anomaly', **{'threat.ioc_flags':flags})
                 existing = [f for f in findings if f['ip']==ip]
                 if not existing:
                     msg = f'{ip} traffic flags={flags}'

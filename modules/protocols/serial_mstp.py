@@ -84,6 +84,7 @@ def parse_mstp_frame(data, offset):
 
 def update_topology(topology, frame):
     src = str(frame["src"])
+    reg_upsert(ip="mstp:"+src, mac="", source="serial_mstp", **{"type":"controller","protocols":["MSTP"]})
     dst = str(frame["dst"])
     ftype = frame["type_name"]
     ts = frame["timestamp"]

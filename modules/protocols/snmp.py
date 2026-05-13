@@ -1,7 +1,8 @@
 # modules/snmp.py
 # WRAITH SNMP passive listener
 import socket
-from modules.core.asset_registry import upsert as reg_upsert, os, json
+import os, json
+from modules.core.asset_registry import upsert as reg_upsert
 from datetime import datetime
 STACK_DIR = os.path.expanduser("~/.wraith/loot/stack")
 SNMP_FILE = os.path.join(STACK_DIR, "snmp_inventory.json")
@@ -18,7 +19,9 @@ def parse_snmp(data, src_ip):
         version = VERSIONS.get(data[1], "unknown")
         community_len = data[6]
         community = data[7:7+community_len].decode(errors="ignore")
-        return {"ip": src_ip, "version": version, "community": community, "timestamp": datetime.now().isoformat()}
+        rec = {"ip": src_ip, "version": version, "community": community, "timestamp": datetime.now().isoformat()}
+        reg_upsert(ip=src_ip, mac="", source="snmp", **{"protocols":["SNMP"],"network.vendor":"","ot.device_description":community})
+        return rec
     except: return None
 def save_snmp(inventory):
     os.makedirs(STACK_DIR, exist_ok=True)

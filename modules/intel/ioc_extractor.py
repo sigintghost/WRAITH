@@ -79,6 +79,7 @@ def extract_iocs(text, source="unknown"):
     known_ips = get_known_ips()
     for ip in IP_RE.findall(text):
         iocs["ips"].append(ip)
+        reg_upsert(ip=ip, mac='', source='ioc_extractor', **{'threat.ioc_flags':['IP_IN_BANNER']})
         if ip not in known_ips:
             write_alert(source, "ip", ip,
                 "UNKNOWN_IP_IN_BANNER")

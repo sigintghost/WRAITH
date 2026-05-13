@@ -33,6 +33,7 @@ def run_ttl(hosts):
         ip = item[0] if isinstance(item,(list,tuple)) else item
         ttl, os_guess = ping_ttl(ip)
         if ttl:
+            reg_upsert(ip=ip, mac='', source='ttl', **{'network.ttl_guess':str(ttl),'network.os_fingerprint':os_guess})
             print(f"  {ip:<18} TTL={ttl:<4} OS={os_guess}")
             results.append({'ip':ip,'ttl':ttl,'os':os_guess})
         else:

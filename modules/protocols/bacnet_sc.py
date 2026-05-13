@@ -34,6 +34,7 @@ def write_alert(ip, reason, severity, detail=""):
     else:
         alerts = data if isinstance(data, list) else []
     alerts.append(alert)
+    reg_upsert(ip=ip, mac='', source='bacnet_sc', **{'type':'controller','protocols':['BACnet/SC'],'threat.ioc_flags':[reason]})
     save_json(ALERTS, alerts)
 
 def probe_tcp_port(ip, port, timeout=2):

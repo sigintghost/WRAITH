@@ -133,6 +133,7 @@ def run_mitre_map():
                 f"{name} — {tactic} "
                 f"(kw: {kw})")
             all_matches.append(m)
+            reg_upsert(ip=m.get('ip',''), mac='', source='mitre_attack_map', **{'threat.mitre_techniques':[m.get('technique_id','')]})
     findings = {"timestamp": datetime.now().isoformat(),
         "total_alerts_scanned": len(alerts[-20:]),
         "techniques_matched": len(all_matches),
