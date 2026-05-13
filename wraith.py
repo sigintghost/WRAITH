@@ -423,8 +423,11 @@ def main2():
                 p = input(" > ")
                 if p == "0": break
                 elif p == "1":
-                    from modules.integrations.fsi_connector import run_asset_db_connector
-                    run_asset_db_connector()
+                    from modules.core.asset_registry import all_records
+                    recs = all_records()
+                    print(f'\n  ASSET REGISTRY — {len(recs)} records')
+                    for r in recs:
+                        print(f"  {r['network']['ip']:<18} {r['type']:<14} {'AUTH' if r['authorized'] else 'UNAUTH'}")
                 elif p == "2":
                     from modules.integrations.snowflake_connector import run_snowflake
                     run_snowflake()

@@ -1,9 +1,39 @@
 # modules/admin.py — WRAITH admin panel
 import modules.admin.auth as auth
+from modules.core.asset_registry import all_records, authorize, upsert as reg_upsert
 CYAN='\033[36m';GREEN='\033[32m';RED='\033[31m'
 YELLOW='\033[33m';BOLD='\033[1m';DIM='\033[2m';RESET='\033[0m'
 ROLES_ALL = ["admin","technician","viewer"]
 ROLES_SAFE = ["technician","viewer"]
+
+def _review_assets():
+    recs = all_records()
+    unauth = [r for r in recs if not r['authorized']]
+    print(f"\n{CYAN}  ASSET REGISTRY{RESET} — {len(recs)} total, {RED}{len(unauth)} unauthorized{RESET}")
+    print(f"  {DIM}{'─'*56}{RESET}")
+    print(f"  {CYAN}{'IP':<18}{'TYPE':<14}{'SOURCE':<16}STATUS{RESET}")
+    for r in sorted(recs,key=lambda x:x['network']['ip']):
+        ip=r['network']['ip']
+        typ=r['type']
+        src=r['provenance']['source_module']
+        auth=f"{GREEN}AUTH{RESET}" if r['authorized'] else f"{RED}UNAUTH{RESET}"
+        print(f"  {ip:<18}{typ:<14}{src:<16}{auth}")
+    print(f"  {DIM}{'─'*56}{RESET}")
+
+def _authorize_asset():
+    unauth=[r for r in all_records() if not r['authorized']]
+    if not unauth: print(f"  {GREEN}all assets authorized{RESET}"); return
+    print(f"\n  {RED}UNAUTHORIZED — {len(unauth)} assets{RESET}")
+    for r in unauth:
+        ip=r['network']['ip']; ts=r['temporal']['first_seen'][:19]
+        src=r['provenance']['source_module']
+        print(f"  {CYAN}{ip}{RESET} first={ts} src={src}")
+    print()
+    ip=input("  authorize IP [0=cancel] > ").strip()
+    if not ip or ip=='0': return
+    typ=input("  type [controller/server/workstation/mobile/unknown] > ").strip() or 'unknown'
+    reg_upsert(ip=ip,mac='',source='operator',**{'type':typ})
+    print(f"  {GREEN}authorized: {ip}{RESET}" if authorize(ip=ip) else f"  {RED}not found: {ip}{RESET}")
 
 def _header():
     print(f"\n{CYAN}{BOLD}  ADMIN PANEL{RESET}")
@@ -97,6 +127,8 @@ def run_admin():
         print(f"  {CYAN}[2]{RESET} create user")
         print(f"  {CYAN}[3]{RESET} edit user")
         print(f"  {CYAN}[4]{RESET} delete user")
+    print(f"  {CYAN}[5]{RESET} asset review")
+    print(f"  {CYAN}[6]{RESET} authorize asset")
         print(f"  {CYAN}[0]{RESET} back")
         c=input(f"  > ").strip()
         if c=="0": break
@@ -104,3 +136,5 @@ def run_admin():
         elif c=="2": _create_user()
         elif c=="3": _edit_user()
         elif c=="4": _delete_user()
+        elif c=="5": _review_assets()
+        elif c=="6": _authorize_asset()
