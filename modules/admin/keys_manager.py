@@ -6,7 +6,7 @@ KEYS_FILE = os.path.join(KEYS_DIR, "keys.py")
 CYAN='\033[36m';GREEN='\033[32m';YELLOW='\033[33m'
 RED='\033[31m';DIM='\033[2m';BOLD='\033[1m';RESET='\033[0m'
 KEY_INFO = {
-"ANTHROPIC_KEY":{"label":"Anthropic Oracle AI","url":"console.anthropic.com","free":"pay per token — no free tier","modules":"Oracle AI, Wishlist agent","fmt":"sk-ant-","req":True},
+"ANTHROPIC_KEY":{"label":"Anthropic DOXA","url":"console.anthropic.com","free":"pay per token — no free tier","modules":"DOXA AI agent","fmt":"sk-ant-","req":True},
 "SHODAN_KEY":{"label":"Shodan","url":"shodan.io/register","free":"free limited, paid $69/yr","modules":"OSINT ports, CVEs, services","fmt":"","req":False},
 "IPINFO_KEY":{"label":"IPInfo","url":"ipinfo.io/signup","free":"50k/month free","modules":"OSINT geo, ASN, org","fmt":"","req":False},
 "GREYNOISE_KEY":{"label":"GreyNoise","url":"greynoise.io/signup","free":"community plan free","modules":"OSINT noise classification","fmt":"","req":False},
@@ -113,7 +113,7 @@ def setup_smtp():
     host=input("  SMTP host [enter to skip] > ").strip()
     if host: keys['SMTP_HOST']=host
     port=input("  SMTP port [587] > ").strip()
-    keys['SMTP_PORT']=port if port else '587'
+    if host: keys['SMTP_PORT']=port if port else '587'
     user=input("  SMTP username/email > ").strip()
     if user: keys['SMTP_USER']=user
     try:
@@ -141,7 +141,7 @@ def setup_pushover():
     except:
         token=input("  app token > ").strip()
         user=input("  user key > ").strip()
-    if token: keys['PUSHOVER_TOKEN']=token
+    if token: keys['PUSHOVER_KEY']=token
     if user: keys['PUSHOVER_USER']=user
     save_keys(keys)
     print(f"  {GREEN}Pushover configured{RESET}")
