@@ -127,8 +127,8 @@ def run_admin():
         print(f"  {CYAN}[2]{RESET} create user")
         print(f"  {CYAN}[3]{RESET} edit user")
         print(f"  {CYAN}[4]{RESET} delete user")
-    print(f"  {CYAN}[5]{RESET} asset review")
-    print(f"  {CYAN}[6]{RESET} authorize asset")
+        print(f"  {CYAN}[5]{RESET} asset review")
+        print(f"  {CYAN}[6]{RESET} authorize asset")
         print(f"  {CYAN}[0]{RESET} back")
         c=input(f"  > ").strip()
         if c=="0": break
