@@ -19,6 +19,16 @@ def get_network():
         s.connect(("8.8.8.8", 80))
         local_ip = s.getsockname()[0]
         s.close()
+        priv = lambda ip: ip.startswith(('10.','192.168.','172.16.','172.17.','172.18.','172.19.','172.20.','172.21.','172.22.','172.23.','172.24.','172.25.','172.26.','172.27.','172.28.','172.29.','172.30.','172.31.'))
+        if not priv(local_ip):
+            import subprocess
+            r=subprocess.run(['ip','route'],capture_output=True,text=True)
+            for line in r.stdout.splitlines():
+                if 'src' in line:
+                    parts2=line.split()
+                    idx=parts2.index('src')
+                    candidate=parts2[idx+1]
+                    if priv(candidate): local_ip=candidate; break
         parts = local_ip.split(".")
         base = f"{parts[0]}.{parts[1]}.{parts[2]}"
         for gw in [f"{base}.1", f"{base}.254"]:
@@ -124,6 +134,8 @@ def run_osint(gateway):
     import sys
     sys.path.insert(0,'.')
     from modules.intel.osint import osint_lookup
+    priv = lambda ip: any(ip.startswith(p) for p in ('10.','192.168.','172.16.','172.17.','172.18.','172.19.','172.20.','172.21.','172.22.','172.23.','172.24.','172.25.','172.26.','172.27.','172.28.','172.29.','172.30.','172.31.'))
+    if not priv(gateway): print(f'  [WARN] default {gateway} appears to be a public IP — enter local target')
     custom = input("  enter target IP [default: " + gateway + "]: ").strip()
     target = custom if custom else gateway
     osint_lookup(target)

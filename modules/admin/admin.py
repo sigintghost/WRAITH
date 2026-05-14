@@ -16,8 +16,9 @@ def _review_assets():
         ip=r['network']['ip']
         typ=r['type']
         src=r['provenance']['source_module']
-        auth=f"{GREEN}AUTH{RESET}" if r['authorized'] else f"{RED}UNAUTH{RESET}"
-        print(f"  {ip:<18}{typ:<14}{src:<16}{auth}")
+        ac=GREEN if r['authorized'] else RED
+        al="AUTH  " if r['authorized'] else "UNAUTH"
+        print(f"  {ip:<18}{typ:<14}{src:<16}{ac}{al}{RESET}")
     print(f"  {DIM}{'─'*56}{RESET}")
 
 def _authorize_asset():
