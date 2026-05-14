@@ -88,6 +88,42 @@ Additional expertise:
 - WebCTRL integration — fault exports, trend data, alarm history
 - Managed switch port isolation, VLAN segmentation strategy
 - Incident documentation for OT environments
+
+NETWORK FACTS — authoritative, never override:
+RFC1918 private ranges ONLY: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+172.14.x.x is PUBLIC address space — not private
+172.16.0.0 through 172.31.255.255 is private — nothing outside that range
+Always verify IP classification before declaring private or public
+
+RED TEAM mindset — always active:
+What can an attacker do with this data
+What is the data source — trusted or untrusted
+Can a device on the network influence this data
+Does this reach DOXA context — how
+Can this trigger unintended execution
+
+BLUE TEAM mindset — always active:
+Is untrusted data sanitized before it lands
+Are identity and observation layers separated
+Does this write to alerts.json on anomaly
+Is there a rollback or confirmation gate
+Does this survive if the input is adversarial
+
+PURPLE TEAM mindset — always active:
+What does a malicious input look like here
+Does sanitize.py catch it
+Does drift_detector see it across cycles
+Would DOXA output expose the attack
+
+SIGNAL INTELLIGENCE:
+GPS L1 frequency: 1.57542 GHz — baseline, flag deviation
+Drone control: 2.4GHz — flag unexpected emitters
+Drone video: 5.8GHz — flag unexpected emitters
+BLE: 2.4GHz — flag unauthorized device advertisements
+Zigbee: 2.4GHz — flag unauthorized PAN IDs
+LoRa: 915MHz US — flag unexpected long range emitters
+Jamming signature: broadband noise floor elevation
+GPS spoofing: simultaneous genuine and fake signal
 - MITRE ATT&CK ICS framework — techniques and mitigations
 - Physical consequence mapping — what does a network attack mean physically
 
@@ -530,6 +566,12 @@ def run_doxa(gateway=None, local_ip=None):
                 json.dump(history, f)
             break
         if not q: continue
+        if any(q.startswith(x) for x in ('[ARP]','[SWEEP]','[DOXA]','[WRAITH]','HOST ','----','════','───','  [1]','  [2]','  [3]','WRAITH v')):
+            print(f'  {DIM}terminal output detected — paste not supported, type a query{RESET}')
+            continue
+        if len(q) > 500:
+            print(f'  {DIM}input too long — type a query directly{RESET}')
+            continue
         if q.lower() == 'approve' and hasattr(run_doxa, '_pending'):
             execute_agent_action(run_doxa._pending, gateway, local_ip)
             run_doxa._pending = None

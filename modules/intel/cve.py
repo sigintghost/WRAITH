@@ -48,9 +48,11 @@ def scan_bacnet_inventory():
     if not os.path.exists(fp): return {}
     with open(fp) as f: inv=json.load(f)
     vendors=set()
-    for dev in inv.values() if isinstance(inv,dict) else []:
-        v=dev.get("vendor","")
-        if v and v!="unknown": vendors.add(v)
+    devs=inv.get('sc_devices',inv.get('devices',{}))
+    for dev in devs.values():
+        if not isinstance(dev,dict): continue
+        v=dev.get('vendor',dev.get('mode',''))
+        if v and v not in ('unknown',''): vendors.add(v)
     return {v:[] for v in vendors}
 def scan_snmp_inventory():
     fp=os.path.join(STACK,"snmp_inventory.json")
