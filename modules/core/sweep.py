@@ -94,6 +94,9 @@ def run_sweep(base, local_ip):
     print(f"  {'-'*18} {'-'*8} {'-'*20}")
     print(f'\n  [ARP] resolving MACs...')
     run_arp(prefix+'.1', local_ip)
+    from modules.core.ttl import run_ttl
+    print(f'\n  [TTL] fingerprinting hosts...')
+    run_ttl(results)
     results.sort(key=lambda x: int(x[0].split('.')[-1]))
     for ip, port, hostname in results:
         print(f"  {ip:<18} {port:<8} {hostname}")
