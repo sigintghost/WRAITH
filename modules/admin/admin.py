@@ -1,6 +1,7 @@
 # modules/admin.py — WRAITH admin panel
 import modules.admin.auth as auth
 from modules.core.asset_registry import all_records, authorize, upsert as reg_upsert
+from modules.sensors.sensor_registry import all_sensors, register, retire, show_all
 CYAN='\033[36m';GREEN='\033[32m';RED='\033[31m'
 YELLOW='\033[33m';BOLD='\033[1m';DIM='\033[2m';RESET='\033[0m'
 ROLES_ALL = ["admin","technician","viewer"]
@@ -119,6 +120,26 @@ def _delete_user():
     if input(f"  > ").strip()=="1" and auth.delete_user(u):
         print(f"  {GREEN}deleted: {u}{RESET}")
     else: print(f"  {DIM}cancelled{RESET}")
+def _sensor_menu():
+    while True:
+        print(f"\n  {CYAN}SENSOR FLEET{RESET}")
+        print(f"  {DIM}{'─'*46}{RESET}")
+        print(f"  {CYAN}[1]{RESET} list sensors")
+        print(f"  {CYAN}[2]{RESET} register sensor")
+        print(f"  {CYAN}[3]{RESET} retire sensor")
+        print(f"  {CYAN}[0]{RESET} back")
+        c=input(f"  > ").strip()
+        if c=="0": break
+        elif c=="1": show_all()
+        elif c=="2":
+            label=input("  label > ").strip()
+            platform=input("  platform [pi4/openwrt/linux/gpd] > ").strip()
+            ip=input("  ip [enter to skip] > ").strip()
+            register(label,platform,ip=ip)
+        elif c=="3":
+            sid=input("  sensor id [0=cancel] > ").strip()
+            if sid and sid!="0": retire(sid)
+
 def run_admin():
     if auth.CURRENT_ROLE != "admin":
         print(f"  {RED}access denied — admin only{RESET}"); return
@@ -130,6 +151,7 @@ def run_admin():
         print(f"  {CYAN}[4]{RESET} delete user")
         print(f"  {CYAN}[5]{RESET} asset review")
         print(f"  {CYAN}[6]{RESET} authorize asset")
+        print(f"  {CYAN}[7]{RESET} sensors")
         print(f"  {CYAN}[0]{RESET} back")
         c=input(f"  > ").strip()
         if c=="0": break
@@ -139,3 +161,4 @@ def run_admin():
         elif c=="4": _delete_user()
         elif c=="5": _review_assets()
         elif c=="6": _authorize_asset()
+        elif c=="7": _sensor_menu()
