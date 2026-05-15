@@ -1,9 +1,8 @@
 import json, os, uuid
 from datetime import datetime
 
-import os as _os
-_LOOT = _os.environ.get('WRAITH_STACK_PATH', _os.path.expanduser('~/.wraith'))
-REGISTRY_PATH = _os.path.join(_LOOT, 'asset_registry.json')
+_LOOT = os.environ.get('WRAITH_STACK_PATH', os.path.expanduser('~/.wraith'))
+REGISTRY_PATH = os.path.join(_LOOT, 'asset_registry.json')
 
 def _load():
     if not os.path.exists(REGISTRY_PATH): return {}
