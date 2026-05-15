@@ -425,7 +425,8 @@ def main2():
             t=select_target_from_sweep()
             if not t: t=input("  enter IP > ").strip()
             if t:
-                portscan(t)
+                from modules.core.portscan import run_portscan
+                run_portscan(t)
                 banner(t)
                 run_snmp_module()
                 from modules.core.baseline import run_baseline
