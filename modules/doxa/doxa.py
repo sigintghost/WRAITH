@@ -204,6 +204,27 @@ def build_context():
     ctx = []
     ctx.append('WRAITH LIVE NETWORK CONTEXT')
     ctx.append(f'timestamp: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+    from modules.core.asset_registry import all_records
+    regs = all_records()
+    if regs:
+        ctx.append(f'\nASSET REGISTRY: {len(regs)} total')
+        unauth = [r for r in regs if not r['authorized']]
+        if unauth: ctx.append(f'  UNAUTHORIZED: {len(unauth)} devices require review')
+        for r in regs:
+            ip=r['network']['ip']; typ=r['type']
+            auth='AUTH' if r['authorized'] else 'UNAUTH'
+            vendor=r['network']['vendor'] or 'unknown'
+            ports=r['network']['open_ports']
+            protos=','.join(r['protocols']) if r['protocols'] else 'none'
+            flags=r['threat']['ioc_flags']
+            techniques=r['threat']['mitre_techniques']
+            crit=r['criticality']
+            src=r['provenance']['source_module']
+            line=f'  {ip} type={typ} auth={auth} vendor={vendor} proto={protos} crit={crit} src={src}'
+            if ports: line+=f' ports={ports}'
+            if flags: line+=f' IOC={flags}'
+            if techniques: line+=f' MITRE={techniques}'
+            ctx.append(line)
     stack = load_stack()
     if 'hosts.json' in stack:
         hosts = stack['hosts.json'].get('hosts', [])
@@ -360,7 +381,8 @@ def build_context():
         if bh:
             ctx.append(f'\nBASELINE: {len(bh)} hosts profiled')
     if 'alerts.json' in stack:
-        alerts = stack['alerts.json'].get('alerts', [])
+        raw=stack['alerts.json']
+        alerts=raw if isinstance(raw,list) else raw.get('alerts',[])
         if alerts:
             ctx.append(f'\nACTIVE ALERTS: {len(alerts)}')
             for a in alerts[-3:]:
