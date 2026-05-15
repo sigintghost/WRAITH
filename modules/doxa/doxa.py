@@ -31,7 +31,7 @@ def load_doxa_key():
         return None
 
 PROMPT_MODES = {
-'hunt': 'Perform a full host profile. Cross-reference all filestack sources. What does an attacker see? What is the external reputation? What ports are exposed? What vendor made this device? Is it known-good or unknown?',
+'hunt': 'Perform a full host profile using ONLY data already in the filestack and asset registry. Do NOT ask for more data. Do NOT request scans. Reason across what you have. State findings. State gaps. State risk level. State recommended action. One response. No follow-up questions.',
 'isolate': 'Advise on network-layer containment. Consider VLAN isolation, managed switch port blocking, BBMD table removal, WebCTRL foreign device exclusion, and physical port identification. Be specific to the environment.',
 'baseline': 'Is this device and its behavior normal for this network, time of day, and protocol pattern? Compare against known hosts. Flag deviations.',
 'report': 'Generate a structured incident note. Include timestamp, device details, observed behavior, risk level, recommended actions. Format for a facilities director or IT security team.',
