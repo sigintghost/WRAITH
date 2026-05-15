@@ -508,6 +508,25 @@ def ask_doxa(question, api_key, history):
             mode_ctx=f'\n\nACTIVE MODE: {mode.upper()}\n{desc}'
             break
     context = build_context()
+    words = question.strip().split()
+    if len(words) >= 2 and words[0].lower() == 'hunt':
+        tip = words[1]
+        from modules.core.asset_registry import get
+        rec = get(ip=tip)
+        hunt_ctx = f'\nHUNT TARGET: {tip}\n'
+        if rec:
+            hunt_ctx += f'  type={rec["type"]} auth={rec["authorized"]} crit={rec["criticality"]}\n'
+            hunt_ctx += f'  vendor={rec["network"]["vendor"]} mac={rec["network"]["mac"]}\n'
+            hunt_ctx += f'  ports={rec["network"]["open_ports"]}\n'
+            hunt_ctx += f'  protocols={rec["protocols"]}\n'
+            hunt_ctx += f'  os={rec["network"]["os_fingerprint"]}\n'
+            hunt_ctx += f'  ioc={rec["threat"]["ioc_flags"]}\n'
+            hunt_ctx += f'  mitre={rec["threat"]["mitre_techniques"]}\n'
+            hunt_ctx += f'  first={rec["temporal"]["first_seen"][:10]}\n'
+            hunt_ctx += f'  last={rec["temporal"]["last_seen"][:10]}\n'
+        else:
+            hunt_ctx += '  NOT IN REGISTRY — unknown device\n'
+        context = hunt_ctx + context
     agents_ctx = ''
     try:
         ap = os.path.expanduser('~/WRAITH/AGENTS.md')
