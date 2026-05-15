@@ -487,9 +487,7 @@ def main2():
                 p = input(" > ")
                 if p == "0": break
                 elif p == "1":
-                    pub = get_public_ip()
-                    t = input(f"  target [{pub}]: ").strip() or pub
-                    run_osint(t)
+                    run_osint(gateway)
                 elif p == "2":
                     from modules.intel.cve import run_cve_module
                     run_cve_module()
