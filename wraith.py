@@ -351,6 +351,7 @@ def show_main_menu():
     print(f"  {CYAN}[4]{RESET} INTEL        {DIM}OSINT CVE DNS signals{RESET}")
     print(f"  {CYAN}[5]{RESET} DOXA         {DIM}AI agent{RESET}")
     print(f"  {CYAN}[6]{RESET} ALERTS")
+    print(f"  {CYAN}[r]{RESET} REPORT       {DIM}export markdown report{RESET}")
     print(f"  {CYAN}[7]{RESET} INTEGRATIONS {DIM}Asset DB WebCTRL Connectors{RESET}")
     print(f"  {CYAN}[8]{RESET} ADMIN")
     print(f"  {CYAN}[9]{RESET} KEYS")
@@ -401,7 +402,10 @@ def main2():
     while True:
         show_main_menu()
         c = input(" > ")
-        if c == "0": break
+        if c == "r":
+            from modules.reporting.report import run_report
+            run_report()
+        elif c == "0": break
         elif c == "1":
             from modules.core.subnet_selector import select_subnet
             from modules.core.filestack import set_subnet
