@@ -9,8 +9,10 @@ def _load():
 
 def _save(db):
     os.makedirs(os.path.dirname(REGISTRY_PATH), exist_ok=True)
-    with open(REGISTRY_PATH,'w') as f:
+    tmp = REGISTRY_PATH + '.tmp'
+    with open(tmp,'w') as f:
         json.dump(db, f, indent=2)
+    os.replace(tmp, REGISTRY_PATH)
 
 def _now():
     return datetime.utcnow().isoformat()+'Z'
