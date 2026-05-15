@@ -93,6 +93,8 @@ def portscan(gateway):
         data['scans'].append({'target':gateway,'ports':[{'port':p,'service':s,'state':'OPEN'} for p,s in found]})
         write_json('portscan.json',data)
         print(f'  stack written: portscan.json')
+    from modules.core.asset_registry import upsert as reg_upsert
+    reg_upsert(ip=gateway, mac='', source='portscan', **{'network.open_ports':[p for p,l in found]})
     except Exception as e:
         print(f'  [WARN] filestack: {e}')
     div()
