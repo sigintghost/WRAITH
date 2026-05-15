@@ -13,6 +13,8 @@ BOLD   = '\033[1m'
 RESET  = '\033[0m'
 def div(): print(f"  {DIM}{'─'*44}{RESET}")
 def ts(): return datetime.datetime.now().strftime("%H:%M:%S")
+from modules.utils.hash_check import run_hash_check
+
 def get_network():
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -384,6 +386,7 @@ def show_intel_menu():
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def main2():
+    run_hash_check(silent=True)
     from modules.core.netcheck import run_network_check
     ok=run_network_check()
     if not ok: return
