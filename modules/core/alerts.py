@@ -58,6 +58,7 @@ def fire(alert_type, message, severity="WARN", source=None, ip=""):
     return True
 def _print_alert(alert):
     sev = alert["severity"]
+    RED="\033[31m";YELLOW="\033[33m";CYAN="\033[36m";DIM="\033[2m";BOLD="\033[1m";RST="\033[0m"
     c_info = "[94m"
     c_warn = "[93m"
     c_crit = "[91m"
@@ -66,7 +67,10 @@ def _print_alert(alert):
     ts = alert["timestamp"][11:19]
     msg = alert["message"]
     src = alert["source"]
-    print(color + "  [ALERT] " + ts + " " + sev + " " + src + ": " + msg + reset)
+    color=RED if sev=="CRITICAL" else YELLOW if sev=="WARN" else CYAN
+    ip=alert.get("ip","")
+    ip_str=f" {DIM}{ip}{RST}" if ip else ""
+    print(f"  {color}{BOLD}[{sev}]{RST} {DIM}{ts}{RST} {color}{src}{RST}{ip_str} {msg}")
 def get_recent(limit=20):
     alerts = _load_alerts()
     return alerts[-limit:]
