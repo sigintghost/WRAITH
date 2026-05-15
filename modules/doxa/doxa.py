@@ -598,11 +598,8 @@ def run_doxa(gateway=None, local_ip=None):
                 json.dump(history, f)
             break
         if not q: continue
-        if any(q.startswith(x) for x in ('[ARP]','[SWEEP]','[DOXA]','[WRAITH]','HOST ','----','════','───','  [1]','  [2]','  [3]','WRAITH v')):
+        if len(q) > 300 or any(q.startswith(x) for x in ('[ARP]','[SWEEP]','[DOXA]','[WRAITH]','HOST ','WRAITH v','ghost [','ghost >')):
             print(f'  {DIM}terminal output detected — paste not supported, type a query{RESET}')
-            continue
-        if len(q) > 500:
-            print(f'  {DIM}input too long — type a query directly{RESET}')
             continue
         if q.lower() == 'approve' and hasattr(run_doxa, '_pending'):
             execute_agent_action(run_doxa._pending, gateway, local_ip)
