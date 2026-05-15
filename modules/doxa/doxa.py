@@ -34,6 +34,8 @@ PROMPT_MODES = {
 'hunt': 'Perform a full host profile using ONLY data already in the filestack and asset registry. Do NOT ask for more data. Do NOT request scans. Reason across what you have. State findings. State gaps. State risk level. State recommended action. One response. No follow-up questions.',
 'isolate': 'Advise on network-layer containment. Consider VLAN isolation, managed switch port blocking, BBMD table removal, WebCTRL foreign device exclusion, and physical port identification. Be specific to the environment.',
 'baseline': 'Is this device and its behavior normal for this network, time of day, and protocol pattern? Compare against known hosts. Flag deviations.',
+'risk': 'Rank ALL hosts in the asset registry by risk level. Use filestack data only. For each host output: IP, risk level HIGH/MEDIUM/LOW, one-line reason. Sort highest risk first. No follow-up questions. One response.',
+'brief': 'Write one paragraph in plain English for a facilities director or building owner. No technical jargon. What is on the network, what looks wrong, and what should happen next. Maximum 5 sentences. One response.',
 'report': 'Generate a structured incident note. Include timestamp, device details, observed behavior, risk level, recommended actions. Format for a facilities director or IT security team.',
 'explain': 'Explain this finding in plain English for a non-technical building owner or facilities manager. No jargon. Focus on real-world impact.',
 'defend': 'As a BAS engineer and network defender, what specific actions can I take right now? Prioritize by impact. Include WebCTRL, switch-level, and protocol-level options.',
@@ -509,6 +511,20 @@ def ask_doxa(question, api_key, history):
             break
     context = build_context()
     words = question.strip().split()
+    if words[0].lower() in ('risk','brief'):
+        from modules.core.asset_registry import all_records
+        regs = all_records()
+        risk_ctx = f'\nFULL ASSET REGISTRY FOR ANALYSIS: {len(regs)} hosts\n'
+        for r in regs:
+            ip=r['network']['ip']; typ=r['type']
+            auth='AUTH' if r['authorized'] else 'UNAUTH'
+            ports=r['network']['open_ports']
+            protos=','.join(r['protocols']) if r['protocols'] else 'none'
+            flags=r['threat']['ioc_flags']
+            first=r['temporal']['first_seen'][:10]
+            last=r['temporal']['last_seen'][:10]
+            risk_ctx+=f'  {ip} type={typ} auth={auth} ports={ports} proto={protos} ioc={flags} first={first} last={last}\n'
+        context = risk_ctx + context
     if len(words) >= 2 and words[0].lower() == 'hunt':
         tip = words[1]
         from modules.core.asset_registry import get
