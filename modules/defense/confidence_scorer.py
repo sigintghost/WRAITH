@@ -44,6 +44,15 @@ def score_host(rec):
     if cred_risk:
         score += 15
         reasons.append('default cred risk +15')
+    if 53 in ports and (80 in ports or 443 in ports):
+        score += 25
+        reasons.append('gateway position +25')
+    if 80 in ports or 443 in ports:
+        score += 15
+        reasons.append('HTTP management UI +15')
+    if 53 in ports:
+        score += 10
+        reasons.append('DNS exposed +10')
     return score, reasons
 
 def run_scorer(silent=False):

@@ -210,9 +210,9 @@ def _maybe_action_queue(query, response):
         from modules.defense.confidence_scorer import get_high_confidence_hosts, present_action_queue
         hosts = get_high_confidence_hosts()
         if not hosts: return
-        score,ip,reasons,rec = hosts[0]
-        if score < 60: return
-        present_action_queue(ip, score, reasons)
+        for score,ip,reasons,rec in hosts[:3]:
+            if score < 60: break
+            present_action_queue(ip, score, reasons)
     except: pass
 
 def build_context():
