@@ -152,6 +152,15 @@ def http_fingerprint(ip, port=80):
                 print(f"  {Y}DEVICE TYPE: {device}{RS}")
                 break
         banner = {'ip': ip, 'port': port, 'status': status[:40], 'server': server, 'powered': powered, 'title': title}
+        device_type = 'unknown'
+        for keyword,device in [('router','router'),('camera','camera'),('samsung','iot'),('niagara','controller'),('webctrl','controller'),('bacnet','controller'),('ubiquiti','ap'),('mikrotik','router')]:
+            if keyword in resp.lower(): device_type = device; break
+        reg_upsert(ip=ip, mac='', source='http_fingerprint', **{
+            'network.http_banner': f"{status[:40]} | server={server}",
+            'network.http_server': server,
+            'network.http_port': port,
+            'type': device_type if device_type != 'unknown' else 'unknown',
+        })
         try:
             from modules.core.filestack import STACK
             import os, json

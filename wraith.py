@@ -118,21 +118,42 @@ def dns():
     div()
 
 def banner(gateway):
+    from modules.core.asset_registry import upsert as reg_upsert
     print(f"\n  [BANNER] {ts()}")
     print(f"  target: {gateway}")
     div()
+    enrichment = {}
     try:
         s=socket.socket()
         s.settimeout(2)
         s.connect((gateway,80))
-        s.send(f"HEAD / HTTP/1.0\r\nHost: {gateway}\r\n\r\n".encode())
-        data=s.recv(1024).decode(errors="ignore")
+        s.send(f"GET / HTTP/1.0\r\nHost: {gateway}\r\n\r\n".encode())
+        data=s.recv(2048).decode(errors='ignore')
         s.close()
-        for line in data.splitlines()[:6]:
-            if line.strip():
-                print(f"  {line.strip()}")
+        lines=data.split('\r\n')
+        status=lines[0] if lines else ''
+        headers={}
+        for line in lines[1:15]:
+            if ':' in line:
+                k,v=line.split(':',1)
+                headers[k.strip().lower()]=v.strip()
+        for line in data.splitlines()[:10]:
+            if line.strip(): print(f"  {line.strip()}")
+        enrichment['network.http_banner']=status[:80]
+        enrichment['network.http_server']=headers.get('server','unknown')
+        if 'location' in headers:
+            enrichment['network.http_redirect']=headers['location']
+            print(f"  {DIM}redirect: {headers['location']}{RESET}")
+        if 'set-cookie' in headers:
+            enrichment['network.http_cookie']=headers['set-cookie'][:80]
+        if '/cgi-bin' in data: enrichment['type']='router'
+        if 'niagara' in data.lower(): enrichment['type']='controller'
+        if 'webctrl' in data.lower(): enrichment['type']='controller'
+        if 'samsung' in data.lower(): enrichment['type']='iot'
+        reg_upsert(ip=gateway,mac='',source='banner',**enrichment)
+        print(f"  {DIM}registry enriched{RESET}")
     except:
-        print("  no banner retrieved.")
+        print('  no banner retrieved.')
     div()
 def run_osint(gateway):
     import sys
