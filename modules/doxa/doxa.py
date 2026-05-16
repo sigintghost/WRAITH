@@ -657,7 +657,7 @@ def run_doxa(gateway=None, local_ip=None):
             q = input(f'  {CYAN}ghost >{RESET} ').strip()
         except (KeyboardInterrupt, EOFError):
             print()
-            history = history[-50:]
+            history = history[-20:]
             with open(mem_path,'w') as f:
                 json.dump(history, f)
             break
@@ -674,7 +674,7 @@ def run_doxa(gateway=None, local_ip=None):
             run_doxa._pending = None
             continue
         if q.lower() in ('exit','quit','back','q'):
-            history = history[-50:]
+            history = history[-20:]
             with open(mem_path,'w') as f:
                 json.dump(history, f)
             break
