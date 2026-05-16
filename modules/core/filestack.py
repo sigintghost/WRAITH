@@ -37,12 +37,29 @@ def write_json_safe(filename, data):
     except: pass
     return write_json(filename,data)
 
+MAX_FILE_BYTES = 2 * 1024 * 1024  # 2MB hard cap
+
+def _rotate_if_oversized(path):
+    try:
+        if os.path.getsize(path) > MAX_FILE_BYTES:
+            from modules.core.alerts import fire
+            fire('FILESTACK_BLOAT', f'{os.path.basename(path)} exceeded 2MB — rotating',
+                severity='WARN', source='filestack')
+            with open(path) as f: data = json.load(f)
+            if isinstance(data, list):
+                data = data[-(len(data)//2):]
+            elif isinstance(data, dict) and 'scans' in data:
+                data['scans'] = data['scans'][-(len(data['scans'])//2):]
+            with open(path,'w') as f: json.dump(data,f,indent=2)
+    except: pass
+
 def write_json(filename, data):
     ensure_stack()
     path = os.path.join(get_stack(), filename)
     data['_updated'] = datetime.datetime.now().isoformat()
     with open(path, 'w') as f:
         json.dump(data, f, indent=2, default=str)
+    _rotate_if_oversized(path)
     return path
 
 def read_json(filename):

@@ -60,6 +60,8 @@ def upsert(ip='', mac='', source='', **kwargs):
     if mac: net['mac'] = mac
     changed = False
     for field, val in kwargs.items():
+        if isinstance(val, str) and len(val) > 500:
+            val = val[:500]
         if '.' in field:
             sec, key = field.split('.', 1)
             if sec in rec:

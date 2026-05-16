@@ -195,7 +195,7 @@ def load_stack():
             except: pass
     return data
 
-def _safe(val, maxlen=80):
+def _safe(val, maxlen=200):
     if not val: return ''
     val = str(val)[:maxlen]
     bad = ['ignore','forget','disregard','override','system','instruction','prompt','pretend','bypass','authorized','whitelist']
