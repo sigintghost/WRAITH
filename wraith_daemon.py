@@ -202,8 +202,16 @@ if __name__ == '__main__':
     if not args.gateway or not args.local_ip or not args.subnet:
         from modules.core.netcheck import run_network_check
         run_network_check()
-        from modules.core.sweep import get_network
-        gw, lip, sub = get_network()
+        from modules.core.netcheck import run_network_check
+        info = run_network_check()
+        import socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8',80))
+        lip = s.getsockname()[0]
+        s.close()
+        import subprocess
+        gw = subprocess.run(['ip','route','show','default'],capture_output=True,text=True).stdout.split()[2] if subprocess.run(['ip','route','show','default'],capture_output=True,text=True).returncode==0 else ''
+        sub = lip.rsplit('.',1)[0]+'.0/24'
     else:
         gw, lip, sub = args.gateway, args.local_ip, args.subnet
     run_daemon(gw, lip, sub, args.interval, args.jitter)
