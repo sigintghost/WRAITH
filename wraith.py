@@ -353,6 +353,7 @@ def show_main_menu():
     print(f"  {CYAN}[4]{RESET} INTEL        {DIM}OSINT CVE DNS signals{RESET}")
     print(f"  {CYAN}[5]{RESET} DOXA         {DIM}AI agent{RESET}")
     print(f"  {CYAN}[6]{RESET} ALERTS")
+    print(f"  {CYAN}[s]{RESET} SCORE        {DIM}confidence threat scoring{RESET}")
     print(f"  {CYAN}[r]{RESET} REPORT       {DIM}export markdown report{RESET}")
     print(f"  {CYAN}[7]{RESET} INTEGRATIONS {DIM}Asset DB WebCTRL Connectors{RESET}")
     print(f"  {CYAN}[8]{RESET} ADMIN")
@@ -407,7 +408,10 @@ def main2():
     while True:
         show_main_menu()
         c = input(" > ")
-        if c == "r":
+        if c == "s":
+            from modules.defense.confidence_scorer import run_scorer
+            run_scorer()
+        elif c == "r":
             from modules.reporting.report import run_report
             run_report()
         elif c == "0": break

@@ -203,6 +203,18 @@ def _safe(val, maxlen=80):
         return '[SANITIZED]'
     return val
 
+def _maybe_action_queue(query, response):
+    triggers = ('hunt','ghost','risk','profile','isolate')
+    if not any(query.strip().lower().startswith(m) for m in triggers): return
+    try:
+        from modules.defense.confidence_scorer import get_high_confidence_hosts, present_action_queue
+        hosts = get_high_confidence_hosts()
+        if not hosts: return
+        score,ip,reasons,rec = hosts[0]
+        if score < 60: return
+        present_action_queue(ip, score, reasons)
+    except: pass
+
 def build_context():
     from modules.core.filestack import STACK, _subnet
     from modules.core.subnet_selector import load_known
@@ -613,6 +625,7 @@ def ask_doxa(question, api_key, history):
                 for w in warnings:
                     print(f"  \033[31m[DOXA SECURITY] {w}\033[0m")
             history.append({'role': 'assistant', 'content': reply})
+            _maybe_action_queue(q, reply)
             return reply
     except urllib.error.HTTPError as e:
         return f'[DOXA] API error: {e.code} {e.reason}'
