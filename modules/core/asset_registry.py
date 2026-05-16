@@ -62,8 +62,8 @@ def upsert(ip='', mac='', source='', **kwargs):
     for field, val in kwargs.items():
         if '.' in field:
             sec, key = field.split('.', 1)
-            if sec in rec and key in rec[sec]:
-                if rec[sec][key] != val:
+            if sec in rec:
+                if rec[sec].get(key) != val:
                     rec[sec][key] = val
                     changed = True
         else:
