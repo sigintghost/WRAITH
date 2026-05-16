@@ -530,6 +530,25 @@ def execute_agent_action(action, gateway, local_ip):
     except Exception as e:
         print(f"  [31m[DOXA] action failed: {e}[0m")
 
+def ask_doxa_ollama(question, history, model='llama3'):
+    import urllib.request, json
+    C='[36m';D='[2m';RS='[0m'
+    url = 'http://localhost:11434/api/chat'
+    messages = [{'role':'system','content':GHOST_SYSTEM}]
+    messages += history[-10:]
+    messages.append({'role':'user','content':question})
+    payload = json.dumps({'model':model,'messages':messages,'stream':False}).encode()
+    req = urllib.request.Request(url,data=payload,
+        headers={'Content-Type':'application/json'},method='POST')
+    try:
+        with urllib.request.urlopen(req,timeout=60) as resp:
+            data = json.loads(resp.read())
+            reply = data.get('message',{}).get('content','')
+            print(reply)
+            return reply
+    except Exception as e:
+        return f'[OLLAMA] error: {e} — is Ollama running?'
+
 def ask_doxa(question, api_key, history):
     from modules.defense.sanitize import Sanitizer
     question=Sanitizer().sanitize(question,"doxa_input","user_query")
@@ -634,7 +653,10 @@ def ask_doxa(question, api_key, history):
 
 def run_doxa(gateway=None, local_ip=None):
     print(f'\n  {CYAN}{BOLD}[DOXA]{RESET} ghost intelligence module')
-    print(f"  {DIM}token routing active — Anthropic{RESET}")
+    import os
+    _mode = os.environ.get('DOXA_MODE','cloud').lower()
+    _model = os.environ.get('OLLAMA_MODEL','llama3') if _mode=='local' else 'Anthropic'
+    print(f"  {DIM}token routing active — {_model}{RESET}")
     print(f'  {DIM}ask anything — or use a mode:{RESET}')
     print(f'  {DIM}hunt / isolate / baseline / report / explain / defend{RESET}')
     print(f'  {DIM}profile / timeline / vlan / creds / ghost / rf{RESET}')
@@ -679,7 +701,12 @@ def run_doxa(gateway=None, local_ip=None):
                 json.dump(history, f)
             break
         print(f'  {DIM}thinking...{RESET}')
-        reply = ask_doxa(q, api_key, history)
+        import os
+        if os.environ.get('DOXA_MODE','cloud').lower() == 'local':
+            ollama_model = os.environ.get('OLLAMA_MODEL','llama3')
+            reply = ask_doxa_ollama(q, history, ollama_model)
+        else:
+            reply = ask_doxa(q, api_key, history)
         print()
         action = parse_agent_action(reply)
         if action:
