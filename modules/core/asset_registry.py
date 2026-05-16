@@ -8,12 +8,22 @@ def _load():
     if not os.path.exists(REGISTRY_PATH): return {}
     with open(REGISTRY_PATH) as f: return json.load(f)
 
+LOCK_PATH = REGISTRY_PATH + '.lock'
 def _save(db):
     os.makedirs(os.path.dirname(REGISTRY_PATH), exist_ok=True)
-    tmp = REGISTRY_PATH + '.tmp'
-    with open(tmp,'w') as f:
-        json.dump(db, f, indent=2)
-    os.replace(tmp, REGISTRY_PATH)
+    import time
+    deadline = time.time() + 5
+    while os.path.exists(LOCK_PATH) and time.time() < deadline:
+        time.sleep(0.05)
+    try:
+        open(LOCK_PATH,'w').close()
+        tmp = REGISTRY_PATH + '.tmp'
+        with open(tmp,'w') as f:
+            json.dump(db, f, indent=2)
+        os.replace(tmp, REGISTRY_PATH)
+    finally:
+        try: os.remove(LOCK_PATH)
+        except: pass
 
 def _now():
     return datetime.utcnow().isoformat()+'Z'
