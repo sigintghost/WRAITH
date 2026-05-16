@@ -43,8 +43,10 @@ def _handle_signal(sig, frame):
     _log(f"signal {sig} received — shutdown initiated")
     _running = False
 
-signal.signal(signal.SIGINT, _handle_signal)
-signal.signal(signal.SIGTERM, _handle_signal)
+try:
+    signal.signal(signal.SIGINT, _handle_signal)
+    signal.signal(signal.SIGTERM, _handle_signal)
+except: pass
 
 def _jitter_sleep(base_seconds, jitter_seconds=300):
     jitter = random.randint(0, jitter_seconds)
@@ -53,7 +55,8 @@ def _jitter_sleep(base_seconds, jitter_seconds=300):
     _log(f"sleeping {total}s until next cycle")
     deadline = time.time() + total
     while time.time() < deadline and _running:
-        time.sleep(5)
+        try: time.sleep(1)
+        except KeyboardInterrupt: _running=False; break
 
 def _check_hardware():
     caps = {
