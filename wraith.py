@@ -491,7 +491,13 @@ def main2():
                     else:
                         custom=input("  enter IP manually > ").strip()
                         if custom: portscan(custom)
-                elif p == "6": run_snmp_module()
+                elif p == "6":
+                    print(f"\n  [1] passive listener  [2] active query")
+                    m = input("  mode > ").strip()
+                    if m == '2':
+                        from modules.protocols.snmp import run_snmp_query
+                        run_snmp_query()
+                    else: run_snmp_module()
                 elif p == "7":
                     from modules.protocols.wifi_passive import run_wifi_passive
                     run_wifi_passive()
