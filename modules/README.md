@@ -1,10 +1,10 @@
 # WRAITH Modules — v4.6
 
-59 modules across 10 directories.
+63 modules across 10 directories.
 Refactored from flat structure in v4.6.
 
 ## core/ — network observation foundation
-sweep.py, arp.py, portscan.py, ttl.py, registry.py
+sweep.py, arp.py, portscan.py, ttl.py, registry.py, asset_registry.py
 topology.py, filestack.py, baseline.py, alerts.py
 subnet_selector.py, ghost.py, logger.py, netcheck.py
 input_validator.py, mac_table.py, lateral_detector.py
@@ -44,3 +44,12 @@ report_generator.py, dashboard.py
 
 ## utils/ — shared helpers (planned)
 colors.py, validators.py
+
+## utils/ — integrity and tooling
+hash_check.py
+
+## sensors/ — fleet tracking
+sensor_registry.py
+
+## reporting/ — output layer
+report.py
