@@ -368,6 +368,9 @@ def show_protocols_menu():
     print(f"  {CYAN}[4]{RESET} MSTP       {DIM}RS485{RESET}")
     print(f"  {CYAN}[5]{RESET} PORTSCAN   {DIM}OT/BAS{RESET}")
     print(f"  {CYAN}[6]{RESET} SNMP       {DIM}161{RESET}")
+    print(f"  {CYAN}[7]{RESET} WIFI       {DIM}passive client discovery{RESET}")
+    print(f"  {CYAN}[8]{RESET} DNS        {DIM}passive resolution{RESET}")
+    print(f"  {CYAN}[9]{RESET} CREDENTIALS {DIM}default cred exposure{RESET}")
     print(f"  {DIM}[0] BACK{RESET}")
     div()
 def show_intel_menu():
@@ -489,6 +492,15 @@ def main2():
                         custom=input("  enter IP manually > ").strip()
                         if custom: portscan(custom)
                 elif p == "6": run_snmp_module()
+                elif p == "7":
+                    from modules.protocols.wifi_passive import run_wifi_passive
+                    run_wifi_passive()
+                elif p == "8":
+                    from modules.protocols.passive_dns import run_passive_dns
+                    run_passive_dns()
+                elif p == "9":
+                    from modules.protocols.credential_exposure import run_credential_exposure
+                    run_credential_exposure()
                 else: print("  invalid")
         elif c == "4":
             if not check_role('technician'): continue
