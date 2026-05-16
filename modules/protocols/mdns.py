@@ -36,10 +36,14 @@ def run_mdns(duration=30):
     D='\033[2m';RS='\033[0m'
     print(f"\n{C}  [mDNS] passive listener — {duration}s{RS}")
     findings = []
+    # PLATFORM NOTE: requires Linux with multicast support. iSH not supported.
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        sock.bind(('', MDNS_PORT))
+        try: sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+        except: pass
+        try: sock.bind(('', MDNS_PORT))
+        except: sock.bind(('0.0.0.0', 0))
         mreq = struct.pack('4sL', socket.inet_aton(MDNS_ADDR),
             socket.INADDR_ANY)
         sock.setsockopt(socket.IPPROTO_IP,

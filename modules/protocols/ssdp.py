@@ -44,6 +44,7 @@ def run_ssdp(duration=15):
     D='\033[2m';RS='\033[0m'
     print(f"\n{C}  [SSDP] passive UPnP discovery — {duration}s{RS}")
     findings = []
+    # PLATFORM NOTE: requires Linux with multicast support. iSH not supported.
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
