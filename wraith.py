@@ -391,6 +391,8 @@ def show_protocols_menu():
     print(f"  {CYAN}[5]{RESET} PORTSCAN   {DIM}OT/BAS{RESET}")
     print(f"  {CYAN}[6]{RESET} SNMP       {DIM}161{RESET}")
     print(f"  {CYAN}[7]{RESET} WIFI       {DIM}passive client discovery{RESET}")
+    print(f"  {CYAN}[a]{RESET} mDNS       {DIM}Bonjour device discovery{RESET}")
+    print(f"  {CYAN}[b]{RESET} SSDP       {DIM}UPnP device discovery{RESET}")
     print(f"  {CYAN}[8]{RESET} DNS        {DIM}passive resolution{RESET}")
     print(f"  {CYAN}[9]{RESET} CREDENTIALS {DIM}default cred exposure{RESET}")
     print(f"  {DIM}[0] BACK{RESET}")
@@ -526,6 +528,12 @@ def main2():
                 elif p == "7":
                     from modules.protocols.wifi_passive import run_wifi_passive
                     run_wifi_passive()
+                elif p == 'a':
+                    from modules.protocols.mdns import run_mdns
+                    run_mdns()
+                elif p == 'b':
+                    from modules.protocols.ssdp import run_ssdp
+                    run_ssdp()
                 elif p == "8":
                     from modules.protocols.passive_dns import run_passive_dns
                     run_passive_dns()
