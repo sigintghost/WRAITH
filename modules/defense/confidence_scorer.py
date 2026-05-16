@@ -113,6 +113,7 @@ def present_action_queue(ip, score, reasons):
         isolate_recommend, flag_alert,
         annotate_host, tag_device)
     caps = _detect_caps()
+    G='[32m'
     print(f"\n  {R}{B}[ACTION QUEUE]{RS} {C}{ip}{RS} score={score}")
     print(f"  {D}confidence threshold exceeded — operator action required{RS}")
     print(f"\n  {C}[AVAILABLE NOW]{RS}")
