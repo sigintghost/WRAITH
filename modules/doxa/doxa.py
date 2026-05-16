@@ -626,7 +626,6 @@ def ask_doxa(question, api_key, history):
                 for w in warnings:
                     print(f"  \033[31m[DOXA SECURITY] {w}\033[0m")
             history.append({'role': 'assistant', 'content': reply})
-            _maybe_action_queue(q, reply)
             return reply
     except urllib.error.HTTPError as e:
         return f'[DOXA] API error: {e.code} {e.reason}'
@@ -688,3 +687,4 @@ def run_doxa(gateway=None, local_ip=None):
             print(f"  {YELLOW}[DOXA] proposed action: {action}{RESET}")
             print(f"  {DIM}type 'approve' to execute or 'deny' to skip{RESET}")
         print()
+        _maybe_action_queue(q, reply)
