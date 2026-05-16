@@ -213,7 +213,8 @@ def _maybe_action_queue(query, response):
         for score,ip,reasons,rec in hosts[:3]:
             if score < 60: break
             present_action_queue(ip, score, reasons)
-    except: pass
+    except Exception as e:
+        print(f'  [QUEUE DEBUG] {e}')
 
 def build_context():
     from modules.core.filestack import STACK, _subnet
