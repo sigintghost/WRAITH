@@ -582,7 +582,7 @@ def ask_doxa(question, api_key, history):
     history.append({'role': 'user', 'content': question})
     payload = json.dumps({
         'model': pick_model(question),
-        'max_tokens': 2048,
+        'max_tokens': 4096,
         'system': system,
         'messages': history,
         'stream': True,
