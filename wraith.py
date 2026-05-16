@@ -374,6 +374,7 @@ def show_main_menu():
     print(f"  {CYAN}[4]{RESET} INTEL        {DIM}OSINT CVE DNS signals{RESET}")
     print(f"  {CYAN}[5]{RESET} DOXA         {DIM}AI agent{RESET}")
     print(f"  {CYAN}[6]{RESET} ALERTS")
+    print(f"  {CYAN}[d]{RESET} DAEMON       {DIM}continuous passive intelligence{RESET}")
     print(f"  {CYAN}[s]{RESET} SCORE        {DIM}confidence threat scoring{RESET}")
     print(f"  {CYAN}[r]{RESET} REPORT       {DIM}export markdown report{RESET}")
     print(f"  {CYAN}[7]{RESET} INTEGRATIONS {DIM}Asset DB WebCTRL Connectors{RESET}")
@@ -431,7 +432,14 @@ def main2():
     while True:
         show_main_menu()
         c = input(" > ")
-        if c == "s":
+        if c == "d":
+            print(f"\n  {CYAN}[DAEMON]{RESET} starting in background...")
+            import subprocess, sys
+            subprocess.Popen([sys.executable,'wraith_daemon.py',
+                '--gateway',gateway,'--local-ip',local_ip,
+                '--subnet',f'{gateway.rsplit(".",1)[0]}.0/24'])
+            print(f"  {DIM}daemon running — check ~/.wraith/daemon.log{RESET}")
+        elif c == "s":
             from modules.defense.confidence_scorer import run_scorer
             run_scorer()
         elif c == "r":
