@@ -369,6 +369,7 @@ def show_main_menu():
     print(f"\n  {CYAN}WRAITH v{VERSION}{RESET} > {DIM}main{RESET}")
     div()
     print(f"  {CYAN}[1]{RESET} SWEEP        {DIM}discover + TTL{RESET}")
+    print(f"  {CYAN}[g]{RESET} GHOST SWEEP  {DIM}stealth — jittered — single probe{RESET}")
     print(f"  {CYAN}[2]{RESET} SCAN         {DIM}portscan + banner + SNMP{RESET}")
     print(f"  {CYAN}[3]{RESET} PROTOCOLS    {DIM}BACnet Modbus MQTT MSTP{RESET}")
     print(f"  {CYAN}[4]{RESET} INTEL        {DIM}OSINT CVE DNS signals{RESET}")
@@ -457,6 +458,16 @@ def main2():
                 set_subnet(f"{base}.0_24")
                 from modules.core.mac_table import show_mac_table
                 show_mac_table()
+        elif c == "g":
+            from modules.core.subnet_selector import select_subnet
+            from modules.core.filestack import set_subnet
+            sel = select_subnet(base)
+            if sel is None: print("  [GHOST] cancelled")
+            else:
+                set_subnet(f"{sel}.0_24")
+                from modules.core.ghost_sweep import run_ghost_sweep
+                run_ghost_sweep(sel, local_ip)
+                set_subnet(f"{base}.0_24")
         elif c == "2":
             if not check_role('technician'): continue
             from modules.core.portscan import select_target_from_sweep
