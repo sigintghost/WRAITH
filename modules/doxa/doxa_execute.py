@@ -12,6 +12,7 @@ ALLOWLIST = {
     "annotate_host": "Add investigation note to a host",
     "export_report": "Export current session to report",
     "isolate_recommend": "Generate isolation recommendation",
+    "run_credentials": "Test default credentials on a target host",
 }
 
 def _log(action, target, result, token):
@@ -117,6 +118,15 @@ def isolate_recommend(target):
     _log("isolate_recommend", target, "issued", token)
     print(f"  [EXEC] recommendation logged [{token}]")
 
+def cred_check(target):
+    target = _s.sanitize(target, "exec", "ip")
+    ok, token = _gate("run_credentials", target)
+    if not ok: return
+    from modules.intel.credential_check import run_credential_check
+    results = run_credential_check(target)
+    _log("run_credentials", target,
+        f"hits={len(results) if results else 0}", token)
+
 def run_execute(target_ip=None, action=None, param=None):
     print("\n  \033[36m[DOXA EXECUTE]\033[0m "
         "controlled action engine")
@@ -132,7 +142,8 @@ def run_execute(target_ip=None, action=None, param=None):
         "annotate_host": lambda: annotate_host(
             target_ip, param or input("  note > ")),
         "isolate_recommend": lambda: isolate_recommend(
-            target_ip)}
+            target_ip),
+        "run_credentials": lambda: cred_check(target_ip)}
     fn = dispatch.get(action)
     if fn: fn()
     else: print(f"  [EXEC] unknown action: {action}")
