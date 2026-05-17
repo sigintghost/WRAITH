@@ -155,8 +155,8 @@ def present_action_queue(ip, score, reasons):
         from modules.protocols.passive_dns import run_passive_dns
         run_passive_dns()
     elif sel == '7':
-        from modules.protocols.credential_exposure import run_credential_exposure
-        run_credential_exposure()
+        from modules.intel.credential_check import run_credential_check
+        run_credential_check(ip)
     elif sel == '8':
         from modules.core.sweep import run_sweep
         base = ip.rsplit('.',1)[0]
