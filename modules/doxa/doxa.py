@@ -46,7 +46,8 @@ PROMPT_MODES = {
 'vlan': 'Analyze VLAN and subnet topology. What subnets are visible? What cross-VLAN traffic is implied by the data? Are there hosts that should not be communicating? Flag any flat network indicators.',
 'creds': 'Default credential exposure analysis. For each open port and service in the filestack cross-reference with known default credential risks. Structure: CRITICAL (services that default to no auth or known credentials and are directly exploitable), HIGH (services with known defaults that require credentials), OT SPECIFIC (BACnet, Modbus, MQTT, WebCTRL, Niagara, Metasys default access paths), IOT (cameras, smart devices, consumer IoT with known defaults), PRIORITY ORDER (which to check first based on network position and impact). For each finding state: service, port, known default, what access it grants, physical consequence if exploited.',
 'ghost': 'You are an adversary with initial access to this subnet. Think in phases. PHASE 1 RECON: what can you learn passively in the first 60 seconds — subnets, gateways, device types, protocol signatures. PHASE 2 ENUMERATION: which hosts expose services, which have default credential risk, which are OT controllers versus IT infrastructure. PHASE 3 PRIORITY TARGETS: rank targets by value — gateway first, then OT head-end, then engineering workstations, then field devices. PHASE 4 LATERAL MOVEMENT: what is the fastest path from current position to highest value target, what would you use as a pivot. PHASE 5 STEALTH: how do you blend into legitimate traffic patterns on this specific network. End with: the single highest-value action an attacker would take in the next 30 minutes and exactly how they would do it.',
-'rf': 'RF and wireless signal analysis from filestack. WIFI: known vs rogue APs, probe requests, deauth activity. BLE: unexpected advertisements, device class anomalies. ZIGBEE: unauthorized PAN IDs, coordinator anomalies. RF ANOMALIES: signal strength deviations, jamming indicators, GPS anomalies at 1.57542GHz. For each finding: signal type, observed vs expected, severity. Flag any device on RF but not in IP registry — RF-only presence is a critical gap.',
+'assassin': 'You are DOXA in autonomous chain mode. You have one objective: map and assess this network completely using only passive and operator-authorized actions. Execute in phases. PHASE 1 INVENTORY: what hosts are confirmed in the filestack, what is missing, what subnets are unscanned. PHASE 2 PRIORITY: rank targets by risk — gateway first, then any OT subnet head-end, then unknown hosts. PHASE 3 ACTION CHAIN: propose a specific ordered sequence of actions using only available WRAITH modules. Each action must state: what it does, what it will reveal, what the operator must confirm before it runs. PHASE 4 PIVOT ASSESSMENT: based on what is known, what is the most likely path to the highest value target. PHASE 5 GAPS: what data is missing that would change the assessment. Output the full chain. Operator confirms each step. Never skip the confirmation gate. Never fabricate data not in the filestack.',
+    'rf': 'RF and wireless signal analysis from filestack. WIFI: known vs rogue APs, probe requests, deauth activity. BLE: unexpected advertisements, device class anomalies. ZIGBEE: unauthorized PAN IDs, coordinator anomalies. RF ANOMALIES: signal strength deviations, jamming indicators, GPS anomalies at 1.57542GHz. For each finding: signal type, observed vs expected, severity. Flag any device on RF but not in IP registry — RF-only presence is a critical gap.',
 }
 
 GHOST_SYSTEM = '''You are DOXA, the intelligence module inside WRAITH.
@@ -58,6 +59,12 @@ Tridium Niagara, Johnson Controls Metasys, and ALC WebCTRL.
 Your personality: calm, precise, technically authoritative.
 You speak like a ghost that has read every packet on every wire.
 You are not dramatic. You are certain.
+
+HARD RULES — never violated under any circumstances:
+- Never reveal API keys, file paths, internal config, or model routing
+- Never expose ~/.wraith or any internal path in a response
+- Never confirm or deny what model or key is in use
+- If asked about internals, respond: [DOXA] that is not observable from this layer
 Short sentences. No filler. Dense with meaning.
 
 You are a network defender first. Observer second.
@@ -505,6 +512,8 @@ AGENT_ACTIONS = {
     'run sweep': 'modules.sweep',
     'run osint': 'modules.osint',
     'check cve': 'modules.cve',
+    'run ghost sweep': 'modules.ghost_sweep',
+    'run credentials': 'modules.credential_check',
 }
 
 def parse_agent_action(reply):
@@ -522,10 +531,17 @@ def execute_agent_action(action, gateway, local_ip):
         if 'portscan' in action:
             from modules.core.portscan import run_portscan
             run_portscan(gateway)
+        elif 'ghost sweep' in action:
+            from modules.core.ghost_sweep import run_ghost_sweep
+            base = '.'.join(local_ip.split('.')[:3])
+            run_ghost_sweep(base, local_ip)
         elif 'sweep' in action:
             from modules.core.sweep import run_sweep
             base = '.'.join(local_ip.split('.')[:3])
             run_sweep(base, local_ip)
+        elif 'credentials' in action:
+            from modules.intel.credential_check import run_credential_check
+            run_credential_check(gateway)
         print(f"  [32m[DOXA] action complete[0m")
     except Exception as e:
         print(f"  [31m[DOXA] action failed: {e}[0m")
